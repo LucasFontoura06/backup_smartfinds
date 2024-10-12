@@ -1,5 +1,4 @@
 import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider } from '@mui/material';
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 import HomeIcon from '@mui/icons-material/Home';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -18,10 +17,10 @@ const menuVariants = {
 };
 
 const Menu: React.FC<MenuProps> = ({ open, setOpen }) => {
-  const navigate = useNavigate(); // Utilizando useNavigate do react-router-dom
+  const navigate = useNavigate();
 
   const handleNavigation = (path: string) => {
-    navigate(path); // Navegação usando o useNavigate do react-router-dom
+    navigate(path); // Navega para a rota correspondente
     setOpen(false); // Fecha o menu ao navegar
   };
 
@@ -32,9 +31,9 @@ const Menu: React.FC<MenuProps> = ({ open, setOpen }) => {
           <Divider />
           <List>
             {[{ icon: <HomeIcon />, text: 'Home', path: '/' },
-              { icon: <ShoppingCartIcon />, text: 'Produtos', path: '/products' },
+              { icon: <ShoppingCartIcon />, text: 'Produtos', path: '/products' }, // Corrigir para '/products'
               { icon: <DashboardIcon />, text: 'Dashboard', path: '/dashboard' },
-              { icon: <AddIcon />, text: 'Cadastrar Produto', path: '/add-product' }
+              { icon: <AddIcon />, text: 'Cadastrar Produto', path: '/cadastrarProduto' }
             ].map((item, i) => (
               <ListItem key={item.text} disablePadding>
                 <ListItemButton onClick={() => handleNavigation(item.path)}>
