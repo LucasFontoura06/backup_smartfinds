@@ -4,7 +4,7 @@ import Navbar from './components/Navbar'; // Componente de navegação que você
 import Footer from './components/Footer'; // Componente de rodapé que você pode criar
 import Menu from './components/template/menu'; // Importando o menu lateral
 import { BrowserRouter as Router } from 'react-router-dom'; // Envolvendo o app com BrowserRouter
-import ProductsPage from './pages/ProductsPage';
+import AppRoutes from './routes/routes'; // Importando as rotas definidas
 
 const App: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false); // Estado para controlar o menu
@@ -19,11 +19,11 @@ const App: React.FC = () => {
         <CssBaseline /> {/* Reseta os estilos básicos do navegador */}
         <Navbar toggleMenu={toggleMenu} /> {/* Barra de navegação */}
         <Menu open={menuOpen} setOpen={setMenuOpen} /> {/* Menu lateral */}
-        <ProductsPage /> {/* Página de produtos */}
+        <AppRoutes /> {/* Renderizando as rotas aqui */}
         <Footer /> {/* Rodapé */}
       </div>
     </Router>
   );
-}
+};
 
 export default App;
