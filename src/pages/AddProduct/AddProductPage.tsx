@@ -1,28 +1,36 @@
+import { resetForm, setLinkAliexpress, setLinkAmazon, setLinkImage, setLinkMercadoLivre, setNomeProduto, submitFormProducts } from "../../lib/features/AddProducts/addProcuctSlice";
+import { Box, Card, CardHeader, CardContent, Grid, Button, CardActions, Typography, Alert } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 import { CONSTANTES } from "../../commom/constantes";
 import InputForm from "../../components/inputForm";
-import { useAppDispatch, useAppSelector } from "../../lib/hooks";
-import { Box, Card, CardHeader, CardContent, Grid, Button, CardActions, Typography } from "@mui/material";
+import './AddProductPage.css';
 import React, { useState } from "react";
-import './AddProductPage.css'; // Importando o CSS
+import { unwrapResult } from "@reduxjs/toolkit";
 
 function AddProductsForm() {
   const dispatch = useAppDispatch();
-  const { values, errors, touched } = useAppSelector((state: any) => state.addProducts);
+  const { values, touched, errors, loading } = useAppSelector((state: any) => state.addProducts);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const [loading, setLoading] = useState(false);
-
-  // Função de submit
+  // Função para lidar com o envio do formulário
   const handleSubmit = async () => {
-    setLoading(true);
-
     try {
-      // Aqui você pode disparar a ação de cadastro de produto, por exemplo:
-      // dispatch(cadastrarProdutoAction(values));
-      console.log('Formulário enviado com sucesso');
-    } catch (error) {
-      console.error('Erro ao enviar o formulário', error);
-    } finally {
-      setLoading(false); // Redefine o estado de loading após o envio
+      // Despachando a ação e usando unwrapResult para lidar com o sucesso ou erro
+      const actionResult = await dispatch(submitFormProducts(values));
+      const result = unwrapResult(actionResult);
+
+      // Se chegou aqui, foi bem-sucedido
+      setSuccessMessage('Formulário enviado com sucesso!');
+      setErrorMessage(null); // Limpa qualquer mensagem de erro
+
+      // Reseta o formulário após o envio bem-sucedido
+      dispatch(resetForm());
+    } catch (err) {
+      // Lida com erros ao despachar a ação
+      setErrorMessage('Erro ao enviar o produto. Tente novamente.');
+      setSuccessMessage(null); // Limpa a mensagem de sucesso, se houver
+      console.error(CONSTANTES.ERROR_ADD_PRODUCT, err);
     }
   };
 
@@ -47,6 +55,10 @@ function AddProductsForm() {
           Cadastro de Produto
         </Typography>
 
+        {/* Exibe mensagem de sucesso ou erro */}
+        {successMessage && <Alert severity="success">{successMessage}</Alert>}
+        {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+
         <Card className="form" elevation={5}>
           <CardHeader
             title="Formulário" // Novo título "Formulário"
@@ -58,31 +70,51 @@ function AddProductsForm() {
               <Grid item xs={12} md={6}>
                 <InputForm
                   label={`* ${CONSTANTES.LBL_NOME_PRODUTO}`}
+                  value={values.name}
+                  onChange={(e: any) => dispatch(setNomeProduto(e.target.value))}
                   className="input-field label-field"
+                  isInvalid={touched.name && Boolean(errors.name)}
+                  msgError={touched.name ? errors.name : false}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <InputForm
                   label={`* ${CONSTANTES.LBL_LINK_IMAGEM}`}
+                  value={values.linkImage}
+                  onChange={(e: any) => dispatch(setLinkImage(e.target.value))}
                   className="input-field label-field"
+                  isInvalid={touched.linkImage && Boolean(errors.linkImage)}
+                  msgError={touched.linkImage ? errors.linkImage : false}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <InputForm
                   label={`* ${CONSTANTES.LBL_AFILIADO_ALIEXPRESS}`}
+                  value={values.linkAliexpress}
+                  onChange={(e: any) => dispatch(setLinkAliexpress(e.target.value))}
                   className="input-field label-field"
+                  isInvalid={touched.linkAliexpress && Boolean(errors.linkAliexpress)}
+                  msgError={touched.linkAliexpress ? errors.linkAliexpress : false}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <InputForm
                   label={`* ${CONSTANTES.LBL_AFILIADO_AMAZON}`}
+                  value={values.linkAmazon}
+                  onChange={(e: any) => dispatch(setLinkAmazon(e.target.value))}
                   className="input-field label-field"
+                  isInvalid={touched.linkAmazon && Boolean(errors.linkAmazon)}
+                  msgError={touched.linkAmazon ? errors.linkAmazon : false}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <InputForm
                   label={`* ${CONSTANTES.LBL_AFILIADO_MERCADO_LIVRE}`}
+                  value={values.linkMercadoLivre}
+                  onChange={(e: any) => dispatch(setLinkMercadoLivre(e.target.value))}
                   className="input-field label-field"
+                  isInvalid={touched.linkMercadoLivre && Boolean(errors.linkMercadoLivre)}
+                  msgError={touched.linkMercadoLivre ? errors.linkMercadoLivre : false}
                 />
               </Grid>
             </Grid>
@@ -91,7 +123,7 @@ function AddProductsForm() {
             <Button
               variant="contained"
               color="primary"
-              onClick={handleSubmit}
+              onClick={handleSubmit} // Chama a função handleSubmit no clique do botão
               disabled={loading} // Desativa o botão enquanto estiver carregando
             >
               {loading ? 'Carregando...' : 'CADASTRAR'}
