@@ -1,9 +1,9 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom'; // Adicione o 'Navigate'
 import HomePage from '../App'; // Se você tiver uma HomePage
-import ProductsPage from '../pages/ProductsPage';
-import DashboardPage from '../pages/DashboardPage';
-import AddProductPage from '../pages/AddProductPage'; // Componente para cadastrar produtos
+import ProductsPage from '../pages/Products/ProductsPage';
+import DashboardPage from '../pages/Dashboard/DashboardPage';
+import AddProductPage from '../pages/AddProduct/AddProductPage'; // Componente para cadastrar produtos
 
 const AppRoutes: React.FC = () => {
   return (

@@ -1,0 +1,66 @@
+/* Estilo geral do cartão */
+.form {
+    background-color: #c2c2c2; /* Cor de fundo do cartão */
+    padding: 16px; /* Padding do cartão */
+    border-radius: 8px; /* Bordas arredondadas do cartão */
+    margin: 16px; /* Adiciona margem em todos os lados */
+}
+
+/* Estilo do cabeçalho do cartão */
+.form .MuiCardHeader-root {
+    border-radius: 8px 8px 0 0; /* Bordas arredondadas apenas no topo */
+}
+
+/* Estilo para o campo de entrada */
+.input-field {
+    background-color: #ffffff; /* Cor de fundo do campo de entrada */
+    border-radius: 4px; /* Bordas arredondadas nos campos de entrada */
+    margin-bottom: 16px; /* Margem inferior dos campos de entrada */
+    border: 1px solid black; /* Cor da borda preta */
+    color: black; /* Cor do texto preta */
+    outline: none; /* Remove o contorno padrão */
+}
+
+/* Estilo para o campo de entrada quando focado */
+.input-field:focus {
+    border-color: black; /* Cor da borda preta quando o campo está focado */
+    color: black; /* Cor do texto preta */
+}
+
+/* Estilo para a label do campo de entrada */
+.label-field {
+    color: black; /* Cor da label preta */
+}
+
+/* Estilo do botão de ação */
+.button {
+    background-color: #3f51b5; /* Cor de fundo do botão */
+    color: white; /* Cor do texto do botão */
+    padding: 10px 20px; /* Padding do botão */
+    border-radius: 4px; /* Bordas arredondadas do botão */
+    transition: background-color 0.3s; /* Transição suave para a cor de fundo */
+}
+
+.button:hover {
+    background-color: #303f9f; /* Cor do botão quando o mouse está sobre ele */
+}
+
+/* Estilo de erro para campos que não passaram na validação */
+.error-message {
+    color: #f44336; /* Cor do texto de erro */
+    font-size: 12px; /* Tamanho da fonte para a mensagem de erro */
+    margin-top: -12px; /* Margem negativa para alinhar melhor */
+    margin-bottom: 12px; /* Margem inferior para espaçamento */
+}
+
+/* Media query para dispositivos móveis */
+@media (max-width: 600px) {
+    .form {
+        margin: 16px; /* Adiciona espaçamento nas laterais */
+        padding: 24px; /* Aumenta o padding para criar mais espaço dentro da caixa */
+    }
+
+    .input-field {
+        margin-bottom: 12px; /* Reduz o espaçamento entre inputs em dispositivos móveis */
+    }
+}
