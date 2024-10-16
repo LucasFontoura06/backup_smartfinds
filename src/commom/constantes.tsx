@@ -19,6 +19,17 @@ export const CONSTANTES = {
     LINK_AMAZON_NAME: 'linkAmazon',
     LINK_MERCADO_LIVRE_NAME: 'linkMercadoLivre',
 
+    //Página de Lista de Produtos
+    LBL_TITLE_LISTA_PRODUTOS: "Lista de Produtos",
+    LBL_TITLE_PAGE: "Lista de Produtos Cadastrados",
+    LBL_NAME: "name",
+    LBL_LINK_IMAGE: "linkImage",
+    LBL_LINK_ALIEXPRESS: "linkAliexpress",
+    LBL_LINK_AMAZON: "linkAmazon",
+    LBL_LINK_MERCADO_LIVRE: "linkMercadoLivre",
+    LBL_IMAGE_PRODUCT: "Imagem do Produto",
+    
+
     // Erros
     ERROR_ADD_PRODUCT: "Erro ao cadastrar produto",
     ERROR_LIST_PRODUCT: "Erro ao listar produtos",
