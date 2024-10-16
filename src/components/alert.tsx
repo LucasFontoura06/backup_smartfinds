@@ -1,39 +1,38 @@
+import { motion, AnimatePresence } from "framer-motion";
 import { Alert, AlertTitle } from "@mui/material";
-import { motion, AnimatePresence } from "framer-motion"; // Adicione AnimatePresence
 import { useState, useEffect } from "react";
 
 interface CustomAlertProps {
   severity: "success" | "info" | "warning" | "error";
   title: string;
   message: string;
-  duration?: number;  // Adicione uma duração opcional para controlar o tempo de exibição
+  duration?: number;  
 }
 
 const CustomAlerts: React.FC<CustomAlertProps> = ({ severity, title, message, duration = 5000 }) => {
   const [isVisible, setIsVisible] = useState(true);
 
-  // UseEffect para definir o tempo de vida do alerta
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsVisible(false);  // Esconde o alerta após o tempo definido
+      setIsVisible(false);  
     }, duration);
 
-    return () => clearTimeout(timer);  // Limpa o timeout quando o componente for desmontado
+    return () => clearTimeout(timer);  
   }, [duration]);
 
   return (
-    <AnimatePresence> {/* Encapsula o motion.div com AnimatePresence para animar a saída */}
+    <AnimatePresence> 
       {isVisible && (
         <motion.div
-          initial={{ opacity: 0, y: 100 }}  // Começa fora da tela (abaixo)
-          animate={{ opacity: 1, y: 0 }}    // Anima para a posição original
-          exit={{ opacity: 0, y: 100 }}     // Sai deslizando para baixo
+          initial={{ opacity: 0, y: 100 }}  
+          animate={{ opacity: 1, y: 0 }}    
+          exit={{ opacity: 0, y: 100 }}     
           transition={{
             type: "spring",
             stiffness: 100,
             damping: 20,
             duration: 1,
-            exit: { duration: 1.5, ease: "easeInOut" } // Define o tempo e o easing da saída
+            exit: { duration: 1.5, ease: "easeInOut" } 
           }}
           style={{
             position: 'fixed',

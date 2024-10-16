@@ -22,23 +22,23 @@ const InputForm = (props: any) => {
       sx={{
         "& .MuiOutlinedInput-root": {
           "& fieldset": {
-            borderColor: "black", // Cor da borda preta
+            borderColor: "black", 
           },
           "&:hover fieldset": {
-            borderColor: "black", // Cor da borda preta no hover
+            borderColor: "black", 
           },
           "&.Mui-focused fieldset": {
-            borderColor: "black", // Cor da borda preta quando focado
+            borderColor: "black", 
           },
           "& input": {
-            color: "black", // Cor do texto preta
+            color: "black", 
           },
         },
         "& .MuiInputLabel-root": {
-          color: "black", // Cor da label preta
+          color: "black", 
         },
         "& .MuiInputLabel-root.Mui-focused": {
-          color: "black", // Cor da label preta quando focada
+          color: "black", 
         },
       }}
       value={value}

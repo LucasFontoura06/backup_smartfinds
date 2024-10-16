@@ -1,41 +1,34 @@
-import React, { useEffect } from "react";
+import { fetchProdutos } from "../lib/features/AddProducts/addProcuctSlice"; 
 import { Box, Card, CardContent, CardHeader, Slide } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../lib/hooks"; // Custom hook para usar Redux
-import { fetchProdutos } from "../lib/features/AddProducts/addProcuctSlice"; // Ação para buscar produtos
-import { DataGrid } from "@mui/x-data-grid"; // Grid para exibir os dados
-import { CONSTANTES } from "../commom/constantes"; // Certifique-se de que o caminho está correto
+import { useAppDispatch, useAppSelector } from "../lib/hooks"; 
+import { CONSTANTES } from "../commom/constantes"; 
+import { DataGrid } from "@mui/x-data-grid"; 
+import React, { useEffect } from "react";
 
 const ListProducts: React.FC = () => {
   const dispatch = useAppDispatch();
   const { loading, produtos, error } = useAppSelector((state: any) => state.addProducts);
 
   useEffect(() => {
-    dispatch(fetchProdutos()); // Busca produtos ao montar o componente
+    dispatch(fetchProdutos()); 
   }, [dispatch]);
 
   useEffect(() => {
     if (error) {
-      console.error("Erro ao buscar produtos:", error);
+      console.error(CONSTANTES.ERROR_FIND_PRODUCTS, error);
     }
   }, [error]);
 
-  // Verificar se os produtos estão sendo retornados corretamente
-  useEffect(() => {
-    if (produtos) {
-      console.log("Produtos carregados:", produtos);
-    }
-  }, [produtos]);
-
   const columns = [
     {
-      field: CONSTANTES.LBL_NAME, // Usando constante para o nome do campo
-      headerName: CONSTANTES.LBL_NOME_PRODUTO, // Usando constante para o título da coluna
+      field: CONSTANTES.LBL_NAME, 
+      headerName: CONSTANTES.LBL_NOME_PRODUTO, 
       flex: 1,
-      cellClassName: 'produto-nome-cell', // Adicionando uma classe para estilização
+      cellClassName: CONSTANTES.LBL_CLASSE_NAME, 
     },
     {
-      field: CONSTANTES.LBL_LINK_IMAGE, // Usando constante para o campo da imagem
-      headerName: "Imagem do Produto", // Título da coluna
+      field: CONSTANTES.LBL_LINK_IMAGE, 
+      headerName: CONSTANTES.LBL_IMAGE_PRODUCT, 
       flex: 1,
       renderCell: (params: any) => (
         <img src={params.row.linkImage} alt={params.row.name} style={{ width: 50, height: 50 }} />
@@ -43,7 +36,7 @@ const ListProducts: React.FC = () => {
     },
     {
       field: CONSTANTES.LBL_LINK_ALIEXPRESS,
-      headerName: "Link AliExpress",
+      headerName: CONSTANTES.LBL_NAME_ALIEXPRESS,
       flex: 1,
       renderCell: (params: any) => (
         <a href={params.row.linkAliexpress} target="_blank" rel="noopener noreferrer">
@@ -52,8 +45,8 @@ const ListProducts: React.FC = () => {
       ),
     },
     {
-      field: "linkAmazon",
-      headerName: "Link Amazon",
+      field: CONSTANTES.LBL_LINK_AMAZON,
+      headerName: CONSTANTES.LBL_NAME_AMAZON,
       flex: 1,
       renderCell: (params: any) => (
         <a href={params.row.linkAmazon} target="_blank" rel="noopener noreferrer">
@@ -62,8 +55,8 @@ const ListProducts: React.FC = () => {
       ),
     },
     {
-      field: "linkMercadoLivre",
-      headerName: "Link Mercado Livre",
+      field: CONSTANTES.LBL_LINK_MERCADO_LIVRE,
+      headerName: CONSTANTES.LBL_NAME_MERCADO_LIVRE,
       flex: 1,
       renderCell: (params: any) => (
         <a href={params.row.linkMercadoLivre} target="_blank" rel="noopener noreferrer">
@@ -82,8 +75,8 @@ const ListProducts: React.FC = () => {
             {!loading ? (
               <DataGrid
                 rows={produtos.map((produto: any) => ({
-                  id: produto.id, // Usando id corretamente
-                  name: produto.name, // Certificando de que o campo 'name' está presente
+                  id: produto.id, 
+                  name: produto.name, 
                   linkImage: produto.linkImage,
                   linkAliexpress: produto.linkAliexpress,
                   linkAmazon: produto.linkAmazon,
@@ -106,13 +99,13 @@ const ListProducts: React.FC = () => {
                     color: "#fff",
                   },
                   "& .produto-nome-cell": {
-                    color: "#000", // Estiliza o nome do produto com cor preta
+                    color: "#000", 
                   },
                   "& .MuiDataGrid-row:hover": {
-                    backgroundColor: "#f0f0f0", // Cor de hover ao passar o mouse
+                    backgroundColor: "#f0f0f0", 
                   },
                   "& .MuiDataGrid-checkboxInput": {
-                    color: "#000", // Cor preta para o checkbox no canto esquerdo
+                    color: "#000", 
                   },
                   "& .MuiDataGrid-selectedRowCount": {
                     color: "#fff",

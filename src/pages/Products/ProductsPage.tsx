@@ -1,16 +1,15 @@
-// src/pages/ProductsPage.tsx
-import React from "react";
-import ListProducts from "../../components/ListProducts"; // Importe o componente que criamos
-import { Typography } from "@mui/material";
+import ListProducts from "../../components/ListProducts"; 
 import { CONSTANTES } from "../../commom/constantes";
+import { Typography } from "@mui/material";
+import React from "react";
 
 const ProductsPage: React.FC = () => {
   return (
     <div>
       <Typography
-          variant="h4" // Define o tamanho do título
-          align="center" // Centraliza o título
-          sx={{ fontWeight: 'bold', marginBottom: 6, marginTop: 4 }} // Estilo adicional para aumentar o tamanho e margem
+          variant="h4" 
+          align="center" 
+          sx={{ fontWeight: 'bold', marginBottom: 6, marginTop: 4 }} 
         >
           {CONSTANTES.LBL_TITLE_PAGE}
         </Typography>

@@ -3,9 +3,9 @@ import { Box, Card, CardHeader, CardContent, Grid, Button, CardActions, Typograp
 import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 import { CONSTANTES } from "../../commom/constantes";
 import InputForm from "../../components/inputForm";
-import './AddProductPage.css';
-import React, { useState } from "react";
 import { unwrapResult } from "@reduxjs/toolkit";
+import React, { useState } from "react";
+import './AddProductPage.css';
 
 function AddProductsForm() {
   const dispatch = useAppDispatch();
@@ -13,23 +13,17 @@ function AddProductsForm() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Função para lidar com o envio do formulário
   const handleSubmit = async () => {
     try {
-      // Despachando a ação e usando unwrapResult para lidar com o sucesso ou erro
       const actionResult = await dispatch(submitFormProducts(values));
       const result = unwrapResult(actionResult);
 
-      // Se chegou aqui, foi bem-sucedido
       setSuccessMessage('Formulário enviado com sucesso!');
-      setErrorMessage(null); // Limpa qualquer mensagem de erro
-
-      // Reseta o formulário após o envio bem-sucedido
+      setErrorMessage(null); 
       dispatch(resetForm());
     } catch (err) {
-      // Lida com erros ao despachar a ação
       setErrorMessage('Erro ao enviar o produto. Tente novamente.');
-      setSuccessMessage(null); // Limpa a mensagem de sucesso, se houver
+      setSuccessMessage(null); 
       console.error(CONSTANTES.ERROR_ADD_PRODUCT, err);
     }
   };
@@ -41,29 +35,28 @@ function AddProductsForm() {
         m={4}
         sx={{
           flexGrow: 1,
-          maxWidth: '800px', // Largura máxima do formulário
-          mx: 'auto', // Centraliza horizontalmente
+          maxWidth: '800px', 
+          mx: 'auto', 
           display: 'flex',
           flexDirection: 'column',
         }}
       >
         <Typography
-          variant="h4" // Define o tamanho do título
-          align="center" // Centraliza o título
-          sx={{ fontWeight: 'bold', marginBottom: 6, marginTop: 2 }} // Estilo adicional para aumentar o tamanho e margem
+          variant="h4" 
+          align="center" 
+          sx={{ fontWeight: 'bold', marginBottom: 6, marginTop: 2 }} 
         >
-          Cadastro de Produto
+          {CONSTANTES.LBL_TITLE_PAGE_PRODUCTS}
         </Typography>
 
-        {/* Exibe mensagem de sucesso ou erro */}
         {successMessage && <Alert severity="success">{successMessage}</Alert>}
         {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
 
         <Card className="form" elevation={5}>
           <CardHeader
-            title="Formulário" // Novo título "Formulário"
+            title={CONSTANTES.LBL_TITLE_FORM}
             className="text-white font-bold"
-            sx={{ textAlign: 'center', fontSize: '1.5rem' }} // Estilo para centralizar e aumentar o tamanho da fonte
+            sx={{ textAlign: 'center', fontSize: '1.5rem' }} 
           />
           <CardContent>
             <Grid container spacing={2}>
@@ -123,10 +116,10 @@ function AddProductsForm() {
             <Button
               variant="contained"
               color="primary"
-              onClick={handleSubmit} // Chama a função handleSubmit no clique do botão
-              disabled={loading} // Desativa o botão enquanto estiver carregando
+              onClick={handleSubmit} 
+              disabled={loading} 
             >
-              {loading ? 'Carregando...' : 'CADASTRAR'}
+              {loading ? 'Carregando...' : CONSTANTES.LBL_BUTTON_SUBMIT}
             </Button>
           </CardActions>
         </Card>

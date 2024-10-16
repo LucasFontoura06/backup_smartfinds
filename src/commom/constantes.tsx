@@ -5,6 +5,8 @@ export const CONSTANTES = {
     
     // Gerais
     VAZIO: "",
+    LBL_FOOTER: "© 2024 Click Shopper",	
+    PRODUCTS: "produtos",
 
     // Página Cadastrar Produtos
     LBL_CADASTRAR_PRODUCTS_TITLE: "Cadastrar Produto",
@@ -18,6 +20,11 @@ export const CONSTANTES = {
     LINK_ALIEXPRESS_NAME: 'linkAliexpress',
     LINK_AMAZON_NAME: 'linkAmazon',
     LINK_MERCADO_LIVRE_NAME: 'linkMercadoLivre',
+    LBL_TITLE_FORM: "Formulário",
+    LBL_TITLE_PAGE_PRODUCTS: "Cadastro de Produto",
+    LBL_BUTTON_SUBMIT: "CADASTRAR",
+
+
 
     //Página de Lista de Produtos
     LBL_TITLE_LISTA_PRODUTOS: "Lista de Produtos",
@@ -28,11 +35,16 @@ export const CONSTANTES = {
     LBL_LINK_AMAZON: "linkAmazon",
     LBL_LINK_MERCADO_LIVRE: "linkMercadoLivre",
     LBL_IMAGE_PRODUCT: "Imagem do Produto",
+    LBL_NAME_AMAZON: "Link Amazon",
+    LBL_NAME_ALIEXPRESS: "Link AliExpress",
+    LBL_NAME_MERCADO_LIVRE: "Link Mercado Livre",
+    LBL_CLASSE_NAME: "produto-nome-cell",
     
 
     // Erros
     ERROR_ADD_PRODUCT: "Erro ao cadastrar produto",
     ERROR_LIST_PRODUCT: "Erro ao listar produtos",
+    ERROR_FIND_PRODUCTS: "Erro ao buscar produtos:",
 
     //Success
     SUCCESS_FORM_REGISTRATION: "Produto cadastrado com sucesso!",
