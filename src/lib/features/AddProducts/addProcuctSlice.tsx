@@ -9,9 +9,9 @@ import Product from '../../../commom/products'; // Importa a classe Product
 const addProdutosShema = Yup.object().shape({
   name: Yup.string().required('Nome do produto é obrigatório'),
   linkImage: Yup.string().required('Link da imagem é obrigatório'),
-  linkAliexpress: Yup.string().required('Link do AliExpress é obrigatório'),
-  linkAmazon: Yup.string().required('Link da Amazon é obrigatório'),
-  linkMercadoLivre: Yup.string().required('Link do Mercado Livre é obrigatório'),
+  linkAliexpress: Yup.string(),
+  linkAmazon: Yup.string(),
+  linkMercadoLivre: Yup.string(),
 });
 
 const INITIAL_STATE = {
@@ -30,7 +30,6 @@ const INITIAL_STATE = {
     linkAmazon: CONSTANTES.VAZIO,
     linkMercadoLivre: CONSTANTES.VAZIO,
     ativo: false,
-    // dataCadastro: undefined, // Data de cadastro opcional
   },
 };
 
@@ -49,6 +48,23 @@ export const submitFormProducts = createAsyncThunk<any, any>(
       return produtoData;
     } catch (error: any) {
       return rejectWithValue(error.message || "Erro ao adicionar produto");
+    }
+  }
+);
+
+export const updateProduto = createAsyncThunk<any, any>(
+  'addProducts/updateProduto',
+  async (produtoData, { rejectWithValue }) => {
+    try {
+      const produtoDocRef = doc(db, "produtos", produtoData.id); // Referência ao documento do produto no Firestore
+      
+      // Atualiza o produto no Firestore
+      await setDoc(produtoDocRef, produtoData, { merge: true }); // `merge: true` preserva os campos não atualizados
+      
+      // Retorna os dados atualizados
+      return produtoData;
+    } catch (error: any) {
+      return rejectWithValue(error.message || "Erro ao atualizar produto");
     }
   }
 );
@@ -77,7 +93,6 @@ export const fetchProdutos = createAsyncThunk(
           linkAmazon: data.linkAmazon || CONSTANTES.VAZIO,
           linkMercadoLivre: data.linkMercadoLivre || CONSTANTES.VAZIO,
           ativo: data.ativo ?? false,
-          // dataCadastro: data.dataCadastro,
         };
       });
 
@@ -147,20 +162,6 @@ const addProductSlice = createSlice({
         state.touched[CONSTANTES.LINK_MERCADO_LIVRE_NAME] = true;
       }
     },
-    submitFormProducts: (state) => {
-      try {
-        addProdutosShema.validateSync(state.values, { abortEarly: false });
-        state.validForm = true;
-      } catch (error: any) {
-        state.success = false;
-        if (error instanceof Yup.ValidationError) {
-          error.inner.forEach((validationError: any) => {
-            state.touched[validationError.path] = true;
-            state.errors[validationError.path] = validationError.message;
-          });
-        }
-      }
-    },
     resetForm: (state) => {
       // Reseta os valores para um objeto simples com os valores iniciais
       state.values = {
@@ -171,7 +172,6 @@ const addProductSlice = createSlice({
         linkAmazon: CONSTANTES.VAZIO,
         linkMercadoLivre: CONSTANTES.VAZIO,
         ativo: false,
-        // dataCadastro: undefined,
       };
       state.errors = {}; // Limpa todos os erros
       state.touched = {}; // Limpa os campos marcados como "touched"
@@ -211,6 +211,23 @@ const addProductSlice = createSlice({
         state.success = true;
       })
       .addCase(fetchProdutos.rejected, (state, action) => {
+        state.loading = false;
+        state.errors.general = action.error?.message || CONSTANTES.VAZIO;
+      })
+      .addCase(updateProduto.pending, (state) => {
+        state.loading = true;
+        state.success = false;
+      })
+      .addCase(updateProduto.fulfilled, (state, action) => {
+        state.loading = false;
+        // Encontra o produto e atualiza seu valor no estado
+        const index = state.produtos.findIndex((produto) => produto.id === action.payload.id);
+        if (index !== -1) {
+          state.produtos[index] = action.payload;
+        }
+        state.success = true;
+      })
+      .addCase(updateProduto.rejected, (state, action) => {
         state.loading = false;
         state.errors.general = action.error?.message || CONSTANTES.VAZIO;
       });
