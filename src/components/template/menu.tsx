@@ -4,6 +4,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AddIcon from '@mui/icons-material/Add';
+import CategoryIcon from '@mui/icons-material/Category';
 import { useNavigate } from 'react-router-dom';
 
 interface MenuProps {
@@ -20,8 +21,8 @@ const Menu: React.FC<MenuProps> = ({ open, setOpen }) => {
   const navigate = useNavigate();
 
   const handleNavigation = (path: string) => {
-    navigate(path); // Navega para a rota correspondente
-    setOpen(false); // Fecha o menu ao navegar
+    navigate(path);
+    setOpen(false);
   };
 
   return (
@@ -30,11 +31,13 @@ const Menu: React.FC<MenuProps> = ({ open, setOpen }) => {
         <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
           <Divider />
           <List>
-            {[{ icon: <HomeIcon />, text: 'Home', path: '/' },
-              { icon: <ShoppingCartIcon />, text: 'Produtos', path: '/products' }, // Corrigir para '/products'
+            {[
+              { icon: <HomeIcon />, text: 'Home', path: '/' },
+              { icon: <ShoppingCartIcon />, text: 'Produtos', path: '/products' },
               { icon: <DashboardIcon />, text: 'Dashboard', path: '/dashboard' },
-              { icon: <AddIcon />, text: 'Cadastrar Produto', path: '/cadastrarProduto' }
-            ].map((item, i) => (
+              { icon: <AddIcon />, text: 'Cadastrar Produto', path: '/cadastrarProduto' },
+              { icon: <CategoryIcon />, text: 'Categorias', path: '/Affiliate' }, // Nova rota para categorias
+            ].map((item) => (
               <ListItem key={item.text} disablePadding>
                 <ListItemButton onClick={() => handleNavigation(item.path)}>
                   <ListItemIcon sx={{ color: '#fff' }}>{item.icon}</ListItemIcon>

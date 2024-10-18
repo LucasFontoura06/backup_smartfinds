@@ -14,6 +14,7 @@ import {
   DialogTitle,
   Grid,
 } from "@mui/material";
+import '../styles/Card.module.css'; // Importe o arquivo de CSS para aplicar os estilos
 
 // Define a interface para os links do produto
 interface ProductLinks {
@@ -48,28 +49,23 @@ const Card = ({ img, title, productLinks }: { img: string; title: string; produc
 
   return (
     <>
-      <MUICard sx={{ maxWidth: 345, m: 2, boxShadow: 3 }}>
+      <MUICard className="category-card"> {/* Altere a classe para igualar o estilo */}
         <CardMedia
           component="img"
           image={img}
           alt={title}
-          sx={{
-            width: "100%",
-            height: 200, // Definindo uma altura fixa
-            objectFit: "contain", // Garante que a imagem inteira seja visível sem corte
-            objectPosition: "center", // Centraliza a imagem dentro do container
-            padding: 2
-          }}
+          className="category-card-media" // Mesmo estilo usado para as categorias
+          sx={{ height: 150, objectFit: 'contain' }} // Definindo altura máxima para a imagem
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography gutterBottom variant="h6" component="div" align="center">
             {title}
           </Typography>
           <Button
             variant="contained"
             color="primary"
             fullWidth
-            sx={{ mt: 2 }}
+            className="category-card-button" // Mesmo estilo para os botões
             onClick={handleClickOpen}
           >
             Ver Opções de Compra
@@ -143,38 +139,39 @@ const Card = ({ img, title, productLinks }: { img: string; title: string; produc
 
 // Função para buscar produtos em tempo real
 const ProductList = () => {
-  const [products, setProducts] = useState<Product[]>([]); // Definindo o estado com o tipo Product[]
+  const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    // Usando onSnapshot para ouvir as mudanças em tempo real
     const unsubscribe = onSnapshot(collection(db, "produtos"), (snapshot) => {
       const productsData: Product[] = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-      })) as Product[]; // Fazendo o casting para o tipo Product[]
-      console.log("Dados de produtos:", productsData); // Adicionando log para verificar os dados
-      setProducts(productsData); // Atualiza a lista de produtos
+      })) as Product[];
+      console.log("Dados de produtos:", productsData);
+      setProducts(productsData);
     });
 
-    // Cleanup listener ao desmontar o componente
     return () => unsubscribe();
   }, []);
 
   return (
-    <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
-      {products.map((product) => (
-        <Card
-          key={product.id}
-          img={product.linkImage} // Certifique-se de que este é o nome correto do campo da imagem no Firestore
-          title={product.name}
-          productLinks={{
-            amazon: product.linkAmazon,
-            mercadoLivre: product.linkMercadoLivre,
-            shopee: product.linkShopee,
-            aliexpress: product.linkAliexpress,
-          }}
-        />
-      ))}
+    <div className="product-list-container">
+      <Grid container spacing={3} justifyContent="center">
+        {products.map((product) => (
+          <Grid item xs={12} sm={6} md={3} key={product.id}>
+            <Card
+              img={product.linkImage}
+              title={product.name}
+              productLinks={{
+                amazon: product.linkAmazon,
+                mercadoLivre: product.linkMercadoLivre,
+                shopee: product.linkShopee,
+                aliexpress: product.linkAliexpress,
+              }}
+            />
+          </Grid>
+        ))}
+      </Grid>
     </div>
   );
 };
