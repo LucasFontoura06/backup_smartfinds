@@ -36,7 +36,7 @@ const Menu: React.FC<MenuProps> = ({ open, setOpen }) => {
               { icon: <ShoppingCartIcon />, text: 'Produtos', path: '/products' },
               { icon: <DashboardIcon />, text: 'Dashboard', path: '/dashboard' },
               { icon: <AddIcon />, text: 'Cadastrar Produto', path: '/cadastrarProduto' },
-              { icon: <CategoryIcon />, text: 'Categorias', path: '/Affiliate' }, // Nova rota para categorias
+              { icon: <CategoryIcon />, text: 'Afiliados', path: '/Affiliate' }, // Nova rota para categorias
             ].map((item) => (
               <ListItem key={item.text} disablePadding>
                 <ListItemButton onClick={() => handleNavigation(item.path)}>
