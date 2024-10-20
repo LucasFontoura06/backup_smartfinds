@@ -1,10 +1,11 @@
-import { fetchProdutos } from "../lib/features/AddProducts/addProcuctSlice";
-import { Box, Card, CardContent, CardHeader, Slide, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../lib/hooks";
-import { CONSTANTES } from "../commom/constantes";
-import { DataGrid } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
+import { Layout, Table, Button, Modal, Spin, Card } from "antd"; // Componentes do Ant Design
+import { useAppDispatch, useAppSelector } from "../lib/hooks";
+import { fetchProdutos } from "../lib/features/AddProducts/addProcuctSlice";
 import AddProductsForm from "../pages/AddProduct/AddProductPage"; // Import do formulário para editar
+import { CONSTANTES } from "../commom/constantes";
+
+const { Content } = Layout;
 
 const ListProducts: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -35,136 +36,120 @@ const ListProducts: React.FC = () => {
     setOpen(false); // Fecha o modal após a edição ser concluída
   };
 
-  // Função para renderizar as colunas somente se os links estiverem presentes
+  // Definindo as colunas para a tabela
   const columns = [
     {
-      field: CONSTANTES.LBL_NAME,
-      headerName: CONSTANTES.LBL_NOME_PRODUTO,
-      flex: 1,
-      cellClassName: CONSTANTES.LBL_CLASSE_NAME,
-    },
-    {
-      field: CONSTANTES.LBL_LINK_IMAGE,
-      headerName: CONSTANTES.LBL_IMAGE_PRODUCT,
-      flex: 1,
-      renderCell: (params: any) => (
-        params.row.linkImage ? (
-          <img src={params.row.linkImage} alt={params.row.name} style={{ width: 50, height: 50 }} />
-        ) : null
+      title: CONSTANTES.LBL_NOME_PRODUTO,
+      dataIndex: "name",
+      key: "name",
+      render: (text: string) => (
+        <span style={{ color: "#000" }}>{text || "Nome indisponível"}</span> // Cor preta para melhor visibilidade
       ),
     },
     {
-      field: CONSTANTES.LBL_LINK_ALIEXPRESS,
-      headerName: CONSTANTES.LBL_NAME_ALIEXPRESS,
-      flex: 1,
-      renderCell: (params: any) => (
-        params.row.linkAliexpress ? (
-          <a href={params.row.linkAliexpress} target="_blank" rel="noopener noreferrer">
+      title: CONSTANTES.LBL_IMAGE_PRODUCT,
+      dataIndex: "linkImage",
+      key: "linkImage",
+      render: (text: string, record: any) =>
+        record.linkImage ? <img src={record.linkImage} alt={record.name} style={{ width: 50, height: 50 }} /> : null,
+    },
+    {
+      title: CONSTANTES.LBL_NAME_ALIEXPRESS,
+      dataIndex: "linkAliexpress",
+      key: "linkAliexpress",
+      render: (text: string, record: any) =>
+        record.linkAliexpress ? (
+          <a href={record.linkAliexpress} target="_blank" rel="noopener noreferrer" style={{ color: "#1890ff" }}>
             AliExpress
           </a>
-        ) : null
-      ),
+        ) : null,
     },
     {
-      field: CONSTANTES.LBL_LINK_AMAZON,
-      headerName: CONSTANTES.LBL_NAME_AMAZON,
-      flex: 1,
-      renderCell: (params: any) => (
-        params.row.linkAmazon ? (
-          <a href={params.row.linkAmazon} target="_blank" rel="noopener noreferrer">
+      title: CONSTANTES.LBL_NAME_AMAZON,
+      dataIndex: "linkAmazon",
+      key: "linkAmazon",
+      render: (text: string, record: any) =>
+        record.linkAmazon ? (
+          <a href={record.linkAmazon} target="_blank" rel="noopener noreferrer" style={{ color: "#1890ff" }}>
             Amazon
           </a>
-        ) : null
-      ),
+        ) : null,
     },
     {
-      field: CONSTANTES.LBL_LINK_MERCADO_LIVRE,
-      headerName: CONSTANTES.LBL_NAME_MERCADO_LIVRE,
-      flex: 1,
-      renderCell: (params: any) => (
-        params.row.linkMercadoLivre ? (
-          <a href={params.row.linkMercadoLivre} target="_blank" rel="noopener noreferrer">
+      title: CONSTANTES.LBL_NAME_MERCADO_LIVRE,
+      dataIndex: "linkMercadoLivre",
+      key: "linkMercadoLivre",
+      render: (text: string, record: any) =>
+        record.linkMercadoLivre ? (
+          <a href={record.linkMercadoLivre} target="_blank" rel="noopener noreferrer" style={{ color: "#1890ff" }}>
             Mercado Livre
           </a>
-        ) : null
-      ),
+        ) : null,
     },
     {
-      field: "edit",
-      headerName: "Editar",
-      flex: 1,
-      renderCell: (params: any) => (
-        <Button onClick={() => handleEditClick(params.row)}>Editar</Button>
+      title: "Editar",
+      key: "edit",
+      render: (text: string, record: any) => (
+        <Button onClick={() => handleEditClick(record)} type="primary">
+          Editar
+        </Button>
       ),
     },
   ];
 
   return (
-    <Slide direction="right" in={true} mountOnEnter unmountOnExit>
-      <Box component="div" m={4} sx={{ flexGrow: 1 }}>
-        <Card className="form" elevation={5}>
-          <CardHeader title={CONSTANTES.LBL_TITLE_LISTA_PRODUTOS} className="text-white font-bold" />
-          <CardContent>
-            {!loading ? (
-              <>
-                <DataGrid
-                  rows={produtos.map((produto: any) => ({
-                    id: produto.id,
-                    name: produto.name,
-                    linkImage: produto.linkImage,
-                    linkAliexpress: produto.linkAliexpress,
-                    linkAmazon: produto.linkAmazon,
-                    linkMercadoLivre: produto.linkMercadoLivre,
-                  })) || []}
-                  columns={columns}
-                  pageSizeOptions={[10]}
-                  checkboxSelection
-                  disableRowSelectionOnClick
-                  autoHeight
-                  sx={{
-                    "& .MuiDataGrid-cell": {
-                      color: "#fff",
-                    },
-                    "& .produto-nome-cell": {
-                      color: "#000",
-                    },
-                    "& .MuiDataGrid-row:hover": {
-                      backgroundColor: "#f0f0f0",
-                    },
-                    "& .MuiDataGrid-checkboxInput": {
-                      color: "#000",
-                    },
-                    "& .MuiDataGrid-selectedRowCount": {
-                      color: "#fff",
-                    },
-                    "& .MuiTablePagination-actions": {
-                      color: "#fff",
-                    },
-                    "& .MuiTablePagination-displayedRows": {
-                      color: "#fff",
-                    },
-                  }}
-                />
-                {/* Modal para editar o produto */}
-                <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-                  {/* <DialogTitle>Editar Produto</DialogTitle> */}
-                  <DialogContent>
-                    {selectedProduct && (
-                      <AddProductsForm produtoParaEditar={selectedProduct} onProductUpdated={handleProductUpdated} />
-                    )}
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={handleClose} color="secondary">
-                      Cancelar
-                    </Button>
-                  </DialogActions>
-                </Dialog>
-              </>
-            ) : null}
-          </CardContent>
+    <Layout style={{ backgroundColor: "#001529", padding: "0" }}> {/* Certifique-se que o Layout não tenha padding */}
+      <Content style={{ padding: "0", margin: "0", backgroundColor: "transparent" }}> {/* Garantindo que o Content não tenha padding */}
+        <Card
+          title={<span className="custom-card-title">{CONSTANTES.LBL_TITLE_LISTA_PRODUTOS}</span>}
+          style={{ backgroundColor: "#001529", color: "#f0f0f0", border: "none", padding: "0" }} // Removendo padding e bordas no Card
+          headStyle={{ backgroundColor: "#001529", color: "#f0f0f0", padding: "0" }} // Removendo padding do cabeçalho
+          bodyStyle={{ padding: "0" }} // Removendo padding do corpo do card
+        >
+          {!loading ? (
+            <Table
+              columns={columns}
+              dataSource={produtos.map((produto: any) => ({
+                key: produto.id,
+                name: produto.name || "Nome não disponível", // Fallback para o nome
+                linkImage: produto.linkImage,
+                linkAliexpress: produto.linkAliexpress,
+                linkAmazon: produto.linkAmazon,
+                linkMercadoLivre: produto.linkMercadoLivre,
+              }))}
+              pagination={{ pageSize: 10 }}
+              rowClassName={() => 'custom-row'} // Adiciona uma classe customizada às linhas
+              style={{ backgroundColor: "#001529", color: "#000", padding: "0" }} // Removendo padding da tabela
+            />
+          ) : (
+            <Spin tip="Carregando produtos..." />
+          )}
+
+          {/* Modal para edição do produto */}
+          <Modal
+            title="Editar Produto"
+            visible={open}
+            onCancel={handleClose}
+            footer={null}
+            bodyStyle={{ backgroundColor: "#001529", color: "#f0f0f0" }}
+          >
+            {selectedProduct && (
+              <AddProductsForm produtoParaEditar={selectedProduct} onProductUpdated={handleProductUpdated} />
+            )}
+          </Modal>
         </Card>
-      </Box>
-    </Slide>
+      </Content>
+
+      <style>{`
+        .custom-row {
+          border-bottom: 1px solid #ddd; // Linha divisória entre as linhas da tabela
+        }
+        .custom-card-title {
+          background-color: #001529 !important;
+          color: #f0f0f0 !important;
+        }
+      `}</style>
+    </Layout>
   );
 };
 

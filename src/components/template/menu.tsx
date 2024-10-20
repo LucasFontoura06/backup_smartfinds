@@ -1,55 +1,70 @@
-import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider } from '@mui/material';
-import { motion } from 'framer-motion';
-import HomeIcon from '@mui/icons-material/Home';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import AddIcon from '@mui/icons-material/Add';
-import CategoryIcon from '@mui/icons-material/Category';
+import React from 'react';
+import { Layout, Menu } from 'antd';
+import { HomeOutlined, ShoppingCartOutlined, DashboardOutlined, PlusOutlined, AppstoreOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
-interface MenuProps {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-}
+const { Sider } = Layout;
 
-const menuVariants = {
-  open: { opacity: 1, x: 0, transition: { type: 'spring', stiffness: 300, damping: 30 } },
-  closed: { opacity: 0, x: '-100%', transition: { type: 'spring', stiffness: 300, damping: 40 } },
-};
-
-const Menu: React.FC<MenuProps> = ({ open, setOpen }) => {
+const MenuComponent: React.FC = () => {
   const navigate = useNavigate();
 
   const handleNavigation = (path: string) => {
     navigate(path);
-    setOpen(false);
   };
 
+  const items = [
+    {
+      key: '1',
+      icon: <HomeOutlined />,
+      label: 'Home',
+      onClick: () => handleNavigation('/'),
+    },
+    {
+      key: '2',
+      icon: <ShoppingCartOutlined />,
+      label: 'Produtos',
+      onClick: () => handleNavigation('/products'),
+    },
+    {
+      key: '3',
+      icon: <DashboardOutlined />,
+      label: 'Dashboard',
+      onClick: () => handleNavigation('/dashboard'),
+    },
+    {
+      key: '4',
+      icon: <PlusOutlined />,
+      label: 'Cadastrar Produto',
+      onClick: () => handleNavigation('/cadastrarProduto'),
+    },
+    {
+      key: '5',
+      icon: <AppstoreOutlined />,
+      label: 'Afiliados',
+      onClick: () => handleNavigation('/Affiliate'),
+    },
+  ];
+
   return (
-    <Drawer open={open} onClose={() => setOpen(false)} sx={{ '& .MuiDrawer-paper': { width: 240, backgroundColor: '#4a4a4a' } }}>
-      <motion.div initial={open ? 'closed' : 'open'} animate={open ? 'open' : 'closed'} variants={menuVariants} style={{ height: '100%' }}>
-        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-          <Divider />
-          <List>
-            {[
-              { icon: <HomeIcon />, text: 'Home', path: '/' },
-              { icon: <ShoppingCartIcon />, text: 'Produtos', path: '/products' },
-              { icon: <DashboardIcon />, text: 'Dashboard', path: '/dashboard' },
-              { icon: <AddIcon />, text: 'Cadastrar Produto', path: '/cadastrarProduto' },
-              { icon: <CategoryIcon />, text: 'Afiliados', path: '/Affiliate' }, // Nova rota para categorias
-            ].map((item) => (
-              <ListItem key={item.text} disablePadding>
-                <ListItemButton onClick={() => handleNavigation(item.path)}>
-                  <ListItemIcon sx={{ color: '#fff' }}>{item.icon}</ListItemIcon>
-                  <ListItemText primary={item.text} sx={{ color: '#fff' }} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-      </motion.div>
-    </Drawer>
+    <Sider
+      theme="dark"
+      width={250}
+      style={{
+        height: '100vh',
+        position: 'fixed',
+        left: 0,
+        top: 0,
+        zIndex: 1000,
+      }}
+    >
+      <div className="logo" style={{ height: '64px', backgroundColor: '#001529', margin: '16px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <h2 style={{ color: 'white', textAlign: 'center', paddingTop: '10px' }}>
+          Click Shopper
+        </h2>
+      </div>
+      <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} items={items} />
+    </Sider>
   );
 };
 
-export default Menu;
+export default MenuComponent;
