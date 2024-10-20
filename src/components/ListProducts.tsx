@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Layout, Table, Button, Modal, Spin, Card } from "antd"; // Componentes do Ant Design
+import { Layout, Table, Button, Modal, Spin, Card } from "antd";
 import { useAppDispatch, useAppSelector } from "../lib/hooks";
-import { fetchProdutos } from "../lib/features/AddProducts/addProcuctSlice";
+import { fetchProdutos, updateProduto } from "../lib/features/AddProducts/addProcuctSlice";
 import AddProductsForm from "../pages/AddProduct/AddProductPage"; // Import do formulário para editar
 import { CONSTANTES } from "../commom/constantes";
 
@@ -12,6 +12,7 @@ const ListProducts: React.FC = () => {
   const { loading, produtos, error } = useAppSelector((state: any) => state.addProducts);
   const [selectedProduct, setSelectedProduct] = useState<any>(null); // Produto selecionado para edição
   const [open, setOpen] = useState(false); // Estado para controlar a abertura do modal
+  const [showLoading, setShowLoading] = useState(true); // Controla a exibição do loading
 
   useEffect(() => {
     dispatch(fetchProdutos());
@@ -22,6 +23,14 @@ const ListProducts: React.FC = () => {
       console.error(CONSTANTES.ERROR_FIND_PRODUCTS, error);
     }
   }, [error]);
+
+  // Simula o loading por mais tempo (ex. 2 segundos)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowLoading(false);
+    }, 1000); // 2 segundos de delay
+    return () => clearTimeout(timer); // Limpa o timeout quando o componente desmontar
+  }, [loading]);
 
   const handleEditClick = (produto: any) => {
     setSelectedProduct(produto); // Armazena o produto selecionado
@@ -34,6 +43,7 @@ const ListProducts: React.FC = () => {
 
   const handleProductUpdated = () => {
     setOpen(false); // Fecha o modal após a edição ser concluída
+    dispatch(fetchProdutos()); // Atualiza a lista após a edição
   };
 
   // Definindo as colunas para a tabela
@@ -43,7 +53,7 @@ const ListProducts: React.FC = () => {
       dataIndex: "name",
       key: "name",
       render: (text: string) => (
-        <span style={{ color: "#000" }}>{text || "Nome indisponível"}</span> // Cor preta para melhor visibilidade
+        <span style={{ color: "#000" }}>{text || "Nome indisponível"}</span>
       ),
     },
     {
@@ -98,40 +108,41 @@ const ListProducts: React.FC = () => {
   ];
 
   return (
-    <Layout style={{ backgroundColor: "#001529", padding: "0" }}> {/* Certifique-se que o Layout não tenha padding */}
-      <Content style={{ padding: "0", margin: "0", backgroundColor: "transparent" }}> {/* Garantindo que o Content não tenha padding */}
+    <Layout style={{ backgroundColor: "#001529", padding: "0" }}>
+      <Content style={{ padding: "0", margin: "0", backgroundColor: "transparent" }}>
         <Card
           title={<span className="custom-card-title">{CONSTANTES.LBL_TITLE_LISTA_PRODUTOS}</span>}
-          style={{ backgroundColor: "#001529", color: "#f0f0f0", border: "none", padding: "0" }} // Removendo padding e bordas no Card
-          headStyle={{ backgroundColor: "#001529", color: "#f0f0f0", padding: "0" }} // Removendo padding do cabeçalho
-          bodyStyle={{ padding: "0" }} // Removendo padding do corpo do card
+          style={{ backgroundColor: "#001529", color: "#f0f0f0", border: "none", padding: "0" }}
+          styles={{ header: { backgroundColor: "#001529", color: "#f0f0f0" }, body: { padding: "0" } }}
         >
-          {!loading ? (
+          {!showLoading ? (
             <Table
               columns={columns}
               dataSource={produtos.map((produto: any) => ({
                 key: produto.id,
-                name: produto.name || "Nome não disponível", // Fallback para o nome
+                name: produto.name || "Nome não disponível",
                 linkImage: produto.linkImage,
                 linkAliexpress: produto.linkAliexpress,
                 linkAmazon: produto.linkAmazon,
                 linkMercadoLivre: produto.linkMercadoLivre,
               }))}
               pagination={{ pageSize: 10 }}
-              rowClassName={() => 'custom-row'} // Adiciona uma classe customizada às linhas
-              style={{ backgroundColor: "#001529", color: "#000", padding: "0" }} // Removendo padding da tabela
+              rowClassName={() => 'custom-row'}
+              style={{ backgroundColor: "#001529", color: "#000", padding: "0" }}
             />
           ) : (
-            <Spin tip="Carregando produtos..." />
+            <div className="loading-container">
+              <Spin tip="Carregando produtos..." />
+            </div>
           )}
 
           {/* Modal para edição do produto */}
           <Modal
             title="Editar Produto"
-            visible={open}
+            open={open}
             onCancel={handleClose}
             footer={null}
-            bodyStyle={{ backgroundColor: "#001529", color: "#f0f0f0" }}
+            styles={{ body: { backgroundColor: "#001529", color: "#f0f0f0" } }}
           >
             {selectedProduct && (
               <AddProductsForm produtoParaEditar={selectedProduct} onProductUpdated={handleProductUpdated} />
@@ -142,11 +153,17 @@ const ListProducts: React.FC = () => {
 
       <style>{`
         .custom-row {
-          border-bottom: 1px solid #ddd; // Linha divisória entre as linhas da tabela
+          border-bottom: 1px solid #ddd;
         }
         .custom-card-title {
           background-color: #001529 !important;
           color: #f0f0f0 !important;
+        }
+        .loading-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
         }
       `}</style>
     </Layout>

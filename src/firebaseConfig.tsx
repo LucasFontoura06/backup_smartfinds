@@ -23,7 +23,6 @@ const firebaseConfig = {
   measurementId: "G-CT63RXFE86"
 };
 
-console.log("Configuração Firebase:", firebaseConfig); 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
