@@ -1,20 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
-import { db } from "../firebaseConfig"; // Certifique-se de que este arquivo é o seu arquivo de configuração do Firebase
-import {
-  Card as MUICard,
-  CardContent,
-  CardMedia,
-  Typography,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Grid,
-} from "@mui/material";
-import '../styles/Card.module.css'; // Importe o arquivo de CSS para aplicar os estilos
+import { db } from "../firebaseConfig"; 
+import { Box, Container, Grid, Card, CardContent, CardMedia, Typography, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 
 // Define a interface para os links do produto
 interface ProductLinks {
@@ -35,8 +22,8 @@ interface Product {
   linkAliexpress?: string;
 }
 
-// Componente do Card
-const Card = ({ img, title, productLinks }: { img: string; title: string; productLinks: ProductLinks }) => {
+// Componente do Card com o layout dos afiliados
+const ProductCard = ({ img, title, productLinks }: { img: string; title: string; productLinks: ProductLinks }) => {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -49,13 +36,18 @@ const Card = ({ img, title, productLinks }: { img: string; title: string; produc
 
   return (
     <>
-      <MUICard className="category-card"> {/* Altere a classe para igualar o estilo */}
+      <Card
+        sx={{
+          backgroundColor: "#fff",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // Leve sombra no card
+          borderRadius: "8px", // Bordas arredondadas
+        }}
+      >
         <CardMedia
           component="img"
           image={img}
           alt={title}
-          className="category-card-media" // Mesmo estilo usado para as categorias
-          sx={{ height: 150, objectFit: 'contain' }} // Definindo altura máxima para a imagem
+          sx={{ height: 150, objectFit: 'contain' }} 
         />
         <CardContent>
           <Typography gutterBottom variant="h6" component="div" align="center">
@@ -65,15 +57,15 @@ const Card = ({ img, title, productLinks }: { img: string; title: string; produc
             variant="contained"
             color="primary"
             fullWidth
-            className="category-card-button" // Mesmo estilo para os botões
             onClick={handleClickOpen}
+            sx={{ mb: 1 }}
           >
             Ver Opções de Compra
           </Button>
         </CardContent>
-      </MUICard>
+      </Card>
 
-      {/* Pop-up de seleção de plataformas */}
+      {/* Pop-up para exibir opções de compra */}
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Escolha uma plataforma</DialogTitle>
         <DialogContent>
@@ -147,7 +139,6 @@ const ProductList = () => {
         id: doc.id,
         ...doc.data(),
       })) as Product[];
-      console.log("Dados de produtos:", productsData);
       setProducts(productsData);
     });
 
@@ -155,11 +146,20 @@ const ProductList = () => {
   }, []);
 
   return (
-    <div className="product-list-container">
+    <Container
+      sx={{
+        backgroundColor: "#001529", // Cor de fundo da página
+        minHeight: "100vh", // Altura mínima da página para cobrir toda a tela
+        padding: "2rem",
+      }}
+    >
+      <Typography variant="h4" align="center" sx={{ fontWeight: 'bold', color: '#fff', marginBottom: 6, marginTop: 4 }}>
+        Lista de Produtos
+      </Typography>
       <Grid container spacing={3} justifyContent="center">
         {products.map((product) => (
           <Grid item xs={12} sm={6} md={3} key={product.id}>
-            <Card
+            <ProductCard
               img={product.linkImage}
               title={product.name}
               productLinks={{
@@ -172,7 +172,7 @@ const ProductList = () => {
           </Grid>
         ))}
       </Grid>
-    </div>
+    </Container>
   );
 };
 
