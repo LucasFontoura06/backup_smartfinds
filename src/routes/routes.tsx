@@ -7,12 +7,15 @@ import AddProductPage from '../pages/AddProduct/AddProductPage'; // Componente p
 import Home from '../pages/Home/HomePage';
 import Affiliate from '../pages/Affiliate/Affiliate';
 
+import ProductList from '../pages/Produtos/ProdutosPage';
+
 
 const AppRoutes: React.FC = () => {
   return (
     <Routes>
       {/* Redireciona da rota raiz "/" para "/products" */}
       <Route path="/" element={<Home />} /> 
+      <Route path="/produtos" element={<ProductList />} /> 
       <Route path="/products" element={<ProductsPage />} /> 
       <Route path="/dashboard" element={<DashboardPage />} />
       <Route path="/cadastrarProduto" element={<AddProductPage />} />

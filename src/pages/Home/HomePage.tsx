@@ -99,7 +99,7 @@ const MainScreen: React.FC = () => {
       <Button
         variant="contained"
         className={classes.buttonProducts}
-        onClick={() => navigate('/products')}
+        onClick={() => navigate('/produtos')}
       >
         Ir para Produtos
       </Button>
