@@ -1,28 +1,60 @@
 import React from 'react';
-import ProductList from '../../components/Card';
-import { Typography, Box } from '@mui/material';
+import { Button } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { useNavigate } from 'react-router-dom'; // Importando o useNavigate para navegação
 
-export default function HomePage() {
+const useStyles = makeStyles(() => ({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100vh',
+    background: 'linear-gradient(90deg, #7b1fa2, #2196f3)', // Degradê roxo para azul
+    color: '#fff',
+    textAlign: 'center',
+    padding: '0 20px',
+  },
+  title: {
+    fontSize: '4rem',
+    fontWeight: 'bold',
+    marginBottom: '20px',
+    letterSpacing: '2px',
+    textTransform: 'uppercase',
+  },
+  button: {
+    position: 'absolute',
+    top: '20px',
+    right: '20px',
+    backgroundColor: '#fff', // Botão branco
+    color: '#7b1fa2', // Texto roxo no botão
+    '&:hover': {
+      backgroundColor: '#f3e5f5', // Cor ao passar o mouse
+    },
+  },
+}));
+
+const MainScreen: React.FC = () => {
+  const classes = useStyles();
+  const navigate = useNavigate(); // Inicializando o hook useNavigate
+
+  // Função para redirecionar ao clicar no botão
+  const handleNavigation = () => {
+    navigate('/products'); // Caminho para onde deseja navegar
+  };
+
   return (
-    <Box
-      sx={{
-        backgroundColor: '#001529', // Cor de fundo
-        minHeight: '100vh', // Para cobrir toda a altura da tela
-        padding: 0, // Remove qualquer padding
-        margin: 0, // Remove qualquer margem
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center', // Centraliza os itens horizontalmente
-      }}
-    >
-      <Typography
-        variant="h4"
-        align="center"
-        sx={{ fontWeight: 'bold', marginBottom: 6, marginTop: 4, color: '#fff' }} // Ajuste de cor para o texto
+    <div className={classes.container}>
+      <Button
+        variant="contained"
+        className={classes.button}
+        onClick={handleNavigation} // Chamando a função ao clicar no botão
       >
-        Seja Bem Vindo a Nossa Loja!
-      </Typography>
-      <ProductList />
-    </Box>
+        Adm
+      </Button>
+      <h1 className={classes.title}>Smart Finds</h1>
+    </div>
   );
-}
+};
+
+export default MainScreen;

@@ -5,7 +5,7 @@ export const CONSTANTES = {
     
     // Gerais
     VAZIO: "",
-    LBL_FOOTER: "© 2024 Click Shopper",	
+    LBL_FOOTER: "© 2024 Smart Finds",	
     PRODUCTS: "produtos",
 
     // Página Cadastrar Produtos

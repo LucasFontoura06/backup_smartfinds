@@ -1,46 +1,56 @@
 import React, { useState } from 'react';
 import { CssBaseline } from '@mui/material';
-import { Provider } from 'react-redux'; // Importando o Provider do Redux
-import { BrowserRouter as Router } from 'react-router-dom'; // Envolvendo o app com BrowserRouter
-import Navbar from './components/Navbar'; // Componente de navegação que você pode criar
-import Footer from './components/Footer'; // Componente de rodapé que você pode criar
-import Menu from './components/template/menu'; // Importando o menu lateral
-import AppRoutes from './routes/routes'; // Importando as rotas definidas
-import { store } from '../src/lib/store'; // Importando a instância da store já criada
-import { Layout } from 'antd'; // Importando o Layout do Ant Design
+import { Provider } from 'react-redux';
+import { BrowserRouter as Router, useLocation } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import Menu from './components/template/menu';
+import AppRoutes from './routes/routes';
+import { store } from '../src/lib/store';
+import { Layout } from 'antd';
 
-const { Content } = Layout; // Extraindo Content do Layout
+const { Content } = Layout;
 
 const App: React.FC = () => {
-  const [menuOpen, setMenuOpen] = useState(true); // Estado para controlar o menu
+  const [menuOpen, setMenuOpen] = useState(true);
+  const location = useLocation(); // Hook para acessar a localização atual
 
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen); // Alterna entre abrir e fechar o menu
-  };
+  // Verifica se a localização atual é a homepage
+  const isHomePage = location.pathname === '/';
 
   return (
-    <Provider store={store}> {/* Envolvendo o Router com o Provider */} 
+    <div className="App">
+      <CssBaseline />
+      <Layout style={{ minHeight: '100vh' }}>
+        {/* Renderiza o Menu apenas se a rota não for a homepage */}
+        {!isHomePage && (
+          <Menu />
+        )}
+        <Layout
+          style={{
+            marginLeft: !isHomePage ? (menuOpen ? 250 : 80) : 0, // Define a margem apenas se não for a homepage
+            transition: 'margin-left 0.2s',
+          }}
+        >
+          <Content style={{ background: '#f0f2f5' }}>
+            <AppRoutes />
+          </Content>
+          <Footer />
+        </Layout>
+      </Layout>
+    </div>
+  );
+};
+
+// Envolvendo o App com Router e Provider
+const AppWrapper: React.FC = () => {
+  return (
+    <Provider store={store}>
       <Router>
-        <div className="App">
-          <CssBaseline /> {/* Reseta os estilos básicos do navegador */}
-          <Layout style={{ minHeight: '100vh' }}>
-            <Menu /> {/* Menu lateral */}
-            <Layout
-              style={{
-                marginLeft: menuOpen ? 250 : 80, // Ajuste da margem com base no estado do menu
-                transition: 'margin-left 0.2s',
-              }}
-            >
-              <Content style={{ padding: '24px', background: '#f0f2f5' }}> {/* Azul padrão do Ant Design */}
-                <AppRoutes /> {/* Renderizando as rotas aqui */}
-              </Content>
-              <Footer /> {/* Rodapé */}
-            </Layout>
-          </Layout>
-        </div>
+        <App />
       </Router>
     </Provider>
   );
 };
 
-export default App;
+export default AppWrapper;

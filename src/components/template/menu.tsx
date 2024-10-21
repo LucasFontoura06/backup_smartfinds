@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout, Menu } from 'antd';
-import { HomeOutlined, ShoppingCartOutlined, DashboardOutlined, PlusOutlined, AppstoreOutlined } from '@ant-design/icons';
+import { ShoppingCartOutlined, DashboardOutlined, PlusOutlined, AppstoreOutlined, LogoutOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
 const { Sider } = Layout;
@@ -12,13 +12,13 @@ const MenuComponent: React.FC = () => {
     navigate(path);
   };
 
+  const handleLogout = () => {
+    // Função de logout - adicione sua lógica de logout aqui
+    console.log('Logout efetuado');
+    navigate('/'); // Redirecionar para a página de login após o logout
+  };
+
   const items = [
-    {
-      key: '1',
-      icon: <HomeOutlined />,
-      label: 'Home',
-      onClick: () => handleNavigation('/'),
-    },
     {
       key: '2',
       icon: <ShoppingCartOutlined />,
@@ -55,14 +55,33 @@ const MenuComponent: React.FC = () => {
         left: 0,
         top: 0,
         zIndex: 1000,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between', // Para empurrar o botão de logout para o final
       }}
     >
-      <div className="logo" style={{ height: '64px', backgroundColor: '#001529', margin: '16px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <h2 style={{ color: 'white', textAlign: 'center', paddingTop: '10px' }}>
-          Click Shopper
-        </h2>
+      <div>
+        <div className="logo" style={{ height: '64px', backgroundColor: '#001529', margin: '16px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <h2 style={{ color: 'white', textAlign: 'center', paddingTop: '10px' }}>
+            Click Shopper
+          </h2>
+        </div>
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={['2']} items={items} />
       </div>
-      <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} items={items} />
+      <div style={{ padding: '10px 0' }}>
+        <Menu
+          theme="dark"
+          mode="inline"
+          items={[
+            {
+              key: 'logout',
+              icon: <LogoutOutlined />,
+              label: 'Sair',
+              onClick: handleLogout,
+            },
+          ]}
+        />
+      </div>
     </Sider>
   );
 };
