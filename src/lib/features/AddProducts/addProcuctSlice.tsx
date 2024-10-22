@@ -12,6 +12,7 @@ const addProdutosShema = Yup.object().shape({
   linkAliexpress: Yup.string(),
   linkAmazon: Yup.string(),
   linkMercadoLivre: Yup.string(),
+  categoria: Yup.string().required('Categoria é obrigatória'), // Nova validação
 });
 
 const INITIAL_STATE = {
@@ -29,6 +30,7 @@ const INITIAL_STATE = {
     linkAliexpress: CONSTANTES.VAZIO,
     linkAmazon: CONSTANTES.VAZIO,
     linkMercadoLivre: CONSTANTES.VAZIO,
+    categoria: CONSTANTES.VAZIO, // Novo campo
     ativo: false,
   },
 };
@@ -95,6 +97,7 @@ export const fetchProdutos = createAsyncThunk(
           linkAliexpress: data.linkAliexpress || CONSTANTES.VAZIO,
           linkAmazon: data.linkAmazon || CONSTANTES.VAZIO,
           linkMercadoLivre: data.linkMercadoLivre || CONSTANTES.VAZIO,
+          categoria: data.categoria || CONSTANTES.VAZIO, // Novo campo
           ativo: data.ativo ?? false,
         };
       });
@@ -179,6 +182,17 @@ const addProductSlice = createSlice({
         state.touched[CONSTANTES.LINK_MERCADO_LIVRE_NAME] = true;
       }
     },
+    setCategoria: (state, action) => {
+      state.values.categoria = action.payload;
+      try {
+        addProdutosShema.validateSyncAt('categoria', state.values);
+        state.errors[CONSTANTES.CATEGORIA_NAME] = CONSTANTES.VAZIO;
+      } catch (error: any) {
+        state.errors[CONSTANTES.CATEGORIA_NAME] = error.message;
+      } finally {
+        state.touched[CONSTANTES.CATEGORIA_NAME] = true;
+      }
+    },
     resetForm: (state) => {
       // Reseta os valores para um objeto simples com os valores iniciais
       state.values = {
@@ -188,6 +202,7 @@ const addProductSlice = createSlice({
         linkAliexpress: CONSTANTES.VAZIO,
         linkAmazon: CONSTANTES.VAZIO,
         linkMercadoLivre: CONSTANTES.VAZIO,
+        categoria: CONSTANTES.VAZIO, // Novo campo
         ativo: false,
       };
       state.errors = {}; // Limpa todos os erros
@@ -275,6 +290,7 @@ export const {
   setLinkAliexpress,
   setLinkAmazon,
   setLinkMercadoLivre,
+  setCategoria,
   resetForm, // Exportando o resetForm
   clearErrors,
   setError,

@@ -1,14 +1,33 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../lib/hooks";
-import { resetForm, setNomeProduto, setLinkImage, setLinkAliexpress, setLinkAmazon, setLinkMercadoLivre, submitFormProducts } from "../../lib/features/AddProducts/addProcuctSlice";
-import { Box, Card, CardContent, Grid, Button, CardActions, Typography, Alert, CircularProgress } from "@mui/material";
+import { 
+  resetForm, 
+  setNomeProduto, 
+  setLinkImage, 
+  setLinkAliexpress, 
+  setLinkAmazon, 
+  setLinkMercadoLivre, 
+  setCategoria, 
+  submitFormProducts 
+} from "../../lib/features/AddProducts/addProcuctSlice";
+import { Box, Card, CardContent, Grid, Button, CardActions, Typography, Alert, CircularProgress, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { unwrapResult } from "@reduxjs/toolkit";
 import InputForm from "../../components/inputForm";
 
 interface AddProductsFormProps {
   produtoParaEditar?: any;
-  onProductUpdated?: () => void; // Callback para ser chamado após a atualização
+  onProductUpdated?: () => void;
 }
+
+// Lista de categorias (você pode expandir ou carregar dinamicamente do backend)
+const categorias = [
+  "Eletrônicos",
+  "Roupas",
+  "Acessórios",
+  "Casa e Decoração",
+  "Livros",
+  "Outros"
+];
 
 function AddProductsForm({ produtoParaEditar, onProductUpdated }: AddProductsFormProps) {
   const dispatch = useAppDispatch();
@@ -18,31 +37,29 @@ function AddProductsForm({ produtoParaEditar, onProductUpdated }: AddProductsFor
 
   useEffect(() => {
     if (produtoParaEditar) {
-      // Preenche o formulário com os valores do produto para edição
       dispatch(setNomeProduto(produtoParaEditar.name || ""));
       dispatch(setLinkImage(produtoParaEditar.linkImage || ""));
       dispatch(setLinkAliexpress(produtoParaEditar.linkAliexpress || ""));
       dispatch(setLinkAmazon(produtoParaEditar.linkAmazon || ""));
       dispatch(setLinkMercadoLivre(produtoParaEditar.linkMercadoLivre || ""));
+      dispatch(setCategoria(produtoParaEditar.categoria || ""));
     } else {
-      // Limpa o formulário quando não há produto para editar
       dispatch(resetForm());
     }
   }, [produtoParaEditar, dispatch]);
 
   const handleSubmit = async () => {
     try {
-      // Certifique-se de que todos os valores estão definidos antes de usar
       const validValues = {
         ...values,
-        name: values.name || "", // Fallback para strings vazias
+        name: values.name || "",
         linkImage: values.linkImage || "",
         linkAliexpress: values.linkAliexpress || "",
         linkAmazon: values.linkAmazon || "",
-        linkMercadoLivre: values.linkMercadoLivre || ""
+        linkMercadoLivre: values.linkMercadoLivre || "",
+        categoria: values.categoria || ""
       };
 
-      // Se for um produto em edição, adicione o campo `id`, caso contrário, não adicione
       if (produtoParaEditar && produtoParaEditar.id) {
         validValues.id = produtoParaEditar.id;
       }
@@ -52,13 +69,12 @@ function AddProductsForm({ produtoParaEditar, onProductUpdated }: AddProductsFor
 
       setSuccessMessage(produtoParaEditar ? 'Produto atualizado com sucesso!' : 'Produto criado com sucesso!');
 
-      // Remove a mensagem de sucesso após 5 segundos
       setTimeout(() => {
         setSuccessMessage(null);
       }, 5000);
 
       if (onProductUpdated) {
-        onProductUpdated(); // Chama o callback para fechar o modal
+        onProductUpdated();
       }
 
       setErrorMessage(null);
@@ -104,7 +120,7 @@ function AddProductsForm({ produtoParaEditar, onProductUpdated }: AddProductsFor
               <Grid item xs={12} md={6}>
                 <InputForm
                   label={`* Nome do Produto`}
-                  value={values.name || ""} // Certifique-se de que nunca será undefined
+                  value={values.name || ""}
                   onChange={(e: any) => dispatch(setNomeProduto(e.target.value))}
                   isInvalid={touched.name && Boolean(errors.name)}
                   msgError={touched.name ? errors.name : false}
@@ -113,7 +129,7 @@ function AddProductsForm({ produtoParaEditar, onProductUpdated }: AddProductsFor
               <Grid item xs={12} md={6}>
                 <InputForm
                   label={`* Link da Imagem`}
-                  value={values.linkImage || ""} // Certifique-se de que nunca será undefined
+                  value={values.linkImage || ""}
                   onChange={(e: any) => dispatch(setLinkImage(e.target.value))}
                   isInvalid={touched.linkImage && Boolean(errors.linkImage)}
                   msgError={touched.linkImage ? errors.linkImage : false}
@@ -122,7 +138,7 @@ function AddProductsForm({ produtoParaEditar, onProductUpdated }: AddProductsFor
               <Grid item xs={12} md={6}>
                 <InputForm
                   label={`Link AliExpress`}
-                  value={values.linkAliexpress || ""} // Certifique-se de que nunca será undefined
+                  value={values.linkAliexpress || ""}
                   onChange={(e: any) => dispatch(setLinkAliexpress(e.target.value))}
                   isInvalid={touched.linkAliexpress && Boolean(errors.linkAliexpress)}
                   msgError={touched.linkAliexpress ? errors.linkAliexpress : false}
@@ -131,7 +147,7 @@ function AddProductsForm({ produtoParaEditar, onProductUpdated }: AddProductsFor
               <Grid item xs={12} md={6}>
                 <InputForm
                   label={`Link Amazon`}
-                  value={values.linkAmazon || ""} // Certifique-se de que nunca será undefined
+                  value={values.linkAmazon || ""}
                   onChange={(e: any) => dispatch(setLinkAmazon(e.target.value))}
                   isInvalid={touched.linkAmazon && Boolean(errors.linkAmazon)}
                   msgError={touched.linkAmazon ? errors.linkAmazon : false}
@@ -140,11 +156,28 @@ function AddProductsForm({ produtoParaEditar, onProductUpdated }: AddProductsFor
               <Grid item xs={12} md={6}>
                 <InputForm
                   label={`Link Mercado Livre`}
-                  value={values.linkMercadoLivre || ""} // Certifique-se de que nunca será undefined
+                  value={values.linkMercadoLivre || ""}
                   onChange={(e: any) => dispatch(setLinkMercadoLivre(e.target.value))}
                   isInvalid={touched.linkMercadoLivre && Boolean(errors.linkMercadoLivre)}
                   msgError={touched.linkMercadoLivre ? errors.linkMercadoLivre : false}
                 />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <FormControl fullWidth>
+                  <InputLabel id="categoria-label">Categoria</InputLabel>
+                  <Select
+                    labelId="categoria-label"
+                    value={values.categoria || ""}
+                    onChange={(e) => dispatch(setCategoria(e.target.value))}
+                    label="Categoria"
+                  >
+                    {categorias.map((categoria) => (
+                      <MenuItem key={categoria} value={categoria}>
+                        {categoria}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Grid>
             </Grid>
           </CardContent>

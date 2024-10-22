@@ -63,7 +63,7 @@ const MenuComponent: React.FC = () => {
       <div>
         <div className="logo" style={{ height: '64px', backgroundColor: '#001529', margin: '16px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <h2 style={{ color: 'white', textAlign: 'center', paddingTop: '10px' }}>
-            Click Shopper
+            Painel de Controle
           </h2>
         </div>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={['2']} items={items} />

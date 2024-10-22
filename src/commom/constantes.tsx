@@ -23,6 +23,7 @@ export const CONSTANTES = {
     LBL_TITLE_FORM: "Formulário",
     LBL_TITLE_PAGE_PRODUCTS: "Cadastro de Produto",
     LBL_BUTTON_SUBMIT: "CADASTRAR",
+    CATEGORIA_NAME: 'categoria',
 
 
 
