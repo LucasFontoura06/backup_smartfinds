@@ -90,9 +90,24 @@ const MainScreen: React.FC = () => {
   return (
     <div className={classes.container}>
       <ButtonGroup className={classes.buttonBar}>
-        <Button onClick={() => navigate('/products')}>Adm</Button>
-        <Button onClick={() => navigate('/developer')}>Developer</Button>
-        <Button onClick={() => navigate('/contact')}>Contato</Button>
+        <Button 
+          onClick={() => navigate('/products')}
+          sx={{ textTransform: 'none' }}
+        >
+          Login
+        </Button>
+        <Button 
+          onClick={() => navigate('/developer')}
+          sx={{ textTransform: 'none' }}
+        >
+          Developer
+        </Button>
+        <Button 
+          onClick={() => navigate('/contact')}
+          sx={{ textTransform: 'none' }}
+        >
+          Contato
+        </Button>
       </ButtonGroup>
       <h1 className={classes.title}>Smart Finds</h1>
       <p className={classes.description}>{typedText}</p>

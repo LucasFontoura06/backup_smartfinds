@@ -15,20 +15,22 @@ const App: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(true);
   const location = useLocation(); // Hook para acessar a localização atual
 
-  // Verifica se a localização atual é a homepage ou a página de produtos
-  const isHomePageOrProducts = location.pathname === '/' || location.pathname === '/produtos';
+  // Verifica se a localização atual é a homepage, a página de produtos ou a página do desenvolvedor
+  const shouldHideMenu = location.pathname === '/' || 
+                         location.pathname === '/produtos' || 
+                         location.pathname === '/developer';
 
   return (
     <div className="App">
       <CssBaseline />
       <Layout style={{ minHeight: '100vh' }}>
-        {/* Renderiza o Menu apenas se não for a homepage ou a página de produtos */}
-        {!isHomePageOrProducts && (
+        {/* Renderiza o Menu apenas se não for uma das páginas que devem escondê-lo */}
+        {!shouldHideMenu && (
           <Menu />
         )}
         <Layout
           style={{
-            marginLeft: !isHomePageOrProducts ? (menuOpen ? 250 : 80) : 0, // Define a margem apenas se não for a homepage ou a página de produtos
+            marginLeft: !shouldHideMenu ? (menuOpen ? 250 : 80) : 0, // Define a margem apenas se não for uma das páginas que devem escondê-lo
             transition: 'margin-left 0.2s',
           }}
         >
