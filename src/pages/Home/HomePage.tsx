@@ -90,7 +90,7 @@ const MainScreen: React.FC = () => {
   return (
     <div className={classes.container}>
       <ButtonGroup className={classes.buttonBar}>
-        <Button onClick={() => navigate('/admin')}>Adm</Button>
+        <Button onClick={() => navigate('/products')}>Adm</Button>
         <Button onClick={() => navigate('/developer')}>Developer</Button>
         <Button onClick={() => navigate('/contact')}>Contato</Button>
       </ButtonGroup>

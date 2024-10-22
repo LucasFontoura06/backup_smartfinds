@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Layout, Table, Button, Modal, Spin, Card } from "antd";
+import { Layout, Table, Button, Modal, Spin, Card, Popconfirm } from "antd";
 import { useAppDispatch, useAppSelector } from "../lib/hooks";
-import { fetchProdutos, updateProduto } from "../lib/features/AddProducts/addProcuctSlice";
+import { fetchProdutos, updateProduto, deleteProduto } from "../lib/features/AddProducts/addProcuctSlice";
 import AddProductsForm from "../pages/AddProduct/AddProductPage"; // Import do formulário para editar
 import { CONSTANTES } from "../commom/constantes";
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 const { Content } = Layout;
 
@@ -44,6 +45,10 @@ const ListProducts: React.FC = () => {
   const handleProductUpdated = () => {
     setOpen(false); // Fecha o modal após a edição ser concluída
     dispatch(fetchProdutos()); // Atualiza a lista após a edição
+  };
+
+  const handleDeleteClick = (produtoId: string) => {
+    dispatch(deleteProduto(produtoId));
   };
 
   // Definindo as colunas para a tabela
@@ -97,12 +102,33 @@ const ListProducts: React.FC = () => {
         ) : null,
     },
     {
-      title: "Editar",
-      key: "edit",
+      title: "Ações",
+      key: "actions",
       render: (text: string, record: any) => (
-        <Button onClick={() => handleEditClick(record)} type="primary">
-          Editar
-        </Button>
+        <>
+          <Button
+            onClick={() => handleEditClick(record)}
+            type="primary"
+            icon={<EditOutlined />}
+            style={{ marginRight: 8 }}
+          >
+            Editar
+          </Button>
+          <Popconfirm
+            title="Tem certeza que deseja deletar este produto?"
+            onConfirm={() => handleDeleteClick(record.key)}
+            okText="Sim"
+            cancelText="Não"
+          >
+            <Button
+              type="primary"
+              danger
+              icon={<DeleteOutlined />}
+            >
+              Deletar
+            </Button>
+          </Popconfirm>
+        </>
       ),
     },
   ];

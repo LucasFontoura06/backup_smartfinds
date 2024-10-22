@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import * as Yup from "yup";
 import { CONSTANTES } from '../../../commom/constantes';
 import { db } from '../../../firebaseConfig'; // Importa o Firestore configurado
-import { doc, setDoc, collection, getDocs } from "firebase/firestore";
+import { doc, setDoc, collection, getDocs, deleteDoc, updateDoc } from "firebase/firestore";
 import Product from '../../../commom/products'; // Importa a classe Product
 
 // Esquema de validação do formulário de produtos
@@ -52,14 +52,17 @@ export const submitFormProducts = createAsyncThunk<any, any>(
   }
 );
 
-export const updateProduto = createAsyncThunk<any, any>(
+export const updateProduto = createAsyncThunk<Product, Product>(
   'addProducts/updateProduto',
   async (produtoData, { rejectWithValue }) => {
     try {
-      const produtoDocRef = doc(db, "produtos", produtoData.id); // Referência ao documento do produto no Firestore
+      const produtoDocRef = doc(db, "produtos", produtoData.id);
+      
+      // Remova o campo 'id' antes de atualizar
+      const { id, ...updateData } = produtoData;
       
       // Atualiza o produto no Firestore
-      await setDoc(produtoDocRef, produtoData, { merge: true }); // `merge: true` preserva os campos não atualizados
+      await updateDoc(produtoDocRef, updateData);
       
       // Retorna os dados atualizados
       return produtoData;
@@ -99,6 +102,20 @@ export const fetchProdutos = createAsyncThunk(
       return produtos;
     } catch (error: any) {
       return rejectWithValue(error.message || "Erro ao buscar produtos");
+    }
+  }
+);
+
+// Nova thunk para deletar um produto
+export const deleteProduto = createAsyncThunk<string, string>(
+  'addProducts/deleteProduto',
+  async (produtoId, { rejectWithValue }) => {
+    try {
+      const produtoDocRef = doc(db, "produtos", produtoId);
+      await deleteDoc(produtoDocRef);
+      return produtoId;
+    } catch (error: any) {
+      return rejectWithValue(error.message || "Erro ao deletar produto");
     }
   }
 );
@@ -220,14 +237,30 @@ const addProductSlice = createSlice({
       })
       .addCase(updateProduto.fulfilled, (state, action) => {
         state.loading = false;
-        // Encontra o produto e atualiza seu valor no estado
-        const index = state.produtos.findIndex((produto) => produto.id === action.payload.id);
+        // Encontra o índice do produto atualizado
+        const index = state.produtos.findIndex(p => p.id === action.payload.id);
         if (index !== -1) {
+          // Substitui o produto antigo pelo atualizado
           state.produtos[index] = action.payload;
         }
         state.success = true;
+        state.successMessage = 'Produto atualizado com sucesso';
       })
       .addCase(updateProduto.rejected, (state, action) => {
+        state.loading = false;
+        state.errors.general = action.error?.message || CONSTANTES.VAZIO;
+      })
+      .addCase(deleteProduto.pending, (state) => {
+        state.loading = true;
+        state.success = false;
+      })
+      .addCase(deleteProduto.fulfilled, (state, action) => {
+        state.loading = false;
+        state.produtos = state.produtos.filter(produto => produto.id !== action.payload);
+        state.success = true;
+        state.successMessage = 'Produto deletado com sucesso';
+      })
+      .addCase(deleteProduto.rejected, (state, action) => {
         state.loading = false;
         state.errors.general = action.error?.message || CONSTANTES.VAZIO;
       });
