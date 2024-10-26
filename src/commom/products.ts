@@ -1,13 +1,26 @@
 import { Timestamp } from "firebase/firestore";
 import { CONSTANTES } from "./constantes";
 
-export default class Product {
+interface IProduct {
   id: string;
   name: string;
   linkImage: string;
   linkAliexpress: string;
   linkAmazon: string;
   linkMercadoLivre: string;
+  categoria: string;
+  ativo: boolean;
+  dataCadastro?: Timestamp;
+}
+
+export class Product implements IProduct {
+  id: string;
+  name: string;
+  linkImage: string;
+  linkAliexpress: string;
+  linkAmazon: string;
+  linkMercadoLivre: string;
+  categoria: string;
   ativo: boolean;
   dataCadastro?: Timestamp;
 
@@ -18,6 +31,7 @@ export default class Product {
     linkAliexpress: string,
     linkAmazon: string,
     linkMercadoLivre: string,
+    categoria: string,
     ativo: boolean,
     dataCadastro?: Timestamp
   ) {
@@ -27,6 +41,7 @@ export default class Product {
     this.linkAliexpress = linkAliexpress;
     this.linkAmazon = linkAmazon;
     this.linkMercadoLivre = linkMercadoLivre;
+    this.categoria = categoria;
     this.ativo = ativo;
     this.dataCadastro = dataCadastro ?? Timestamp.now();
   }
@@ -39,7 +54,10 @@ export default class Product {
       CONSTANTES.VAZIO,
       CONSTANTES.VAZIO,
       CONSTANTES.VAZIO,
+      CONSTANTES.VAZIO,
       false
     );
   }
 }
+
+export default Product;

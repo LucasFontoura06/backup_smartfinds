@@ -1,8 +1,8 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import * as Yup from "yup";
 import { CONSTANTES } from '../../../commom/constantes';
 import { db } from '../../../firebaseConfig'; // Importa o Firestore configurado
-import { doc, setDoc, collection, getDocs, deleteDoc, updateDoc } from "firebase/firestore";
+import { doc, setDoc, collection, getDocs, deleteDoc, updateDoc, addDoc } from "firebase/firestore";
 import Product from '../../../commom/products'; // Importa a classe Product
 
 // Esquema de validação do formulário de produtos
@@ -36,20 +36,27 @@ const INITIAL_STATE = {
 };
 
 // Função para salvar produtos no Firestore
-export const submitFormProducts = createAsyncThunk<any, any>(
+export const submitFormProducts = createAsyncThunk<Product, Partial<Product>>(
   'addProducts/submitFormProducts',
   async (produtoData, { rejectWithValue }) => {
     try {
       // Referência à coleção 'produtos'
       const produtosCollectionRef = collection(db, "produtos");
       
-      // Salva o produto no Firestore
-      await setDoc(doc(produtosCollectionRef), produtoData);
+      let docRef;
+      if (produtoData.id) {
+        // Se já existe um ID, atualiza o documento existente
+        docRef = doc(produtosCollectionRef, produtoData.id);
+        await updateDoc(docRef, produtoData);
+      } else {
+        // Se não existe ID, cria um novo documento
+        docRef = await addDoc(produtosCollectionRef, produtoData);
+      }
       
-      // Retorna os dados enviados
-      return produtoData;
+      // Retorna os dados enviados com o ID do documento
+      return { ...produtoData, id: docRef.id } as Product;
     } catch (error: any) {
-      return rejectWithValue(error.message || "Erro ao adicionar produto");
+      return rejectWithValue(error.message || "Erro ao adicionar/atualizar produto");
     }
   }
 );
@@ -193,6 +200,9 @@ const addProductSlice = createSlice({
         state.touched[CONSTANTES.CATEGORIA_NAME] = true;
       }
     },
+    setProductId: (state, action: PayloadAction<string>) => {
+      state.values.id = action.payload;
+    },
     resetForm: (state) => {
       // Reseta os valores para um objeto simples com os valores iniciais
       state.values = {
@@ -226,8 +236,17 @@ const addProductSlice = createSlice({
       })
       .addCase(submitFormProducts.fulfilled, (state, action) => {
         state.loading = false;
-        state.produtos.push(action.payload); // Adiciona o produto ao estado
+        const index = state.produtos.findIndex(p => p.id === action.payload.id);
+        if (index !== -1) {
+          // Atualiza o produto existente
+          state.produtos[index] = action.payload;
+        } else {
+          // Adiciona o novo produto
+          state.produtos.push(action.payload);
+        }
+        state.values = action.payload; // Atualiza os valores do formulário com o produto salvo
         state.success = true;
+        state.successMessage = 'Produto salvo com sucesso';
       })
       .addCase(submitFormProducts.rejected, (state, action) => {
         state.loading = false;
@@ -294,4 +313,5 @@ export const {
   resetForm, // Exportando o resetForm
   clearErrors,
   setError,
+  setProductId,
 } = addProductSlice.actions;
