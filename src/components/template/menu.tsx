@@ -13,9 +13,8 @@ const MenuComponent: React.FC = () => {
   };
 
   const handleLogout = () => {
-    // Função de logout - adicione sua lógica de logout aqui
     console.log('Logout efetuado');
-    navigate('/'); // Redirecionar para a página de login após o logout
+    navigate('/');
   };
 
   const items = [

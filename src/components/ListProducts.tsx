@@ -11,9 +11,9 @@ const { Content } = Layout;
 const ListProducts: React.FC = () => {
   const dispatch = useAppDispatch();
   const { loading, produtos, error } = useAppSelector((state: any) => state.addProducts);
-  const [selectedProduct, setSelectedProduct] = useState<any>(null); // Produto selecionado para edição
-  const [open, setOpen] = useState(false); // Estado para controlar a abertura do modal
-  const [showLoading, setShowLoading] = useState(true); // Controla a exibição do loading
+  const [selectedProduct, setSelectedProduct] = useState<any>(null); 
+  const [open, setOpen] = useState(false); 
+  const [showLoading, setShowLoading] = useState(true); 
 
   useEffect(() => {
     dispatch(fetchProdutos());
@@ -25,53 +25,51 @@ const ListProducts: React.FC = () => {
     }
   }, [error]);
 
-  // Simula o loading por mais tempo (ex. 2 segundos)
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowLoading(false);
-    }, 1000); // 2 segundos de delay
-    return () => clearTimeout(timer); // Limpa o timeout quando o componente desmontar
+    }, 1000); 
+    return () => clearTimeout(timer); 
   }, [loading]);
 
   const handleEditClick = (produto: any) => {
-    setSelectedProduct(produto); // Armazena o produto selecionado
-    setOpen(true); // Abre o modal
+    setSelectedProduct(produto); 
+    setOpen(true); 
   };
 
   const handleClose = () => {
-    setOpen(false); // Fecha o modal
+    setOpen(false);
   };
 
   const handleProductUpdated = () => {
-    setOpen(false); // Fecha o modal após a edição ser concluída
-    dispatch(fetchProdutos()); // Atualiza a lista após a edição
+    setOpen(false);
+    dispatch(fetchProdutos()); 
   };
 
   const handleDeleteClick = (produtoId: string) => {
     dispatch(deleteProduto(produtoId));
   };
 
-  // Definindo as colunas para a tabela
   const columns = [
     {
       title: CONSTANTES.LBL_NOME_PRODUTO,
-      dataIndex: "name",
-      key: "name",
+      dataIndex: CONSTANTES.LBL_DATA_INDEX_NAME,
+      key: CONSTANTES.KEY_NAME,
       render: (text: string) => (
         <span style={{ color: "#000" }}>{text || "Nome indisponível"}</span>
       ),
     },
     {
       title: CONSTANTES.LBL_IMAGE_PRODUCT,
-      dataIndex: "linkImage",
-      key: "linkImage",
+      dataIndex: CONSTANTES.LBL_DATA_INDEX_LINK_IMAGE,
+      key: CONSTANTES.KEY_LINK_IMAGE,
       render: (text: string, record: any) =>
         record.linkImage ? <img src={record.linkImage} alt={record.name} style={{ width: 50, height: 50 }} /> : null,
     },
     {
       title: CONSTANTES.LBL_NAME_ALIEXPRESS,
-      dataIndex: "linkAliexpress",
-      key: "linkAliexpress",
+      dataIndex: CONSTANTES.LBL_DATA_INDEX_LINK_ALIEXPRESS,
+      key: CONSTANTES.KEY_LINK_ALIEXPRESS,
       render: (text: string, record: any) =>
         record.linkAliexpress ? (
           <a href={record.linkAliexpress} target="_blank" rel="noopener noreferrer" style={{ color: "#1890ff" }}>
@@ -81,8 +79,8 @@ const ListProducts: React.FC = () => {
     },
     {
       title: CONSTANTES.LBL_NAME_AMAZON,
-      dataIndex: "linkAmazon",
-      key: "linkAmazon",
+      dataIndex: CONSTANTES.LBL_DATA_INDEX_LINK_AMAZON,
+      key: CONSTANTES.KEY_LINK_AMAZON,
       render: (text: string, record: any) =>
         record.linkAmazon ? (
           <a href={record.linkAmazon} target="_blank" rel="noopener noreferrer" style={{ color: "#1890ff" }}>
@@ -92,8 +90,8 @@ const ListProducts: React.FC = () => {
     },
     {
       title: CONSTANTES.LBL_NAME_MERCADO_LIVRE,
-      dataIndex: "linkMercadoLivre",
-      key: "linkMercadoLivre",
+      dataIndex: CONSTANTES.LBL_DATA_INDEX_LINK_MERCADO_LIVRE,
+      key: CONSTANTES.KEY_LINK_MERCADO_LIVRE,
       render: (text: string, record: any) =>
         record.linkMercadoLivre ? (
           <a href={record.linkMercadoLivre} target="_blank" rel="noopener noreferrer" style={{ color: "#1890ff" }}>
@@ -102,8 +100,8 @@ const ListProducts: React.FC = () => {
         ) : null,
     },
     {
-      title: "Ações",
-      key: "actions",
+      title: CONSTANTES.LBL_ACTIONS,
+      key: CONSTANTES.KEY_ACTIONS,
       render: (text: string, record: any) => (
         <>
           <Button
@@ -112,20 +110,20 @@ const ListProducts: React.FC = () => {
             icon={<EditOutlined />}
             style={{ marginRight: 8 }}
           >
-            Editar
+            {CONSTANTES.LBL_EDITAR}
           </Button>
           <Popconfirm
-            title="Tem certeza que deseja deletar este produto?"
+            title={CONSTANTES.LBL_CONFIRMACAO_DELETAR}
             onConfirm={() => handleDeleteClick(record.key)}
-            okText="Sim"
-            cancelText="Não"
+            okText={CONSTANTES.LBL_SIM}
+            cancelText={CONSTANTES.LBL_NAO}
           >
             <Button
               type="primary"
               danger
               icon={<DeleteOutlined />}
             >
-              Deletar
+              {CONSTANTES.LBL_DELETAR}
             </Button>
           </Popconfirm>
         </>
@@ -146,7 +144,7 @@ const ListProducts: React.FC = () => {
               columns={columns}
               dataSource={produtos.map((produto: any) => ({
                 key: produto.id,
-                name: produto.name || "Nome não disponível",
+                name: produto.name || CONSTANTES.LBL_NOME_PRODUTO_INDISPONIVEL,
                 linkImage: produto.linkImage,
                 linkAliexpress: produto.linkAliexpress,
                 linkAmazon: produto.linkAmazon,
@@ -158,13 +156,13 @@ const ListProducts: React.FC = () => {
             />
           ) : (
             <div className="loading-container">
-              <Spin tip="Carregando produtos..." />
+              <Spin tip={CONSTANTES.LBL_CARREGANDO_PRODUTOS} />
             </div>
           )}
 
           {/* Modal para edição do produto */}
           <Modal
-            title="Editar Produto"
+            title={CONSTANTES.LBL_EDITAR_PRODUTO}
             open={open}
             onCancel={handleClose}
             footer={null}

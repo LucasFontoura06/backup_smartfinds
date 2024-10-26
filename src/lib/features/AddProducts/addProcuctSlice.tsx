@@ -1,62 +1,55 @@
+import { doc, collection, getDocs, deleteDoc, updateDoc, addDoc } from "firebase/firestore";
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import * as Yup from "yup";
 import { CONSTANTES } from '../../../commom/constantes';
-import { db } from '../../../firebaseConfig'; // Importa o Firestore configurado
-import { doc, setDoc, collection, getDocs, deleteDoc, updateDoc, addDoc } from "firebase/firestore";
-import Product from '../../../commom/products'; // Importa a classe Product
+import Product from '../../../commom/products'; 
+import { db } from '../../../firebaseConfig'; 
+import * as Yup from "yup";
 
-// Esquema de validação do formulário de produtos
 const addProdutosShema = Yup.object().shape({
-  name: Yup.string().required('Nome do produto é obrigatório'),
-  linkImage: Yup.string().required('Link da imagem é obrigatório'),
+  categoria: Yup.string().required(CONSTANTES.LBL_SCHEMA_CATEGORIA), // Nova validação
+  linkImage: Yup.string().required(CONSTANTES.LBL_SCHEMA_LINK_IMAGE),
+  name: Yup.string().required(CONSTANTES.LBL_SCHEMA_NAME),
+  linkMercadoLivre: Yup.string(),
   linkAliexpress: Yup.string(),
   linkAmazon: Yup.string(),
-  linkMercadoLivre: Yup.string(),
-  categoria: Yup.string().required('Categoria é obrigatória'), // Nova validação
 });
 
 const INITIAL_STATE = {
-  errors: {} as Record<string, string>,
   touched: {} as Record<string, boolean>,
-  produtos: [] as Product[], // Lista de produtos como objetos simples
+  errors: {} as Record<string, string>,
+  produtos: [] as Product[],
   successMessage: '',
+  validForm: false,
   success: false,
   loading: false,
-  validForm: false,
   values: {
-    id: CONSTANTES.VAZIO,
-    name: CONSTANTES.VAZIO,
-    linkImage: CONSTANTES.VAZIO,
+    linkMercadoLivre: CONSTANTES.VAZIO,
     linkAliexpress: CONSTANTES.VAZIO,
     linkAmazon: CONSTANTES.VAZIO,
-    linkMercadoLivre: CONSTANTES.VAZIO,
-    categoria: CONSTANTES.VAZIO, // Novo campo
+    linkImage: CONSTANTES.VAZIO,
+    categoria: CONSTANTES.VAZIO, 
+    name: CONSTANTES.VAZIO,
+    id: CONSTANTES.VAZIO,
     ativo: false,
   },
 };
 
-// Função para salvar produtos no Firestore
 export const submitFormProducts = createAsyncThunk<Product, Partial<Product>>(
-  'addProducts/submitFormProducts',
+  CONSTANTES.LBL_ADD_SUBMIT_PRODUCTS,
   async (produtoData, { rejectWithValue }) => {
     try {
-      // Referência à coleção 'produtos'
-      const produtosCollectionRef = collection(db, "produtos");
+      const produtosCollectionRef = collection(db, CONSTANTES.LBL_PRODUTOS);
       
       let docRef;
       if (produtoData.id) {
-        // Se já existe um ID, atualiza o documento existente
         docRef = doc(produtosCollectionRef, produtoData.id);
         await updateDoc(docRef, produtoData);
       } else {
-        // Se não existe ID, cria um novo documento
         docRef = await addDoc(produtosCollectionRef, produtoData);
       }
-      
-      // Retorna os dados enviados com o ID do documento
       return { ...produtoData, id: docRef.id } as Product;
     } catch (error: any) {
-      return rejectWithValue(error.message || "Erro ao adicionar/atualizar produto");
+      return rejectWithValue(error.message || CONSTANTES.LBL_ERROR_ADD_PRODUCT);
     }
   }
 );
@@ -66,22 +59,17 @@ export const updateProduto = createAsyncThunk<Product, Product>(
   async (produtoData, { rejectWithValue }) => {
     try {
       const produtoDocRef = doc(db, "produtos", produtoData.id);
-      
-      // Remova o campo 'id' antes de atualizar
       const { id, ...updateData } = produtoData;
-      
-      // Atualiza o produto no Firestore
+
       await updateDoc(produtoDocRef, updateData);
-      
-      // Retorna os dados atualizados
       return produtoData;
+
     } catch (error: any) {
       return rejectWithValue(error.message || "Erro ao atualizar produto");
     }
   }
 );
 
-// Função para buscar produtos no Firestore
 export const fetchProdutos = createAsyncThunk(
   'addProducts/fetchProdutos', 
   async (_, { rejectWithValue }) => {
@@ -310,7 +298,7 @@ export const {
   setLinkAmazon,
   setLinkMercadoLivre,
   setCategoria,
-  resetForm, // Exportando o resetForm
+  resetForm,
   clearErrors,
   setError,
   setProductId,

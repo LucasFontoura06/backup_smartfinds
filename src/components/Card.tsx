@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../firebaseConfig"; 
 import { Box, Container, Grid, Card, CardContent, CardMedia, Typography, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { CONSTANTES } from "../commom/constantes";
 
 // Define a interface para os links do produto
 interface ProductLinks {
@@ -60,17 +61,17 @@ const ProductCard = ({ img, title, productLinks }: { img: string; title: string;
             onClick={handleClickOpen}
             sx={{ mb: 1 }}
           >
-            Ver Opções de Compra
+            {CONSTANTES.LBL_VER_OPCOES_COMPRA}
           </Button>
         </CardContent>
       </Card>
 
       {/* Pop-up para exibir opções de compra */}
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Escolha uma plataforma</DialogTitle>
+        <DialogTitle>{CONSTANTES.LBL_ESCOLHA_PLATAFORMA}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Selecione a plataforma para comprar este produto:
+            {CONSTANTES.LBL_SELECIONE_PLATAFORMA}
           </DialogContentText>
           <Grid container spacing={2} sx={{ mt: 2 }}>
             {productLinks.amazon && (
@@ -80,7 +81,7 @@ const ProductCard = ({ img, title, productLinks }: { img: string; title: string;
                   fullWidth
                   onClick={() => window.open(productLinks.amazon, "_blank")}
                 >
-                  Amazon
+                  {CONSTANTES.LBL_AMAZON}
                 </Button>
               </Grid>
             )}
@@ -91,7 +92,7 @@ const ProductCard = ({ img, title, productLinks }: { img: string; title: string;
                   fullWidth
                   onClick={() => window.open(productLinks.mercadoLivre, "_blank")}
                 >
-                  Mercado Livre
+                  {CONSTANTES.LBL_MERCADO_LIVRE}
                 </Button>
               </Grid>
             )}
@@ -102,7 +103,7 @@ const ProductCard = ({ img, title, productLinks }: { img: string; title: string;
                   fullWidth
                   onClick={() => window.open(productLinks.shopee, "_blank")}
                 >
-                  Shopee
+                  {CONSTANTES.LBL_SHOPEE}
                 </Button>
               </Grid>
             )}
@@ -113,7 +114,7 @@ const ProductCard = ({ img, title, productLinks }: { img: string; title: string;
                   fullWidth
                   onClick={() => window.open(productLinks.aliexpress, "_blank")}
                 >
-                  AliExpress
+                  {CONSTANTES.LBL_ALIEXPRESS}
                 </Button>
               </Grid>
             )}
@@ -121,7 +122,7 @@ const ProductCard = ({ img, title, productLinks }: { img: string; title: string;
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="secondary">
-            Fechar
+            {CONSTANTES.LBL_BUTTON_FECHAR}
           </Button>
         </DialogActions>
       </Dialog>
@@ -154,7 +155,7 @@ const ProductList = () => {
       }}
     >
       <Typography variant="h4" align="center" sx={{ fontWeight: 'bold', color: '#fff', marginBottom: 6, marginTop: 4 }}>
-        Lista de Produtos
+        {CONSTANTES.LBL_LISTA_PRODUTOS}
       </Typography>
       <Grid container spacing={3} justifyContent="center">
         {products.map((product) => (
