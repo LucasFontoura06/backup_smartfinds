@@ -177,6 +177,7 @@ const ListProducts: React.FC = () => {
                 linkAliexpress: produto.linkAliexpress,
                 linkAmazon: produto.linkAmazon,
                 linkMercadoLivre: produto.linkMercadoLivre,
+                categoria: produto.categoria, // Adicionar esta linha
               }))}
               pagination={{ 
                 pageSize: 10,
