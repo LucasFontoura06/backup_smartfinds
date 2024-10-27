@@ -67,7 +67,6 @@ function AddProductsForm({ produtoParaEditar, onProductUpdated }: AddProductsFor
         categoria: values.categoria?.trim() || ""
       };
 
-      // Verificação dos campos obrigatórios
       const camposInvalidos = {
         name: !validValues.name,
         linkImage: !validValues.linkImage,
@@ -80,7 +79,6 @@ function AddProductsForm({ produtoParaEditar, onProductUpdated }: AddProductsFor
         return;
       }
 
-      // Validação básica de URL para o link da imagem
       if (!isValidUrl(validValues.linkImage)) {
         showSnackbar('O link da imagem não é uma URL válida.', 'error');
         return;
@@ -112,7 +110,6 @@ function AddProductsForm({ produtoParaEditar, onProductUpdated }: AddProductsFor
     }
   };
 
-  // Função auxiliar para validar URLs
   const isValidUrl = (url: string) => {
     try {
       new URL(url);
@@ -138,34 +135,38 @@ function AddProductsForm({ produtoParaEditar, onProductUpdated }: AddProductsFor
   return (
     <Box
       component="form"
-      m={4}
       sx={{
         flexGrow: 1,
-        maxWidth: '800px',
+        width: '100%',
+        maxWidth: '900px',
         mx: 'auto',
-        display: 'flex',
-        flexDirection: 'column',
+        p: 3,
       }}
     >
       <Typography
-        variant="h4"
-        align="center"
-        sx={{ fontWeight: 'bold', marginBottom: 6, marginTop: 2 }}
+        variant="h5"
+        sx={{ 
+          fontWeight: 500, 
+          marginBottom: 4, 
+          color: '#37352f',
+          borderBottom: '2px solid #f0f0f0',
+          paddingBottom: 2
+        }}
       >
-        {produtoParaEditar ? 'Editar Produto' : 'Adicionar Produto'}
+        {produtoParaEditar ? 'Editar Produto' : 'Novo Produto'}
       </Typography>
 
       {loading ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px' }}>
-          <CircularProgress />
+        <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
+          <CircularProgress size={30} />
         </Box>
       ) : (
-        <Card className="form" elevation={5}>
+        <Card elevation={0} sx={{ backgroundColor: 'transparent' }}>
           <CardContent>
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={6}>
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
                 <InputForm
-                  label={`* Nome do Produto`}
+                  label="Nome do Produto *"
                   value={values.name || ""}
                   onChange={(e: any) => {
                     dispatch(setNomeProduto(e.target.value));
@@ -173,11 +174,21 @@ function AddProductsForm({ produtoParaEditar, onProductUpdated }: AddProductsFor
                   }}
                   isInvalid={camposObrigatorios.name}
                   msgError={camposObrigatorios.name ? "Campo obrigatório" : ""}
+                  fullWidth
+                  sx={{ 
+                    '& .MuiOutlinedInput-root': {
+                      backgroundColor: '#fff',
+                      '&:hover fieldset': {
+                        borderColor: '#d0d0d0',
+                      },
+                    }
+                  }}
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
+              
+              <Grid item xs={12}>
                 <InputForm
-                  label={`* Link da Imagem`}
+                  label="Link da Imagem *"
                   value={values.linkImage || ""}
                   onChange={(e: any) => {
                     dispatch(setLinkImage(e.target.value));
@@ -185,38 +196,18 @@ function AddProductsForm({ produtoParaEditar, onProductUpdated }: AddProductsFor
                   }}
                   isInvalid={camposObrigatorios.linkImage}
                   msgError={camposObrigatorios.linkImage ? "Campo obrigatório" : ""}
+                  fullWidth
+                  sx={{ 
+                    '& .MuiOutlinedInput-root': {
+                      backgroundColor: '#fff',
+                    }
+                  }}
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
-                <InputForm
-                  label={`Link AliExpress`}
-                  value={values.linkAliexpress || ""}
-                  onChange={(e: any) => dispatch(setLinkAliexpress(e.target.value))}
-                  isInvalid={touched.linkAliexpress && Boolean(errors.linkAliexpress)}
-                  msgError={touched.linkAliexpress ? errors.linkAliexpress : false}
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <InputForm
-                  label={`Link Amazon`}
-                  value={values.linkAmazon || ""}
-                  onChange={(e: any) => dispatch(setLinkAmazon(e.target.value))}
-                  isInvalid={touched.linkAmazon && Boolean(errors.linkAmazon)}
-                  msgError={touched.linkAmazon ? errors.linkAmazon : false}
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <InputForm
-                  label={`Link Mercado Livre`}
-                  value={values.linkMercadoLivre || ""}
-                  onChange={(e: any) => dispatch(setLinkMercadoLivre(e.target.value))}
-                  isInvalid={touched.linkMercadoLivre && Boolean(errors.linkMercadoLivre)}
-                  msgError={touched.linkMercadoLivre ? errors.linkMercadoLivre : false}
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
+
+              <Grid item xs={12}>
                 <FormControl fullWidth error={camposObrigatorios.categoria}>
-                  <InputLabel id="categoria-label">* Categoria</InputLabel>
+                  <InputLabel id="categoria-label">Categoria *</InputLabel>
                   <Select
                     labelId="categoria-label"
                     value={values.categoria || ""}
@@ -225,6 +216,12 @@ function AddProductsForm({ produtoParaEditar, onProductUpdated }: AddProductsFor
                       setCamposObrigatorios(prev => ({ ...prev, categoria: false }));
                     }}
                     label="Categoria"
+                    sx={{ 
+                      backgroundColor: '#fff',
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        borderColor: camposObrigatorios.categoria ? 'error.main' : '#d0d0d0',
+                      }
+                    }}
                   >
                     {categorias.map((categoria) => (
                       <MenuItem key={categoria} value={categoria}>
@@ -237,27 +234,104 @@ function AddProductsForm({ produtoParaEditar, onProductUpdated }: AddProductsFor
                   )}
                 </FormControl>
               </Grid>
+
+              <Grid item xs={12} md={4}>
+                <InputForm
+                  label="Link AliExpress"
+                  value={values.linkAliexpress || ""}
+                  onChange={(e: any) => dispatch(setLinkAliexpress(e.target.value))}
+                  fullWidth
+                  sx={{ 
+                    '& .MuiOutlinedInput-root': {
+                      backgroundColor: '#fff',
+                    }
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={4}>
+                <InputForm
+                  label="Link Amazon"
+                  value={values.linkAmazon || ""}
+                  onChange={(e: any) => dispatch(setLinkAmazon(e.target.value))}
+                  fullWidth
+                  sx={{ 
+                    '& .MuiOutlinedInput-root': {
+                      backgroundColor: '#fff',
+                    }
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={4}>
+                <InputForm
+                  label="Link Mercado Livre"
+                  value={values.linkMercadoLivre || ""}
+                  onChange={(e: any) => dispatch(setLinkMercadoLivre(e.target.value))}
+                  fullWidth
+                  sx={{ 
+                    '& .MuiOutlinedInput-root': {
+                      backgroundColor: '#fff',
+                    }
+                  }}
+                />
+              </Grid>
             </Grid>
           </CardContent>
-          <CardActions sx={{ justifyContent: 'flex-end' }}>
+          
+          <Box sx={{ 
+            display: 'flex', 
+            justifyContent: 'flex-end',
+            mt: 3,
+            borderTop: '1px solid #f0f0f0',
+            pt: 3
+          }}>
             <Button
               variant="contained"
-              color="primary"
               onClick={handleSubmit}
               disabled={loading}
+              sx={{
+                minWidth: '120px',
+                backgroundColor: '#1976d2',
+                '&:hover': {
+                  backgroundColor: '#1565c0',
+                },
+                textTransform: 'none',
+                boxShadow: 'none'
+              }}
             >
-              {loading ? 'Carregando...' : 'Salvar'}
+              {loading ? 'Salvando...' : 'Salvar'}
             </Button>
-          </CardActions>
+          </Box>
         </Card>
       )}
+
       <Snackbar
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         open={openSnackbar}
-        autoHideDuration={6000}
+        autoHideDuration={4000}
         onClose={handleCloseSnackbar}
       >
-        <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity} sx={{ width: '100%' }}>
+        <Alert 
+          onClose={handleCloseSnackbar} 
+          severity={snackbarSeverity} 
+          sx={{ 
+            width: '100%',
+            backgroundColor: snackbarSeverity === 'success' ? '#4CAF50' : '#f44336', // Cores mais vibrantes
+            color: '#ffffff', // Texto branco para melhor contraste
+            '& .MuiAlert-icon': {
+              color: '#ffffff' // Ícone branco
+            },
+            '& .MuiSvgIcon-root': { // Estilo para o ícone de fechar
+              color: '#ffffff'
+            },
+            boxShadow: '0 2px 5px rgba(0,0,0,0.2)', // Sombra sutil
+            '& .MuiAlert-message': {
+              fontSize: '0.95rem', // Tamanho do texto um pouco maior
+              fontWeight: 500 // Texto um pouco mais bold
+            }
+          }}
+        >
           {snackbarMessage}
         </Alert>
       </Snackbar>

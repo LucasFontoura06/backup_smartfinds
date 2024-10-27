@@ -5,6 +5,7 @@ import { fetchProdutos, updateProduto, deleteProduto } from "../lib/features/Add
 import AddProductsForm from "../pages/AddProduct/AddProductPage"; // Import do formulário para editar
 import { CONSTANTES } from "../commom/constantes";
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import "../styles/ProductsList.css";
 
 const { Content } = Layout;
 
@@ -132,12 +133,16 @@ const ListProducts: React.FC = () => {
   ];
 
   return (
-    <Layout style={{ backgroundColor: "#001529", padding: "0" }}>
-      <Content style={{ padding: "0", margin: "0", backgroundColor: "transparent" }}>
+    <Layout style={{ backgroundColor: "#ffffff", padding: "0" }}>
+      <Content style={{ padding: "20px", margin: "0", backgroundColor: "transparent" }}>
         <Card
-          title={<span className="custom-card-title">{CONSTANTES.LBL_TITLE_LISTA_PRODUTOS}</span>}
-          style={{ backgroundColor: "#001529", color: "#f0f0f0", border: "none", padding: "0" }}
-          styles={{ header: { backgroundColor: "#001529", color: "#f0f0f0" }, body: { padding: "0" } }}
+          title={<span style={{ color: '#37352f', fontSize: '18px', fontWeight: 600 }}>{CONSTANTES.LBL_TITLE_LISTA_PRODUTOS}</span>}
+          style={{ 
+            backgroundColor: "#ffffff", 
+            border: "1px solid #d9d9d9",
+            borderRadius: '8px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+          }}
         >
           {!showLoading ? (
             <Table
@@ -150,9 +155,18 @@ const ListProducts: React.FC = () => {
                 linkAmazon: produto.linkAmazon,
                 linkMercadoLivre: produto.linkMercadoLivre,
               }))}
-              pagination={{ pageSize: 10 }}
+              pagination={{ 
+                pageSize: 10,
+                showSizeChanger: false,
+                showQuickJumper: true,
+                showTotal: (total, range) => `${range[0]}-${range[1]} de ${total} itens`,
+              }}
               rowClassName={() => 'custom-row'}
-              style={{ backgroundColor: "#001529", color: "#000", padding: "0" }}
+              style={{ 
+                backgroundColor: "#ffffff",
+                color: '#37352f',
+              }}
+              bordered
             />
           ) : (
             <div className="loading-container">
@@ -161,12 +175,15 @@ const ListProducts: React.FC = () => {
           )}
 
           {/* Modal para edição do produto */}
-          <Modal
-            title={CONSTANTES.LBL_EDITAR_PRODUTO}
+          <Modal  
             open={open}
             onCancel={handleClose}
             footer={null}
-            styles={{ body: { backgroundColor: "#001529", color: "#f0f0f0" } }}
+            width={800} // Adicionando largura personalizada
+            styles={{ 
+              body: { backgroundColor: "#ffffff", color: '#37352f' },
+              mask: { backgroundColor: 'rgba(0, 0, 0, 0.6)' }, // Opcional: escurece mais o fundo
+            }}
           >
             {selectedProduct && (
               <AddProductsForm produtoParaEditar={selectedProduct} onProductUpdated={handleProductUpdated} />
@@ -177,17 +194,82 @@ const ListProducts: React.FC = () => {
 
       <style>{`
         .custom-row {
-          border-bottom: 1px solid #ddd;
-        }
-        .custom-card-title {
-          background-color: #001529 !important;
-          color: #f0f0f0 !important;
+          border-bottom: 1px solid #e8e8e8;
         }
         .loading-container {
           display: flex;
           justify-content: center;
           align-items: center;
           height: 100vh;
+        }
+        .ant-table {
+          border-radius: 8px;
+          overflow: hidden;
+        }
+        .ant-table-thead > tr > th {
+          background-color: #8f8b8b !important; // Cor cinza escuro
+          color: #ffffff !important; // Texto branco para melhor contraste
+          font-weight: 600 !important;
+          border-bottom: 2px solid #434343 !important; // Borda mais escura
+          padding: 16px !important;
+          font-size: 14px;
+        }
+        .ant-table-thead > tr > th:hover {
+          background-color: #595959 !important; // Mantém a mesma cor no hover
+        }
+        .ant-table-tbody > tr > td {
+          border-bottom: 1px solid #e8e8e8;
+          padding: 16px !important;
+        }
+        .ant-table-tbody > tr:hover > td {
+          background-color: #fafafa !important;
+        }
+        .ant-table-cell {
+          border-right: 1px solid #e8e8e8 !important;
+        }
+        .ant-table-cell:last-child {
+          border-right: none !important;
+        }
+        .ant-table-bordered {
+          border: 1px solid #d9d9d9 !important;
+        }
+        .ant-table-row {
+          transition: all 0.3s ease;
+        }
+        .ant-table-row:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .ant-pagination {
+          margin-top: 16px !important;
+        }
+        .ant-pagination-item-active {
+          border-color: #1890ff !important;
+          font-weight: 600;
+        }
+        .ant-table-column-title {
+          position: relative;
+          z-index: 1;
+        }
+        .ant-btn {
+          border-radius: 6px;
+          font-weight: 500;
+        }
+        .ant-btn-primary {
+          background-color: #1890ff;
+          border-color: #1890ff;
+        }
+        .ant-btn-primary:hover {
+          background-color: #40a9ff;
+          border-color: #40a9ff;
+        }
+        .ant-btn-dangerous {
+          background-color: #ff4d4f;
+          border-color: #ff4d4f;
+        }
+        .ant-btn-dangerous:hover {
+          background-color: #ff7875;
+          border-color: #ff7875;
         }
       `}</style>
     </Layout>

@@ -100,7 +100,7 @@ const MainScreen: React.FC = () => {
           onClick={() => navigate('/developer')}
           sx={{ textTransform: 'none' }}
         >
-          Developer
+          Quem Somos Nós?
         </Button>
         <Button 
           onClick={() => navigate('/contact')}

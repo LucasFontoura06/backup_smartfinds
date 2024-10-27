@@ -7,7 +7,7 @@ const ProductsPage: React.FC = () => {
   return (
     <Box
       sx={{
-        backgroundColor: "#001529", // Fundo da página
+        backgroundColor: "#ffffff", // Fundo da página
         minHeight: "100vh", // Altura mínima para cobrir toda a viewport
         padding: 4, // Espaçamento em torno do conteúdo
       }}
@@ -19,7 +19,7 @@ const ProductsPage: React.FC = () => {
           fontWeight: 'bold', 
           marginBottom: 6, 
           marginTop: 4, 
-          color: '#f0f0f0' // Alterando a cor do título para se ajustar ao fundo escuro
+          color: '#000' // Alterando a cor do título para se ajustar ao fundo escuro
         }}
       >
         {CONSTANTES.LBL_TITLE_PAGE}

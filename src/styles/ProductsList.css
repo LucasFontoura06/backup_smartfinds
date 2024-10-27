@@ -1,0 +1,19 @@
+.custom-row {
+    border-bottom: 1px solid #000000;
+}
+
+.ant-table-thead>tr>th {
+    border-bottom: 1px solid #000000;
+}
+
+.ant-table-tbody>tr>td {
+    border-bottom: 1px solid #000000;
+}
+
+.ant-table-cell {
+    border-right: 1px solid #000000 !important;
+}
+
+.ant-table-cell:last-child {
+    border-right: none !important;
+}

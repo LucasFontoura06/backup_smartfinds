@@ -9,6 +9,7 @@ import Affiliate from '../pages/Affiliate/Affiliate';
 
 import ProductList from '../pages/Produtos/ProdutosPage';
 import DeveloperPage from '../pages/Developer/DeveloperPage';
+import TeamPage from '../pages/Developer/TeamPage';
 
 
 const AppRoutes: React.FC = () => {
@@ -21,7 +22,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/dashboard" element={<DashboardPage />} />
       <Route path="/cadastrarProduto" element={<AddProductPage />} />
       <Route path="/Affiliate" element={<Affiliate />} />
-      <Route path="/developer" element={<DeveloperPage />} />
+      <Route path="/developer" element={<TeamPage />} />
     </Routes>
   );
 };

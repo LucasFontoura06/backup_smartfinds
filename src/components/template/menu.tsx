@@ -46,7 +46,7 @@ const MenuComponent: React.FC = () => {
 
   return (
     <Sider
-      theme="dark"
+      theme="light"
       width={250}
       style={{
         height: '100vh',
@@ -56,20 +56,21 @@ const MenuComponent: React.FC = () => {
         zIndex: 1000,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between', // Para empurrar o botão de logout para o final
+        justifyContent: 'space-between',
+        borderRight: '1px solid #e0e0e0',
       }}
     >
       <div>
-        <div className="logo" style={{ height: '64px', backgroundColor: '#001529', margin: '16px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <h2 style={{ color: 'white', textAlign: 'center', paddingTop: '10px' }}>
+        <div className="logo" style={{ height: '64px', margin: '16px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <h2 style={{ color: '#37352f', textAlign: 'center', paddingTop: '10px' }}>
             Painel de Controle
           </h2>
         </div>
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={['2']} items={items} />
+        <Menu theme="light" mode="inline" defaultSelectedKeys={['2']} items={items} />
       </div>
       <div style={{ padding: '10px 0' }}>
         <Menu
-          theme="dark"
+          theme="light"
           mode="inline"
           items={[
             {
