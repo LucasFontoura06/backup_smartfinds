@@ -2,19 +2,30 @@ import React from 'react';
 import { Layout, Menu } from 'antd';
 import { ShoppingCartOutlined, DashboardOutlined, PlusOutlined, AppstoreOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import { getAuth } from 'firebase/auth';
 
 const { Sider } = Layout;
 
-const MenuComponent: React.FC = () => {
+interface MenuProps {
+  menuOpen: boolean;
+  setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const SideMenu: React.FC<MenuProps> = ({ menuOpen, setMenuOpen }) => {
   const navigate = useNavigate();
 
   const handleNavigation = (path: string) => {
     navigate(path);
   };
 
-  const handleLogout = () => {
-    console.log('Logout efetuado');
-    navigate('/');
+  const handleLogout = async () => {
+    const auth = getAuth();
+    try {
+      await auth.signOut();
+      navigate('/'); // Alterado de '/login' para '/'
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error);
+    }
   };
 
   const items = [
@@ -92,4 +103,4 @@ const MenuComponent: React.FC = () => {
   );
 };
 
-export default MenuComponent;
+export default SideMenu;

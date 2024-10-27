@@ -29,7 +29,7 @@ const LoginPage = () => {
     try {
       const auth = getAuth();
       await signInWithEmailAndPassword(auth, credentials.email, credentials.password);
-      navigate('/dashboard');
+      navigate('/products');
     } catch (error: any) {
       switch (error.code) {
         case 'auth/invalid-email':
