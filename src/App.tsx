@@ -15,10 +15,11 @@ const App: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(true);
   const location = useLocation(); // Hook para acessar a localização atual
 
-  // Verifica se a localização atual é a homepage, a página de produtos ou a página do desenvolvedor
+  // Verifica se a localização atual é a homepage, a página de produtos, login ou a página do desenvolvedor
   const shouldHideMenu = location.pathname === '/' || 
-                         location.pathname === '/produtos' || 
-                         location.pathname === '/developer';
+                        location.pathname === '/produtos' || 
+                        location.pathname === '/developer' ||
+                        location.pathname === '/Login';  // Adiciona a página de login
 
   return (
     <div className="App">
@@ -37,7 +38,7 @@ const App: React.FC = () => {
           <Content style={{ background: '#f0f2f5' }}>
             <AppRoutes />
           </Content>
-          <Footer />
+          {!shouldHideMenu && <Footer />}  {/* Só mostra o Footer se não for uma das páginas que devem escondê-lo */}
         </Layout>
       </Layout>
     </div>

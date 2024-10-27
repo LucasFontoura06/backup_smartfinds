@@ -1,6 +1,5 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom'; // Adicione o 'Navigate'
-import HomePage from '../App'; // Se você tiver uma HomePage
 import ProductsPage from '../pages/ProductsLIst/ProductsListPage';
 import DashboardPage from '../pages/Dashboard/DashboardPage';
 import AddProductPage from '../pages/AddProduct/AddProductPage'; // Componente para cadastrar produtos
@@ -8,8 +7,9 @@ import Home from '../pages/Home/HomePage';
 import Affiliate from '../pages/Affiliate/Affiliate';
 
 import ProductList from '../pages/Produtos/ProdutosPage';
-import DeveloperPage from '../pages/Developer/DeveloperPage';
 import TeamPage from '../pages/Developer/TeamPage';
+import UsersPage from '../pages/Users/UsersPage';
+import LoginPage from '../pages/Login/LoginPage';
 
 
 const AppRoutes: React.FC = () => {
@@ -23,6 +23,8 @@ const AppRoutes: React.FC = () => {
       <Route path="/cadastrarProduto" element={<AddProductPage />} />
       <Route path="/Affiliate" element={<Affiliate />} />
       <Route path="/developer" element={<TeamPage />} />
+      <Route path="/users" element={<UsersPage />} />
+      <Route path="/Login" element={<LoginPage />} />
     </Routes>
   );
 };

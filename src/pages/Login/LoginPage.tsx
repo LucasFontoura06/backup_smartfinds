@@ -1,226 +1,132 @@
-// "use client";
+import React, { useState } from 'react';
+import { 
+  Container, 
+  Paper, 
+  TextField, 
+  Button, 
+  Typography, 
+  Box,
+  Alert,
+  CircularProgress
+} from '@mui/material';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 
-// import { signInWithEmailAndPassword } from "firebase/auth";
-// import { CONSTANTES } from "@/common/constantes";
-// import styles from './../styles/LoginPage.module.css';
-// import { useState } from "react";
-// import {
-//   Box,
-//   Button,
-//   Card,
-//   CardActions,
-//   CardContent,
-//   CardHeader,
-//   createTheme,
-//   Grid,
-//   TextField
-// } from "@mui/material";
-// import { auth } from "../firebaseConfig";
-// import CustomAlert from "../../components/alert"; // Importa o componente de alertas
+const LoginPage = () => {
+  const navigate = useNavigate();
+  const [credentials, setCredentials] = useState({
+    email: '',
+    password: ''
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-// const lightTheme = createTheme({
-//   palette: {
-//     mode: "light", // Força o modo claro
-//     primary: {
-//       main: "#1976d2", // Azul padrão
-//     },
-//     background: {
-//       default: "#fff", // Fundo branco
-//       paper: "#f5f5f5", // Cor do card
-//     },
-//     text: {
-//       primary: "#000", // Texto preto
-//     },
-//   },
-// });
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
 
-// function LoginForm() {
-//   const [formData, setFormData] = useState({
-//     email: '',
-//     senha: '',
-//   });
+    try {
+      const auth = getAuth();
+      await signInWithEmailAndPassword(auth, credentials.email, credentials.password);
+      navigate('/dashboard');
+    } catch (error: any) {
+      switch (error.code) {
+        case 'auth/invalid-email':
+          setError('Email inválido');
+          break;
+        case 'auth/user-disabled':
+          setError('Usuário desabilitado');
+          break;
+        case 'auth/user-not-found':
+          setError('Usuário não encontrado');
+          break;
+        case 'auth/wrong-password':
+          setError('Senha incorreta');
+          break;
+        default:
+          setError('Erro ao fazer login');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
-//   const [error, setError] = useState('');
-//   const [showSuccessMessage, setShowSuccessMessage] = useState(false); // Estado para exibir mensagem de sucesso
-//   const [showErrorMessage, setShowErrorMessage] = useState(false); // Estado para exibir mensagem de erro
-
-//   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-//     const { name, value } = event.target;
-//     setFormData({
-//       ...formData,
-//       [name]: value,
-//     });
-//   };
-
-//   const handleSubmit = async (event: React.FormEvent) => {
-//     event.preventDefault();
-//     setError('');
-//     setShowErrorMessage(false);
-//     setShowSuccessMessage(false);
-
-//     try {
-//       const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.senha);
-//       console.log('Usuário logado:', userCredential.user);
-
-//       // Exibe a mensagem de sucesso
-//       setShowSuccessMessage(true);
-//       setTimeout(() => {
-//         setShowSuccessMessage(false); // Remove a mensagem após 3 segundos
-//       }, 3000);
-
-//     } catch (error) {
-//       console.error('Erro ao fazer login:', error);
-//       // setError(CONSTANTES.ERROR_LOG_USER);
-
-//       // Exibe a mensagem de erro
-//       setShowErrorMessage(true);
-//       setTimeout(() => {
-//         setShowErrorMessage(false); // Remove a mensagem após 3 segundos
-//       }, 3000);
-//     }
-//   };
-
-//   return (
-//     <div className={styles.loginContainer}>
-//       {/* Mensagem de sucesso */}
-//       {showSuccessMessage && (
-//         <Box
-//           sx={{
-//             position: "fixed",
-//             bottom: 10,
-//             right: 10,
-//             zIndex: 1000,
-//           }}
-//         >
-//           <CustomAlert
-//             severity="success"
-//             title="Login Bem-sucedido"
-//             message="Você fez login com sucesso!"
-//           />
-//         </Box>
-//       )}
-
-//       {/* Mensagem de erro */}
-//       {showErrorMessage && (
-//         <Box
-//           sx={{
-//             position: "fixed",
-//             bottom: 10,
-//             right: 10,
-//             zIndex: 1000,
-//           }}
-//         >
-//           <CustomAlert
-//             severity="error"
-//             title="Erro de Login"
-//             message="Usuário ou senha incorretos."
-//           />
-//         </Box>
-//       )}
-
-//       <Box component="form" className={styles.loginForm} onSubmit={handleSubmit}>
-//         <Card className={styles.noShadowCard}>
-//           <CardHeader
-//             title={CONSTANTES.LBL_LO_TITLE}
-//             className={styles.loginHeader}
-//           />
-//           <CardContent>
-//             <Grid container spacing={2}>
-//               <Grid item xs={12}>
-//                 <TextField
-//                   label={CONSTANTES.LBL_LO_EMAIL}
-//                   name="email"
-//                   type="email"
-//                   value={formData.email}
-//                   onChange={handleInputChange}
-//                   fullWidth
-//                   required
-//                   className={styles.inputField}
-//                   sx={{
-//                     "& .MuiOutlinedInput-root": {
-//                       "& fieldset": {
-//                         borderColor: "#ccc", // Borda cinza clara padrão
-//                       },
-//                       "&:hover fieldset": {
-//                         borderColor: "#888", // Borda cinza mais escura ao passar o mouse
-//                       },
-//                       "&.Mui-focused fieldset": {
-//                         borderColor: "#1b2638", // Borda azul escura ao focar
-//                       },
-//                     },
-//                     "& .MuiInputLabel-root": {
-//                       color: "#666", // Cor padrão da label
-//                     },
-//                     "& .MuiInputLabel-root.Mui-focused": {
-//                       color: "#1b2638", // Cor da label ao focar (mesma do foco da borda)
-//                     },
-//                     input: {
-//                       color: "#000", // Cor do texto dentro do input (preto)
-//                     },
-//                   }}
-//                 />
-//               </Grid>
-//               <Grid item xs={12}>
-//                 <TextField
-//                   label={CONSTANTES.LBL_LO_SENHA}
-//                   name="senha"
-//                   type="password"
-//                   value={formData.senha}
-//                   onChange={handleInputChange}
-//                   fullWidth
-//                   required
-//                   className={styles.inputField}
-//                   sx={{
-//                     "& .MuiOutlinedInput-root": {
-//                       "& fieldset": {
-//                         borderColor: "#ccc", // Borda cinza clara padrão
-//                       },
-//                       "&:hover fieldset": {
-//                         borderColor: "#888", // Borda cinza mais escura ao passar o mouse
-//                       },
-//                       "&.Mui-focused fieldset": {
-//                         borderColor: "#1b2638", // Borda azul escura ao focar
-//                       },
-//                     },
-//                     "& .MuiInputLabel-root": {
-//                       color: "#666", // Cor padrão da label
-//                     },
-//                     "& .MuiInputLabel-root.Mui-focused": {
-//                       color: "#1b2638", // Cor da label ao focar
-//                     },
-//                     input: {
-//                       color: "#000", // Cor do texto dentro do input (preto)
-//                     },
-//                   }}
-//                 />
-//               </Grid>
-//             </Grid>
-//             {error && (
-//               <div className={styles.errorMessage}>{error}</div>
-//             )}
-//           </CardContent>
-//           <CardActions sx={{ justifyContent: "center" }}>
-//             <Button type="submit" variant="contained" className={styles.loginButton}>
-//               {CONSTANTES.LBL_LO_BTN_ENTRAR}
-//             </Button>
-//           </CardActions>
-//         </Card>
-//       </Box>
-
-
-//     </div>
-//   );
-// }
-
-// export default LoginForm;
-
-
-import React from 'react'
-
-export default function LoginPage() {
   return (
-    <div>
-      
-    </div>
-  )
-}
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Paper
+          elevation={3}
+          sx={{
+            padding: 4,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            width: '100%',
+          }}
+        >
+          <Typography component="h1" variant="h5" sx={{ mb: 3 }}>
+            Login
+          </Typography>
+
+          {error && (
+            <Alert severity="error" sx={{ width: '100%', mb: 2 }}>
+              {error}
+            </Alert>
+          )}
+
+          <Box component="form" onSubmit={handleLogin} sx={{ width: '100%' }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              value={credentials.email}
+              onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Senha"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              value={credentials.password}
+              onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2, height: '46px' }}
+              disabled={loading}
+            >
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                'Entrar'
+              )}
+            </Button>
+          </Box>
+        </Paper>
+      </Box>
+    </Container>
+  );
+};
+
+export default LoginPage;
+

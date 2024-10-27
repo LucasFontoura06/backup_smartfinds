@@ -91,7 +91,7 @@ const MainScreen: React.FC = () => {
     <div className={classes.container}>
       <ButtonGroup className={classes.buttonBar}>
         <Button 
-          onClick={() => navigate('/products')}
+          onClick={() => navigate('/Login')}
           sx={{ textTransform: 'none' }}
         >
           Login

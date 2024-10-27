@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout, Menu } from 'antd';
-import { ShoppingCartOutlined, DashboardOutlined, PlusOutlined, AppstoreOutlined, LogoutOutlined } from '@ant-design/icons';
+import { ShoppingCartOutlined, DashboardOutlined, PlusOutlined, AppstoreOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
 const { Sider } = Layout;
@@ -41,6 +41,12 @@ const MenuComponent: React.FC = () => {
       icon: <AppstoreOutlined />,
       label: 'Afiliados',
       onClick: () => handleNavigation('/Affiliate'),
+    },
+    {
+      key: '6',
+      icon: <UserOutlined />,
+      label: 'Usuários',
+      onClick: () => handleNavigation('/users'),
     },
   ];
 
