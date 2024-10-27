@@ -103,7 +103,7 @@ const MainScreen: React.FC = () => {
           Quem Somos Nós?
         </Button>
         <Button 
-          onClick={() => navigate('/contact')}
+          onClick={() => navigate('/')}
           sx={{ textTransform: 'none' }}
         >
           Contato

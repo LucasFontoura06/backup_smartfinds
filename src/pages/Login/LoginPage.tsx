@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import { getFirestore, doc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -28,7 +29,20 @@ const LoginPage = () => {
 
     try {
       const auth = getAuth();
-      await signInWithEmailAndPassword(auth, credentials.email, credentials.password);
+      const userCredential = await signInWithEmailAndPassword(auth, credentials.email, credentials.password);
+      
+      // Atualizar lastLoginAt no Firestore
+      const db = getFirestore();
+      const usersRef = collection(db, 'usuarios');
+      const q = query(usersRef, where("email", "==", credentials.email));
+      const querySnapshot = await getDocs(q);
+      
+      querySnapshot.forEach(async (document) => {
+        await updateDoc(doc(db, 'usuarios', document.id), {
+          lastLoginAt: new Date().toISOString()
+        });
+      });
+
       navigate('/products');
     } catch (error: any) {
       switch (error.code) {
@@ -129,4 +143,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-
