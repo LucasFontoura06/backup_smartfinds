@@ -32,7 +32,8 @@ const categorias = [
 
 function AddProductsForm({ produtoParaEditar, onProductUpdated }: AddProductsFormProps) {
   const dispatch = useAppDispatch();
-  const { values, touched, errors, loading } = useAppSelector((state: any) => state.addProducts);
+  const { values } = useAppSelector((state: any) => state.addProducts);
+  const [loading, setLoading] = useState(false); // Adicionar este estado
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
@@ -44,12 +45,8 @@ function AddProductsForm({ produtoParaEditar, onProductUpdated }: AddProductsFor
 
   useEffect(() => {
     if (produtoParaEditar) {
-      dispatch(setNomeProduto(produtoParaEditar.name || ""));
-      dispatch(setLinkImage(produtoParaEditar.linkImage || ""));
-      dispatch(setLinkAliexpress(produtoParaEditar.linkAliexpress || ""));
-      dispatch(setLinkAmazon(produtoParaEditar.linkAmazon || ""));
-      dispatch(setLinkMercadoLivre(produtoParaEditar.linkMercadoLivre || ""));
-      dispatch(setCategoria(produtoParaEditar.categoria || ""));
+      // Os valores já estarão carregados pelo setValues no handleOpenEditDialog
+      // Não precisamos fazer nada aqui
     } else {
       dispatch(resetForm());
     }
@@ -57,6 +54,7 @@ function AddProductsForm({ produtoParaEditar, onProductUpdated }: AddProductsFor
 
   const handleSubmit = async () => {
     try {
+      setLoading(true); // Ativar loading
       const validValues = {
         ...values,
         name: values.name?.trim() || "",
@@ -107,6 +105,8 @@ function AddProductsForm({ produtoParaEditar, onProductUpdated }: AddProductsFor
     } catch (err) {
       showSnackbar('Erro ao salvar o produto. Tente novamente.', 'error');
       console.error("Erro ao adicionar ou atualizar produto:", err);
+    } finally {
+      setLoading(false); // Desativar loading
     }
   };
 

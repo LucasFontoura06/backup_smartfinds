@@ -215,6 +215,18 @@ const addProductSlice = createSlice({
     setError: (state, action) => {
       state.errors.general = action.payload;
     },
+    setValues: (state, action: PayloadAction<Product>) => {
+      state.values = {
+        id: action.payload.id || CONSTANTES.VAZIO,
+        name: action.payload.name || CONSTANTES.VAZIO,
+        linkImage: action.payload.linkImage || CONSTANTES.VAZIO,
+        linkAliexpress: action.payload.linkAliexpress || CONSTANTES.VAZIO,
+        linkAmazon: action.payload.linkAmazon || CONSTANTES.VAZIO,
+        linkMercadoLivre: action.payload.linkMercadoLivre || CONSTANTES.VAZIO,
+        categoria: action.payload.categoria || CONSTANTES.VAZIO,
+        ativo: action.payload.ativo || false,
+      };
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -302,4 +314,5 @@ export const {
   clearErrors,
   setError,
   setProductId,
+  setValues,
 } = addProductSlice.actions;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Layout, Table, Button, Modal, Spin, Card, Popconfirm } from "antd";
 import { useAppDispatch, useAppSelector } from "../lib/hooks";
-import { fetchProdutos, updateProduto, deleteProduto } from "../lib/features/AddProducts/addProcuctSlice";
+import { fetchProdutos, updateProduto, deleteProduto, setValues, resetForm } from "../lib/features/AddProducts/addProcuctSlice";
 import AddProductsForm from "../pages/AddProduct/AddProductPage"; // Import do formulário para editar
 import { CONSTANTES } from "../commom/constantes";
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
@@ -34,17 +34,40 @@ const ListProducts: React.FC = () => {
   }, [loading]);
 
   const handleEditClick = (produto: any) => {
-    setSelectedProduct(produto); 
-    setOpen(true); 
+    // Limpa o formulário antes de carregar os novos valores
+    dispatch(resetForm());
+    
+    // Prepara os valores do produto garantindo que todos os campos existam
+    const valoresCompletos = {
+      id: produto.key, // Usando key como id conforme seu código original
+      name: produto.name || '',
+      linkImage: produto.linkImage || '',
+      linkAliexpress: produto.linkAliexpress || '',
+      linkAmazon: produto.linkAmazon || '',
+      linkMercadoLivre: produto.linkMercadoLivre || '',
+      categoria: produto.categoria || '',
+      ativo: produto.ativo || false,
+    };
+
+    // Carrega os valores no formulário
+    dispatch(setValues(valoresCompletos));
+    
+    // Guarda o produto selecionado
+    setSelectedProduct(valoresCompletos);
+    
+    // Abre o modal
+    setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
+    setSelectedProduct(null);
+    dispatch(resetForm());
   };
 
   const handleProductUpdated = () => {
-    setOpen(false);
-    dispatch(fetchProdutos()); 
+    handleClose();
+    dispatch(fetchProdutos());
   };
 
   const handleDeleteClick = (produtoId: string) => {
