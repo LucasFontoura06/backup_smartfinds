@@ -1,46 +1,87 @@
-# Getting Started with Create React App
+# 🛍️ Comparador de Preços - Marketplace
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
+![Material-UI](https://img.shields.io/badge/Material--UI-0081CB?style=for-the-badge&logo=material-ui&logoColor=white)
+![Redux](https://img.shields.io/badge/Redux-593D88?style=for-the-badge&logo=redux&logoColor=white)
 
-## Available Scripts
+Uma plataforma moderna que permite aos usuários comparar preços de produtos entre diferentes marketplaces (Amazon, AliExpress e Mercado Livre), facilitando a busca pelo melhor custo-benefício.
 
-In the project directory, you can run:
+## ✨ Funcionalidades
 
-### `npm start`
+- 🔍 Busca e comparação de preços entre diferentes marketplaces
+- 📱 Interface responsiva e amigável
+- 🎯 Filtragem por categorias
+- 👤 Sistema de autenticação
+- 📊 Painel administrativo para gestão de produtos
+- 🔄 Atualizações em tempo real com Firebase
+- 🎨 Design moderno com Material-UI
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## 🛠️ Tecnologias Utilizadas
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- **Frontend:**
+  - React.js
+  - TypeScript
+  - Material-UI
+  - Redux Toolkit
+  - Framer Motion (para animações)
 
-### `npm test`
+- **Backend/Database:**
+  - Firebase
+    - Authentication
+    - Firestore
+    - Hosting
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🚀 Como Executar o Projeto
 
-### `npm run build`
+### Pré-requisitos
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Node.js
+- npm ou yarn
+- Conta no Firebase
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Instalação
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Clone o repositório
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## 📱 Layout e Componentes
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Páginas Principais
+- **Home:** Exibição dos produtos em cards com links para diferentes marketplaces
+- **Admin:** Painel administrativo para gestão de produtos
+- **Equipe:** Informações sobre os desenvolvedores
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Componentes Principais
+- `ProductCard`: Cards responsivos para exibição dos produtos
+- `InputForm`: Componente personalizado para formulários
+- `CustomAlert`: Sistema de notificações personalizado
+- `Navbar`: Barra de navegação responsiva
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## 🤝 Contribuindo
 
-## Learn More
+1. Faça um Fork do projeto
+2. Crie uma Branch para sua Feature (`git checkout -b feature/AmazingFeature`)
+3. Faça o Commit das suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Faça o Push para a Branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 👥 Equipe
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- **Lucas Fontoura** - Desenvolvedor Full Stack - [GitHub](https://github.com/DevLucasFontoura)
+- **Jadis** - Gestora de Negócios
+
+## 📝 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+## 📞 Contato
+
+Lucas Fontoura - [LinkedIn](https://www.linkedin.com/in/lucas-fontoura-706a45212/)
+
+Link do Projeto: [https://github.com/seu-usuario/nome-do-repo](https://github.com/seu-usuario/nome-do-repo)
+
+---
+
+⭐️ From [DevLucasFontoura](https://github.com/DevLucasFontoura)
