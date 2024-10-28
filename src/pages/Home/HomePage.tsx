@@ -2,32 +2,32 @@ import React, { useState, useEffect } from 'react';
 import { Button, ButtonGroup } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useNavigate } from 'react-router-dom';
+import wallpaper from '../../assets/wallpaper_home_screen.jpg';
 
 const useStyles = makeStyles(() => ({
-  '@keyframes gradientMove': {
-    '0%': {
-      backgroundPosition: '0% 50%',
-    },
-    '50%': {
-      backgroundPosition: '100% 50%',
-    },
-    '100%': {
-      backgroundPosition: '0% 50%',
-    },
-  },
   container: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start', // Mudado de 'center' para 'flex-start'
+    paddingTop: '120px', // Adiciona um espaçamento do topo
     height: '100vh',
-    background: 'linear-gradient(90deg, #7b1fa2, #2196f3, #ff5722, #00bcd4)',
-    backgroundSize: '400% 400%',
-    animation: '$gradientMove 15s ease infinite',
-    color: '#fff',
-    textAlign: 'center',
-    padding: '0 20px',
+    backgroundImage: `url(${wallpaper})`, // Use a variável importada
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
     position: 'relative',
+    '&::before': { // Adiciona um overlay escuro para melhorar a legibilidade
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)', // Ajuste a opacidade conforme necessário
+      zIndex: 1,
+    },
+    padding: '120px 20px 20px 20px', // Adiciona padding em todos os lados
   },
   title: {
     fontSize: '4rem',
@@ -35,7 +35,16 @@ const useStyles = makeStyles(() => ({
     marginBottom: '20px',
     letterSpacing: '2px',
     textTransform: 'uppercase',
-    fontFamily: "'Zen Dots', cursive", // Aplicando a fonte Zen Dots ao título
+    fontFamily: "'Zen Dots', cursive",
+    color: '#fff',
+    position: 'relative',
+    zIndex: 2, // Coloca o texto acima do overlay
+    textShadow: '2px 2px 4px rgba(0,0,0,0.5)', // Adiciona sombra para melhor legibilidade
+    '@media (max-width: 600px)': {
+      fontSize: '2.5rem', // Fonte menor para mobile
+      marginBottom: '15px',
+      padding: '0 10px',
+    },
   },
   description: {
     fontSize: '1.5rem',
@@ -43,27 +52,51 @@ const useStyles = makeStyles(() => ({
     maxWidth: '900px',
     lineHeight: '1.6',
     minHeight: '4rem',
-    fontFamily: "'Inconsolata', monospace", // Aplicando a fonte Inconsolata ao texto
+    fontFamily: "'Inconsolata', monospace",
+    color: '#fff',
+    position: 'relative',
+    zIndex: 2, // Coloca o texto acima do overlay
+    textShadow: '1px 1px 2px rgba(0,0,0,0.5)', // Adiciona sombra para melhor legibilidade
+    '@media (max-width: 600px)': {
+      fontSize: '1.1rem', // Fonte menor para mobile
+      marginBottom: '20px',
+      padding: '0 10px',
+      maxWidth: '100%',
+    },
   },
   buttonBar: {
     position: 'absolute',
     top: '20px',
     right: '20px',
-    backgroundColor: '#fff',
-    borderRadius: '5px',
+    zIndex: 2,
+    display: 'flex',
+    alignItems: 'center',
     '& .MuiButton-root': {
-      color: '#7b1fa2',
+      color: '#fff',
+      backgroundColor: 'transparent',
+      border: 'none',
       '&:hover': {
-        backgroundColor: '#f3e5f5',
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
       },
+    },
+    '& .separator': {
+      color: '#fff',
+      margin: '0 8px',
+    },
+    '@media (max-width: 600px)': {
+      fontSize: '0.9rem',
+      right: '10px', // Ajusta posição no mobile
+      top: '10px',
     },
   },
   buttonProducts: {
     marginTop: '20px',
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     color: '#7b1fa2',
+    position: 'relative',
+    zIndex: 2, // Coloca o botão acima do overlay
     '&:hover': {
-      backgroundColor: '#f3e5f5',
+      backgroundColor: '#fff',
     },
   },
 }));
@@ -89,26 +122,28 @@ const MainScreen: React.FC = () => {
 
   return (
     <div className={classes.container}>
-      <ButtonGroup className={classes.buttonBar}>
+      <div className={classes.buttonBar}>
         <Button 
           onClick={() => navigate('/Login')}
           sx={{ textTransform: 'none' }}
         >
           Login
         </Button>
+        <span className="separator">|</span>
         <Button 
           onClick={() => navigate('/developer')}
           sx={{ textTransform: 'none' }}
         >
           Quem Somos Nós?
         </Button>
+        <span className="separator">|</span>
         <Button 
           onClick={() => navigate('/')}
           sx={{ textTransform: 'none' }}
         >
           Contato
         </Button>
-      </ButtonGroup>
+      </div>
       <h1 className={classes.title}>Smart Finds</h1>
       <p className={classes.description}>{typedText}</p>
       <Button
