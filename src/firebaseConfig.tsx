@@ -14,13 +14,13 @@ import { getFirestore } from "firebase/firestore";
 // };
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD9DtS8ipA835ohcKZu7--7wNYMzxL5TyE",
-  authDomain: "clickshopper-1e9f1.firebaseapp.com",
-  projectId: "clickshopper-1e9f1",
-  storageBucket: "clickshopper-1e9f1.appspot.com",
-  messagingSenderId: "457045949718",
-  appId: "1:457045949718:web:9ea1d0f6cb0850588da437",
-  measurementId: "G-CT63RXFE86"
+  apiKey: "AIzaSyDgePu-h0GZ6zJtpzQbplRvcbq2VNeDnIA",
+  authDomain: "smartfinds-c69c1.firebaseapp.com",
+  projectId: "smartfinds-c69c1",
+  storageBucket: "smartfinds-c69c1.appspot.com",
+  messagingSenderId: "17051715497",
+  appId: "1:17051715497:web:e6d317e69a76b848a0e6b8",
+  measurementId: "G-9MR218R5J5"
 };
 
 // Initialize Firebase
