@@ -1,33 +1,46 @@
-import React, { useEffect, useState } from "react";
+import { resetForm, setNomeProduto, setLinkImage, setLinkAliexpress, setLinkAmazon, setLinkMercadoLivre, setCategoria, submitFormProducts, setProductId } from "../../lib/features/AddProducts/addProcuctSlice";import { Box, Card, CardContent, Grid, Button, CardActions, Typography, Alert, CircularProgress, FormControl, InputLabel, Select, MenuItem, FormHelperText, Snackbar } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../lib/hooks";
-import { 
-  resetForm, 
-  setNomeProduto, 
-  setLinkImage, 
-  setLinkAliexpress, 
-  setLinkAmazon, 
-  setLinkMercadoLivre, 
-  setCategoria, 
-  submitFormProducts, 
-  setProductId
-} from "../../lib/features/AddProducts/addProcuctSlice";
-import { Box, Card, CardContent, Grid, Button, CardActions, Typography, Alert, CircularProgress, FormControl, InputLabel, Select, MenuItem, FormHelperText, Snackbar } from "@mui/material";
-import { unwrapResult } from "@reduxjs/toolkit";
+import React, { useEffect, useState } from "react";
 import InputForm from "../../components/inputForm";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 interface AddProductsFormProps {
   produtoParaEditar?: any;
   onProductUpdated?: () => void;
 }
 
-// Lista de categorias (você pode expandir ou carregar dinamicamente do backend)
+// Lista de categorias
 const categorias = [
   "Eletrônicos",
-  "Roupas",
-  "Acessórios",
-  "Casa e Decoração",
+  "Computadores e Acessórios",
+  "Casa e Cozinha",
+  "Roupas, Calçados e Joias",
+  "Beleza e Cuidados Pessoais",
+  "Saúde, Higiene e Bebê",
+  "Esportes e Atividades ao Ar Livre",
+  "Brinquedos e Jogos",
+  "Automotivo",
   "Livros",
-  "Outros"
+  "Ferramentas e Melhorias Domésticas",
+  "Alimentos e Bebidas",
+  "Móveis",
+  "Eletrodomésticos",
+  "Pet Shop",
+  "Artigos de Papelaria e Escritório",
+  "Relógios",
+  "Instrumentos Musicais",
+  "Jardinagem e Ar Livre",
+  "Artes, Artesanato e Costura",
+  "Filmes e TV",
+  "Video Games",
+  "Software",
+  "Bagagem e Acessórios de Viagem",
+  "Industriais e Científicos",
+  "Bebidas e Suplementos Nutricionais",
+  "Câmeras e Fotografia",
+  "Produtos para Escritório",
+  "Sapatos e Bolsas",
+  "Áudio e Som para Automóveis"
 ];
 
 function AddProductsForm({ produtoParaEditar, onProductUpdated }: AddProductsFormProps) {

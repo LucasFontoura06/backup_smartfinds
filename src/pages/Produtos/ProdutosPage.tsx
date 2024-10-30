@@ -251,13 +251,37 @@ const ProductList = () => {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
 
   // Categorias disponíveis
-  const categories = [
+  const categorias = [
     "Eletrônicos",
-    "Roupas",
-    "Acessórios",
-    "Casa e Decoração",
+    "Computadores e Acessórios",
+    "Casa e Cozinha",
+    "Roupas, Calçados e Joias",
+    "Beleza e Cuidados Pessoais",
+    "Saúde, Higiene e Bebê",
+    "Esportes e Atividades ao Ar Livre",
+    "Brinquedos e Jogos",
+    "Automotivo",
     "Livros",
-    "Outros"
+    "Ferramentas e Melhorias Domésticas",
+    "Alimentos e Bebidas",
+    "Móveis",
+    "Eletrodomésticos",
+    "Pet Shop",
+    "Artigos de Papelaria e Escritório",
+    "Relógios",
+    "Instrumentos Musicais",
+    "Jardinagem e Ar Livre",
+    "Artes, Artesanato e Costura",
+    "Filmes e TV",
+    "Video Games",
+    "Software",
+    "Bagagem e Acessórios de Viagem",
+    "Industriais e Científicos",
+    "Bebidas e Suplementos Nutricionais",
+    "Câmeras e Fotografia",
+    "Produtos para Escritório",
+    "Sapatos e Bolsas",
+    "Áudio e Som para Automóveis"
   ];
 
   // Efeito para buscar produtos
@@ -341,7 +365,7 @@ const ProductList = () => {
               label="Categoria"
             >
               <MenuItem value="">Todas as categorias</MenuItem>
-              {categories.map((category) => (
+              {categorias.map((category) => (
                 <MenuItem key={category} value={category}>
                   {category}
                 </MenuItem>
