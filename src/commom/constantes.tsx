@@ -7,6 +7,7 @@ export const CONSTANTES = {
     VAZIO: "",
     LBL_FOOTER: "© 2024 Smart Finds",	
     PRODUCTS: "produtos",
+    PRODUTOS_TESTE: "produtos-teste",
     LBL_TITLE: "Smart Finds",
 
     // Página Cadastrar Produtos

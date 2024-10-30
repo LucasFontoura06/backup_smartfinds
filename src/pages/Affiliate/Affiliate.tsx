@@ -1,4 +1,5 @@
-import { Box, Container, Grid, Card, CardContent, Typography, Button } from '@mui/material';
+import { Box, Container, Grid, Card, Typography, Button } from '@mui/material';
+import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import AmazonLogo from '../../assets/amazon_logo.png'; // Exemplo de importação do logo
 import AliexpressLogo from '../../assets/amazon_logo.png'; // Exemplo de importação do logo
 import MercadoLivreLogo from '../../assets/amazon_logo.png'; // Exemplo de importação do logo
@@ -40,48 +41,109 @@ const categories = [
 
 const CategoriesPage = () => {
     return (
-        <Container>
-            <Typography
-                variant="h4"
-                align="center"
-                sx={{ fontWeight: 'bold', marginBottom: 6, marginTop: 4 }}
-            >
-                Categorias de Lojas
-            </Typography>
-            <Grid container spacing={3}>
-                {categories.map((category, index) => (
-                    <Grid item xs={12} sm={6} md={3} key={index}>
-                        <Card>
-                            <CardContent>
-                                <Box display="flex" alignItems="center" mb={2}>
-                                    <img src={category.logo} alt={`${category.name} logo`} width={40} height={40} style={{ marginRight: 10 }} />
-                                    <Typography variant="h6">{category.name}</Typography>
+        <Box sx={{ 
+            backgroundColor: '#f0f2f5',
+            minHeight: '100vh',
+            py: 4
+        }}>
+            <Container sx={{ px: '0px !important' }}>
+                <Box sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    mb: 4
+                }}>
+                    <StorefrontOutlinedIcon sx={{ color: '#6366f2', mr: 1 }} />
+                    <Typography
+                        variant="h6"
+                        sx={{
+                            color: '#37352f',
+                            fontWeight: 600,
+                            fontSize: '1.1rem'
+                        }}
+                    >
+                        Lojas Parceiras
+                    </Typography>
+                </Box>
+
+                <Grid container spacing={3}>
+                    {categories.map((category, index) => (
+                        <Grid item xs={12} sm={6} md={3} key={index}>
+                            <Card sx={{ 
+                                backgroundColor: '#FFFFFF',
+                                boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.05)',
+                                p: 2,
+                                height: '100%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                transition: 'all 0.3s ease-in-out',
+                                '&:hover': {
+                                    transform: 'translateY(-4px)',
+                                    boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+                                    cursor: 'pointer'
+                                }
+                            }}>
+                                <Box sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    mb: 3
+                                }}>
+                                    <img 
+                                        src={category.logo} 
+                                        alt={`${category.name} logo`} 
+                                        style={{ 
+                                            width: 40, 
+                                            height: 40, 
+                                            marginRight: 12,
+                                            objectFit: 'contain'
+                                        }} 
+                                    />
+                                    <Typography sx={{ 
+                                        color: '#37352f', 
+                                        fontWeight: 500,
+                                        fontSize: '1rem'
+                                    }}>
+                                        {category.name}
+                                    </Typography>
                                 </Box>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    href={category.affiliateLink}
-                                    target="_blank"
-                                    fullWidth
-                                    sx={{ mb: 1 }}
-                                >
-                                    Página de Afiliado
-                                </Button>
-                                <Button
-                                    variant="contained" // Mesma variante para uniformizar o estilo dos botões
-                                    color="primary"
-                                    href={category.officialLink}
-                                    target="_blank"
-                                    fullWidth
-                                >
-                                    Página Oficial
-                                </Button>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                ))}
-            </Grid>
-        </Container>
+                                
+                                <Box sx={{ mt: 'auto' }}>
+                                    <Button
+                                        fullWidth
+                                        variant="contained"
+                                        sx={{
+                                            backgroundColor: '#6366f2',
+                                            mb: 1,
+                                            '&:hover': {
+                                                backgroundColor: '#5457e5'
+                                            }
+                                        }}
+                                        href={category.affiliateLink}
+                                        target="_blank"
+                                    >
+                                        Programa de Afiliados
+                                    </Button>
+                                    <Button
+                                        fullWidth
+                                        variant="text"
+                                        sx={{
+                                            color: '#6366f2',
+                                            '&:hover': {
+                                                backgroundColor: 'rgba(99, 102, 242, 0.04)'
+                                            }
+                                        }}
+                                        href={category.officialLink}
+                                        target="_blank"
+                                    >
+                                        Site Oficial
+                                    </Button>
+                                </Box>
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
+            </Container>
+        </Box>
     );
 };
 

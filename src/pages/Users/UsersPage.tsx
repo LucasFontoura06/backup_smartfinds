@@ -1,9 +1,10 @@
-import { Container, Typography, Paper, TextField, DialogActions, Button, Dialog, DialogTitle, DialogContent, FormControl, InputLabel, Select, MenuItem, FormControlLabel, Switch } from '@mui/material';
+import { Container, Typography, Paper, TextField, DialogActions, Button, Dialog, DialogTitle, DialogContent, FormControl, InputLabel, Select, MenuItem, FormControlLabel, Switch, Box, Card } from '@mui/material';
 import { addDoc, collection, getDocs, getFirestore } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { DataGrid, GridValueFormatter } from '@mui/x-data-grid';
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 import AddIcon from '@mui/icons-material/Add';
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 
 interface User {
   id: string;
@@ -127,22 +128,52 @@ const UsersPage = () => {
   ];
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Paper sx={{ p: 3 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-          <Typography variant="h4">
-            Usuários Cadastrados
-          </Typography>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={() => setOpenModal(true)}
+    <Box sx={{ 
+      backgroundColor: '#f0f2f5',
+      minHeight: '100vh',
+      py: 4
+    }}>
+      <Container sx={{ px: '0px !important' }}>
+        <Box sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          mb: 4
+        }}>
+          <PeopleOutlineIcon sx={{ color: '#6366f2', mr: 1 }} />
+          <Typography
+            variant="h6"
+            sx={{
+              color: '#37352f',
+              fontWeight: 600,
+              fontSize: '1.1rem'
+            }}
           >
-            Novo Usuário
-          </Button>
-        </div>
-        
-        <div style={{ height: 400, width: '100%' }}>
+            Usuários do Sistema
+          </Typography>
+        </Box>
+
+        <Card sx={{ 
+          backgroundColor: '#FFFFFF',
+          boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.05)',
+          mx: 3
+        }}>
+          <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end' }}>
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={() => setOpenModal(true)}
+              sx={{
+                backgroundColor: '#6366f2',
+                '&:hover': {
+                  backgroundColor: '#5457e5'
+                }
+              }}
+            >
+              Novo Usuário
+            </Button>
+          </Box>
+          
           <DataGrid
             rows={users}
             columns={columns}
@@ -152,12 +183,48 @@ const UsersPage = () => {
             pageSizeOptions={[5]}
             loading={loading}
             disableRowSelectionOnClick
+            sx={{
+              border: 'none',
+              p: 2,
+              '& .MuiDataGrid-cell': {
+                borderBottom: '1px solid #f0f0f0',
+                fontSize: '0.9rem',
+                color: '#424242'
+              },
+              '& .MuiDataGrid-columnHeaders': {
+                backgroundColor: '#f8f9fa',
+                borderBottom: 'none',
+                fontSize: '0.95rem',
+                fontWeight: 600,
+                color: '#37352f'
+              },
+              '& .MuiDataGrid-row:hover': {
+                backgroundColor: '#f8f9fa'
+              },
+              '& .MuiDataGrid-footerContainer': {
+                borderTop: 'none',
+                backgroundColor: '#f8f9fa'
+              }
+            }}
           />
-        </div>
+        </Card>
 
-        <Dialog open={openModal} onClose={() => setOpenModal(false)}>
-          <DialogTitle>Cadastrar Novo Usuário</DialogTitle>
-          <DialogContent>
+        <Dialog 
+          open={openModal} 
+          onClose={() => setOpenModal(false)}
+          PaperProps={{
+            sx: {
+              borderRadius: '8px'
+            }
+          }}
+        >
+          <DialogTitle sx={{ 
+            borderBottom: '1px solid #f0f0f0',
+            color: '#37352f'
+          }}>
+            Cadastrar Novo Usuário
+          </DialogTitle>
+          <DialogContent sx={{ mt: 2 }}>
             <TextField
               autoFocus
               margin="dense"
@@ -203,15 +270,29 @@ const UsersPage = () => {
               label="Usuário Ativo"
             />
           </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setOpenModal(false)}>Cancelar</Button>
-            <Button onClick={handleCreateUser} variant="contained">
+          <DialogActions sx={{ p: 2, pt: 0 }}>
+            <Button 
+              onClick={() => setOpenModal(false)}
+              sx={{ color: '#666' }}
+            >
+              Cancelar
+            </Button>
+            <Button 
+              onClick={handleCreateUser} 
+              variant="contained"
+              sx={{
+                backgroundColor: '#6366f2',
+                '&:hover': {
+                  backgroundColor: '#5457e5'
+                }
+              }}
+            >
               Cadastrar
             </Button>
           </DialogActions>
         </Dialog>
-      </Paper>
-    </Container>
+      </Container>
+    </Box>
   );
 };
 

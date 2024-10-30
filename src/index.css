@@ -11,3 +11,24 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.custom-menu .ant-menu-item-selected {
+  background-color: #6366f2 !important;
+  color: white !important;
+}
+
+.custom-menu .ant-menu-item:hover {
+  color: #6366f2 !important;
+}
+
+.custom-menu .ant-menu-item-selected .anticon {
+  color: white !important;
+}
+
+.custom-menu .anticon {
+  color: #6366f2;
+}
+
+.logo .anticon:hover {
+  background-color: rgba(99, 102, 242, 0.1);
+}

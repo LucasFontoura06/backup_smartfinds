@@ -162,9 +162,9 @@ const ListProducts: React.FC = () => {
           title={<span style={{ color: '#37352f', fontSize: '18px', fontWeight: 600 }}>{CONSTANTES.LBL_TITLE_LISTA_PRODUTOS}</span>}
           style={{ 
             backgroundColor: "#ffffff", 
-            border: "1px solid #d9d9d9",
-            borderRadius: '8px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+            boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.05)',
+            margin: '0 24px', // Adicionado margem horizontal
+            borderRadius: '8px'
           }}
         >
           {!showLoading ? (
@@ -185,7 +185,6 @@ const ListProducts: React.FC = () => {
                 showQuickJumper: true,
                 showTotal: (total, range) => `${range[0]}-${range[1]} de ${total} itens`,
               }}
-              rowClassName={() => 'custom-row'}
               style={{ 
                 backgroundColor: "#ffffff",
                 color: '#37352f',
@@ -217,75 +216,61 @@ const ListProducts: React.FC = () => {
       </Content>
 
       <style>{`
-        .custom-row {
-          border-bottom: 1px solid #e8e8e8;
-        }
-        .loading-container {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 100vh;
-        }
         .ant-table {
           border-radius: 8px;
           overflow: hidden;
         }
         .ant-table-thead > tr > th {
-          background-color: #8f8b8b !important; // Cor cinza escuro
-          color: #ffffff !important; // Texto branco para melhor contraste
+          background-color: #f8f9fa !important;
+          color: #37352f !important;
           font-weight: 600 !important;
-          border-bottom: 2px solid #434343 !important; // Borda mais escura
+          border-bottom: 1px solid #e8e8e8 !important;
           padding: 16px !important;
           font-size: 14px;
         }
         .ant-table-thead > tr > th:hover {
-          background-color: #595959 !important; // Mantém a mesma cor no hover
+          background-color: #f8f9fa !important;
         }
         .ant-table-tbody > tr > td {
-          border-bottom: 1px solid #e8e8e8;
+          border-bottom: 1px solid #f0f0f0;
           padding: 16px !important;
+          font-size: 14px;
+          color: #424242;
         }
         .ant-table-tbody > tr:hover > td {
-          background-color: #fafafa !important;
+          background-color: #ffffff !important;
         }
         .ant-table-cell {
-          border-right: 1px solid #e8e8e8 !important;
+          border-right: 1px solid #f0f0f0 !important;
         }
         .ant-table-cell:last-child {
           border-right: none !important;
         }
         .ant-table-bordered {
-          border: 1px solid #d9d9d9 !important;
-        }
-        .ant-table-row {
-          transition: all 0.3s ease;
-        }
-        .ant-table-row:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+          border: 1px solid #f0f0f0 !important;
         }
         .ant-pagination {
           margin-top: 16px !important;
+          margin-bottom: 16px !important;
         }
         .ant-pagination-item-active {
-          border-color: #1890ff !important;
-          font-weight: 600;
+          border-color: #6366f2 !important;
+          color: #6366f2 !important;
         }
-        .ant-table-column-title {
-          position: relative;
-          z-index: 1;
+        .ant-pagination-item-active a {
+          color: #6366f2 !important;
         }
         .ant-btn {
           border-radius: 6px;
           font-weight: 500;
         }
         .ant-btn-primary {
-          background-color: #1890ff;
-          border-color: #1890ff;
+          background-color: #6366f2;
+          border-color: #6366f2;
         }
         .ant-btn-primary:hover {
-          background-color: #40a9ff;
-          border-color: #40a9ff;
+          background-color: #5457e5;
+          border-color: #5457e5;
         }
         .ant-btn-dangerous {
           background-color: #ff4d4f;

@@ -1,8 +1,9 @@
-import { resetForm, setNomeProduto, setLinkImage, setLinkAliexpress, setLinkAmazon, setLinkMercadoLivre, setCategoria, submitFormProducts, setProductId } from "../../lib/features/AddProducts/addProcuctSlice";import { Box, Card, CardContent, Grid, Button, CardActions, Typography, Alert, CircularProgress, FormControl, InputLabel, Select, MenuItem, FormHelperText, Snackbar } from "@mui/material";
+import { resetForm, setNomeProduto, setLinkImage, setLinkAliexpress, setLinkAmazon, setLinkMercadoLivre, setCategoria, submitFormProducts, setProductId } from "../../lib/features/AddProducts/addProcuctSlice";import { Box, Card, CardContent, Grid, Button, CardActions, Typography, Alert, CircularProgress, FormControl, InputLabel, Select, MenuItem, FormHelperText, Snackbar, Container } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../lib/hooks";
 import React, { useEffect, useState } from "react";
 import InputForm from "../../components/inputForm";
 import { unwrapResult } from "@reduxjs/toolkit";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 interface AddProductsFormProps {
   produtoParaEditar?: any;
@@ -55,6 +56,14 @@ function AddProductsForm({ produtoParaEditar, onProductUpdated }: AddProductsFor
     linkImage: false,
     categoria: false
   });
+
+  // Definindo cores personalizadas (mesmas do dashboard)
+  const customColors = {
+    primary: '#6366F1',
+    secondary: '#F8FAFC',
+    text: '#64748B',
+    highlight: '#818CF8'
+  };
 
   useEffect(() => {
     if (produtoParaEditar) {
@@ -146,209 +155,257 @@ function AddProductsForm({ produtoParaEditar, onProductUpdated }: AddProductsFor
   };
 
   return (
-    <Box
-      component="form"
-      sx={{
-        flexGrow: 1,
-        width: '100%',
-        maxWidth: '900px',
-        mx: 'auto',
-        p: 3,
-      }}
-    >
-      <Typography
-        variant="h5"
-        sx={{ 
-          fontWeight: 500, 
-          marginBottom: 4, 
-          color: '#37352f',
-          borderBottom: '2px solid #f0f0f0',
-          paddingBottom: 2
-        }}
-      >
-        {produtoParaEditar ? 'Editar Produto' : 'Novo Produto'}
-      </Typography>
+    <Container maxWidth="xl" sx={{ px: '0px !important' }}>
+      <Box sx={{ 
+        py: 4,
+        backgroundColor: '#f0f2f5',
+        minHeight: '100vh'
+      }}>
+        <Card sx={{ 
+          borderRadius: '16px',
+          border: 'none',
+          boxShadow: 'rgba(0, 0, 0, 0.04) 0px 5px 22px, rgba(0, 0, 0, 0.03) 0px 0px 0px 0.5px',
+          backgroundColor: 'white',
+          mx: 'auto',
+          maxWidth: '900px'
+        }}>
+          <CardContent sx={{ p: 4 }}>
+            <Box sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center',
+              mb: 4 
+            }}>
+              <AddCircleIcon 
+                sx={{ 
+                  color: customColors.primary,
+                  mr: 2,
+                  fontSize: 24
+                }} 
+              />
+              <Typography
+                variant="h6"
+                sx={{ 
+                  color: customColors.text,
+                  fontWeight: 600,
+                  fontSize: '1.1rem'
+                }}
+              >
+                {produtoParaEditar ? 'Editar Produto' : 'Novo Produto'}
+              </Typography>
+            </Box>
 
-      {loading ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
-          <CircularProgress size={30} />
-        </Box>
-      ) : (
-        <Card elevation={0} sx={{ backgroundColor: 'transparent' }}>
-          <CardContent>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <InputForm
-                  label="Nome do Produto *"
-                  value={values.name || ""}
-                  onChange={(e: any) => {
-                    dispatch(setNomeProduto(e.target.value));
-                    setCamposObrigatorios(prev => ({ ...prev, name: false }));
-                  }}
-                  isInvalid={camposObrigatorios.name}
-                  msgError={camposObrigatorios.name ? "Campo obrigatório" : ""}
-                  fullWidth
-                  sx={{ 
-                    '& .MuiOutlinedInput-root': {
-                      backgroundColor: '#fff',
-                      '&:hover fieldset': {
-                        borderColor: '#d0d0d0',
-                      },
-                    }
-                  }}
-                />
-              </Grid>
-              
-              <Grid item xs={12}>
-                <InputForm
-                  label="Link da Imagem *"
-                  value={values.linkImage || ""}
-                  onChange={(e: any) => {
-                    dispatch(setLinkImage(e.target.value));
-                    setCamposObrigatorios(prev => ({ ...prev, linkImage: false }));
-                  }}
-                  isInvalid={camposObrigatorios.linkImage}
-                  msgError={camposObrigatorios.linkImage ? "Campo obrigatório" : ""}
-                  fullWidth
-                  sx={{ 
-                    '& .MuiOutlinedInput-root': {
-                      backgroundColor: '#fff',
-                    }
-                  }}
-                />
-              </Grid>
-
-              <Grid item xs={12}>
-                <FormControl fullWidth error={camposObrigatorios.categoria}>
-                  <InputLabel id="categoria-label">Categoria *</InputLabel>
-                  <Select
-                    labelId="categoria-label"
-                    value={values.categoria || ""}
-                    onChange={(e) => {
-                      dispatch(setCategoria(e.target.value));
-                      setCamposObrigatorios(prev => ({ ...prev, categoria: false }));
+            {loading ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
+                <CircularProgress size={30} sx={{ color: customColors.primary }} />
+              </Box>
+            ) : (
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <InputForm
+                    label="Nome do Produto *"
+                    value={values.name || ""}
+                    onChange={(e: any) => {
+                      dispatch(setNomeProduto(e.target.value));
+                      setCamposObrigatorios(prev => ({ ...prev, name: false }));
                     }}
-                    label="Categoria"
+                    isInvalid={camposObrigatorios.name}
+                    msgError={camposObrigatorios.name ? "Campo obrigatório" : ""}
+                    fullWidth
                     sx={{ 
-                      backgroundColor: '#fff',
-                      '& .MuiOutlinedInput-notchedOutline': {
-                        borderColor: camposObrigatorios.categoria ? 'error.main' : '#d0d0d0',
+                      '& .MuiOutlinedInput-root': {
+                        backgroundColor: 'white',
+                        '&:hover fieldset': {
+                          borderColor: customColors.primary,
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: customColors.primary,
+                        }
                       }
                     }}
-                  >
-                    {categorias.map((categoria) => (
-                      <MenuItem key={categoria} value={categoria}>
-                        {categoria}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  {camposObrigatorios.categoria && (
-                    <FormHelperText>Campo obrigatório</FormHelperText>
-                  )}
-                </FormControl>
-              </Grid>
+                  />
+                </Grid>
+                
+                <Grid item xs={12}>
+                  <InputForm
+                    label="Link da Imagem *"
+                    value={values.linkImage || ""}
+                    onChange={(e: any) => {
+                      dispatch(setLinkImage(e.target.value));
+                      setCamposObrigatorios(prev => ({ ...prev, linkImage: false }));
+                    }}
+                    isInvalid={camposObrigatorios.linkImage}
+                    msgError={camposObrigatorios.linkImage ? "Campo obrigatório" : ""}
+                    fullWidth
+                    sx={{ 
+                      '& .MuiOutlinedInput-root': {
+                        backgroundColor: 'white',
+                        '&:hover fieldset': {
+                          borderColor: customColors.primary,
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: customColors.primary,
+                        }
+                      }
+                    }}
+                  />
+                </Grid>
 
-              <Grid item xs={12} md={4}>
-                <InputForm
-                  label="Link AliExpress"
-                  value={values.linkAliexpress || ""}
-                  onChange={(e: any) => dispatch(setLinkAliexpress(e.target.value))}
-                  fullWidth
-                  sx={{ 
-                    '& .MuiOutlinedInput-root': {
-                      backgroundColor: '#fff',
-                    }
-                  }}
-                />
-              </Grid>
+                <Grid item xs={12}>
+                  <FormControl fullWidth error={camposObrigatorios.categoria}>
+                    <InputLabel id="categoria-label">Categoria *</InputLabel>
+                    <Select
+                      labelId="categoria-label"
+                      value={values.categoria || ""}
+                      onChange={(e) => {
+                        dispatch(setCategoria(e.target.value));
+                        setCamposObrigatorios(prev => ({ ...prev, categoria: false }));
+                      }}
+                      label="Categoria"
+                      sx={{ 
+                        backgroundColor: 'white',
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                          borderColor: customColors.primary,
+                        },
+                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          borderColor: customColors.primary,
+                        }
+                      }}
+                    >
+                      {categorias.map((categoria) => (
+                        <MenuItem key={categoria} value={categoria}>
+                          {categoria}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {camposObrigatorios.categoria && (
+                      <FormHelperText>Campo obrigatório</FormHelperText>
+                    )}
+                  </FormControl>
+                </Grid>
 
-              <Grid item xs={12} md={4}>
-                <InputForm
-                  label="Link Amazon"
-                  value={values.linkAmazon || ""}
-                  onChange={(e: any) => dispatch(setLinkAmazon(e.target.value))}
-                  fullWidth
-                  sx={{ 
-                    '& .MuiOutlinedInput-root': {
-                      backgroundColor: '#fff',
-                    }
-                  }}
-                />
-              </Grid>
+                <Grid item xs={12} md={4}>
+                  <InputForm
+                    label="Link AliExpress"
+                    value={values.linkAliexpress || ""}
+                    onChange={(e: any) => dispatch(setLinkAliexpress(e.target.value))}
+                    fullWidth
+                    sx={{ 
+                      '& .MuiOutlinedInput-root': {
+                        backgroundColor: 'white',
+                        '&:hover fieldset': {
+                          borderColor: customColors.primary,
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: customColors.primary,
+                        }
+                      }
+                    }}
+                  />
+                </Grid>
 
-              <Grid item xs={12} md={4}>
-                <InputForm
-                  label="Link Mercado Livre"
-                  value={values.linkMercadoLivre || ""}
-                  onChange={(e: any) => dispatch(setLinkMercadoLivre(e.target.value))}
-                  fullWidth
-                  sx={{ 
-                    '& .MuiOutlinedInput-root': {
-                      backgroundColor: '#fff',
-                    }
-                  }}
-                />
+                <Grid item xs={12} md={4}>
+                  <InputForm
+                    label="Link Amazon"
+                    value={values.linkAmazon || ""}
+                    onChange={(e: any) => dispatch(setLinkAmazon(e.target.value))}
+                    fullWidth
+                    sx={{ 
+                      '& .MuiOutlinedInput-root': {
+                        backgroundColor: 'white',
+                        '&:hover fieldset': {
+                          borderColor: customColors.primary,
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: customColors.primary,
+                        }
+                      }
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={4}>
+                  <InputForm
+                    label="Link Mercado Livre"
+                    value={values.linkMercadoLivre || ""}
+                    onChange={(e: any) => dispatch(setLinkMercadoLivre(e.target.value))}
+                    fullWidth
+                    sx={{ 
+                      '& .MuiOutlinedInput-root': {
+                        backgroundColor: 'white',
+                        '&:hover fieldset': {
+                          borderColor: customColors.primary,
+                        },
+                        '&.Mui-focused fieldset': {
+                          borderColor: customColors.primary,
+                        }
+                      }
+                    }}
+                  />
+                </Grid>
               </Grid>
-            </Grid>
+            )}
+
+            <Box sx={{ 
+              display: 'flex', 
+              justifyContent: 'flex-end',
+              mt: 4,
+              pt: 3,
+              borderTop: `1px solid ${customColors.secondary}`
+            }}>
+              <Button
+                variant="contained"
+                onClick={handleSubmit}
+                disabled={loading}
+                sx={{
+                  minWidth: '120px',
+                  backgroundColor: customColors.primary,
+                  '&:hover': {
+                    backgroundColor: customColors.highlight,
+                  },
+                  textTransform: 'none',
+                  boxShadow: 'none',
+                  borderRadius: '8px'
+                }}
+              >
+                {loading ? 'Salvando...' : 'Salvar'}
+              </Button>
+            </Box>
           </CardContent>
-          
-          <Box sx={{ 
-            display: 'flex', 
-            justifyContent: 'flex-end',
-            mt: 3,
-            borderTop: '1px solid #f0f0f0',
-            pt: 3
-          }}>
-            <Button
-              variant="contained"
-              onClick={handleSubmit}
-              disabled={loading}
-              sx={{
-                minWidth: '120px',
-                backgroundColor: '#1976d2',
-                '&:hover': {
-                  backgroundColor: '#1565c0',
-                },
-                textTransform: 'none',
-                boxShadow: 'none'
-              }}
-            >
-              {loading ? 'Salvando...' : 'Salvar'}
-            </Button>
-          </Box>
         </Card>
-      )}
 
-      <Snackbar
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        open={openSnackbar}
-        autoHideDuration={4000}
-        onClose={handleCloseSnackbar}
-      >
-        <Alert 
-          onClose={handleCloseSnackbar} 
-          severity={snackbarSeverity} 
-          sx={{ 
-            width: '100%',
-            backgroundColor: snackbarSeverity === 'success' ? '#4CAF50' : '#f44336', // Cores mais vibrantes
-            color: '#ffffff', // Texto branco para melhor contraste
-            '& .MuiAlert-icon': {
-              color: '#ffffff' // Ícone branco
-            },
-            '& .MuiSvgIcon-root': { // Estilo para o ícone de fechar
-              color: '#ffffff'
-            },
-            boxShadow: '0 2px 5px rgba(0,0,0,0.2)', // Sombra sutil
-            '& .MuiAlert-message': {
-              fontSize: '0.95rem', // Tamanho do texto um pouco maior
-              fontWeight: 500 // Texto um pouco mais bold
-            }
-          }}
+        <Snackbar
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          open={openSnackbar}
+          autoHideDuration={4000}
+          onClose={handleCloseSnackbar}
         >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
-    </Box>
+          <Alert 
+            onClose={handleCloseSnackbar} 
+            severity={snackbarSeverity} 
+            sx={{ 
+              width: '100%',
+              backgroundColor: snackbarSeverity === 'success' ? '#4CAF50' : '#f44336',
+              color: '#ffffff',
+              '& .MuiAlert-icon': {
+                color: '#ffffff'
+              },
+              '& .MuiSvgIcon-root': {
+                color: '#ffffff'
+              },
+              boxShadow: 'rgba(0, 0, 0, 0.1) 0px 4px 12px',
+              borderRadius: '8px',
+              '& .MuiAlert-message': {
+                fontSize: '0.95rem',
+                fontWeight: 500
+              }
+            }}
+          >
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
+      </Box>
+    </Container>
   );
 }
 
