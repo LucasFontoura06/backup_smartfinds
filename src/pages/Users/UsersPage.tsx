@@ -1,10 +1,16 @@
 import { Container, Typography, Paper, TextField, DialogActions, Button, Dialog, DialogTitle, DialogContent, FormControl, InputLabel, Select, MenuItem, FormControlLabel, Switch, Box, Card } from '@mui/material';
-import { addDoc, collection, getDocs, getFirestore } from 'firebase/firestore';
+import { addDoc, collection, getDocs, getFirestore, deleteDoc, doc, updateDoc, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { DataGrid, GridValueFormatter } from '@mui/x-data-grid';
-import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
+import { createUserWithEmailAndPassword, getAuth, deleteUser } from 'firebase/auth';
 import AddIcon from '@mui/icons-material/Add';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
+import DeleteIcon from '@mui/icons-material/Delete';
+import BlockIcon from '@mui/icons-material/Block';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import { useAppDispatch } from '../../lib/hooks';
+import { deleteUserAction } from '../../lib/features/Users/UserAction';
 
 interface User {
   id: string;
@@ -17,6 +23,7 @@ interface User {
 }
 
 const UsersPage = () => {
+  const [userProfile, setUserProfile] = useState<string>('Usuario');
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [openModal, setOpenModal] = useState(false);
@@ -27,6 +34,27 @@ const UsersPage = () => {
     profile: 'Administrador',
     ativo: true
   });
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<{id: string, email: string} | null>(null);
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const auth = getAuth();
+      const db = getFirestore();
+      if (auth.currentUser) {
+        const userDoc = await getDocs(
+          query(collection(db, 'usuarios'), where('email', '==', auth.currentUser.email))
+        );
+        if (!userDoc.empty) {
+          setUserProfile(userDoc.docs[0].data().profile);
+        }
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -100,15 +128,55 @@ const UsersPage = () => {
     }
   };
 
+  const handleDeleteUser = async (userId: string, userEmail: string) => {
+    setUserToDelete({ id: userId, email: userEmail });
+    setDeleteConfirmOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!userToDelete) return;
+    
+    try {
+      await dispatch(deleteUserAction({
+        id: userToDelete.id,
+        email: userToDelete.email
+      }));
+      
+      setDeleteConfirmOpen(false);
+      setUserToDelete(null);
+      
+    } catch (error) {
+      console.error('Erro ao deletar usuário:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
+      alert('Erro ao deletar usuário: ' + errorMessage);
+    }
+  };
+
+  const handleToggleUserStatus = async (userId: string, currentStatus: boolean) => {
+    try {
+      const db = getFirestore();
+      await updateDoc(doc(db, 'usuarios', userId), {
+        ativo: !currentStatus
+      });
+      setUsers(users.map(user => 
+        user.id === userId ? { ...user, ativo: !currentStatus } : user
+      ));
+    } catch (error) {
+      console.error('Erro ao atualizar status do usuário:', error);
+      alert('Erro ao atualizar status do usuário');
+    }
+  };
+
   const columns = [
-    { field: 'email', headerName: 'Email', width: 250 },
-    { field: 'name', headerName: 'Nome', width: 200 },
-    { field: 'profile', headerName: 'Perfil', width: 150 },
+    { field: 'email', headerName: 'Email', flex: 1, minWidth: 200 },
+    { field: 'name', headerName: 'Nome', flex: 1, minWidth: 150 },
+    { field: 'profile', headerName: 'Perfil', flex: 0.8, minWidth: 120 },
     { field: 'ativo', headerName: 'Ativo', width: 100, type: 'boolean' as const },
     { 
       field: 'createdAt', 
       headerName: 'Data de Criação', 
-      width: 200,
+      flex: 0.8,
+      minWidth: 150,
       renderCell: (params: any) => {
         return params.row.createdAt 
           ? new Date(params.row.createdAt).toLocaleDateString('pt-BR')
@@ -118,12 +186,46 @@ const UsersPage = () => {
     { 
       field: 'lastLoginAt', 
       headerName: 'Último Login', 
-      width: 200,
+      flex: 0.8,
+      minWidth: 150,
       renderCell: (params: any) => {
         return params.row.lastLoginAt 
           ? new Date(params.row.lastLoginAt).toLocaleDateString('pt-BR')
           : '';
       }
+    },
+    {
+      field: 'actions',
+      headerName: 'Ações',
+      width: 120,
+      renderCell: (params: any) => (
+        <Box>
+          <Tooltip title={params.row.ativo ? "Desativar" : "Ativar"}>
+            <IconButton
+              onClick={() => handleToggleUserStatus(params.row.id, params.row.ativo)}
+              size="small"
+              sx={{ 
+                color: params.row.ativo ? 'warning.main' : 'success.main',
+                '&:hover': { backgroundColor: 'rgba(99, 102, 242, 0.1)' }
+              }}
+            >
+              <BlockIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Excluir">
+            <IconButton
+              onClick={() => handleDeleteUser(params.row.id, params.row.email)}
+              size="small"
+              sx={{ 
+                color: 'error.main',
+                '&:hover': { backgroundColor: 'rgba(211, 47, 47, 0.1)' }
+              }}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      )
     }
   ];
 
@@ -133,7 +235,7 @@ const UsersPage = () => {
       minHeight: '100vh',
       py: 4
     }}>
-      <Container sx={{ px: '0px !important' }}>
+      <Container maxWidth="xl" sx={{ px: '24px !important' }}>
         <Box sx={{
           display: 'flex',
           alignItems: 'center',
@@ -156,22 +258,24 @@ const UsersPage = () => {
         <Card sx={{ 
           backgroundColor: '#FFFFFF',
           boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.05)',
-          mx: 3
+          width: '100%'
         }}>
           <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end' }}>
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={() => setOpenModal(true)}
-              sx={{
-                backgroundColor: '#6366f2',
-                '&:hover': {
-                  backgroundColor: '#5457e5'
-                }
-              }}
-            >
-              Novo Usuário
-            </Button>
+            {userProfile === 'Administrador' && (
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={() => setOpenModal(true)}
+                sx={{
+                  backgroundColor: '#6366f2',
+                  '&:hover': {
+                    backgroundColor: '#5457e5'
+                  }
+                }}
+              >
+                Novo Usuário
+              </Button>
+            )}
           </Box>
           
           <DataGrid
@@ -183,9 +287,11 @@ const UsersPage = () => {
             pageSizeOptions={[5]}
             loading={loading}
             disableRowSelectionOnClick
+            autoHeight
             sx={{
               border: 'none',
               p: 2,
+              width: '100%',
               '& .MuiDataGrid-cell': {
                 borderBottom: '1px solid #f0f0f0',
                 fontSize: '0.9rem',
@@ -197,9 +303,6 @@ const UsersPage = () => {
                 fontSize: '0.95rem',
                 fontWeight: 600,
                 color: '#37352f'
-              },
-              '& .MuiDataGrid-row:hover': {
-                backgroundColor: '#f8f9fa'
               },
               '& .MuiDataGrid-footerContainer': {
                 borderTop: 'none',
@@ -288,6 +391,45 @@ const UsersPage = () => {
               }}
             >
               Cadastrar
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog
+          open={deleteConfirmOpen}
+          onClose={() => setDeleteConfirmOpen(false)}
+          PaperProps={{
+            sx: {
+              borderRadius: '8px'
+            }
+          }}
+        >
+          <DialogTitle sx={{ color: '#37352f' }}>
+            Confirmar Exclusão
+          </DialogTitle>
+          <DialogContent>
+            <Typography>
+              Tem certeza que deseja excluir este usuário?
+            </Typography>
+          </DialogContent>
+          <DialogActions sx={{ p: 2, pt: 0 }}>
+            <Button 
+              onClick={() => setDeleteConfirmOpen(false)}
+              sx={{ color: '#666' }}
+            >
+              Cancelar
+            </Button>
+            <Button 
+              onClick={handleConfirmDelete}
+              variant="contained"
+              sx={{
+                backgroundColor: '#dc3545',
+                '&:hover': {
+                  backgroundColor: '#bb2d3b'
+                }
+              }}
+            >
+              Excluir
             </Button>
           </DialogActions>
         </Dialog>

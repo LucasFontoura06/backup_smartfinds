@@ -1,102 +1,100 @@
-import React, { useState, useEffect } from 'react';
-import { Button, ButtonGroup } from '@mui/material';
+import React from 'react';
+import { Button, Container, Box, Typography, AppBar, Toolbar, IconButton, Drawer, List, ListItem } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { useNavigate } from 'react-router-dom';
-import wallpaper from '../../assets/wallpaper_home_screen.jpg';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import MenuIcon from '@mui/icons-material/Menu';
+import Grid from '@mui/material/Grid';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const useStyles = makeStyles(() => ({
-  container: {
+  root: {
+    minHeight: '100vh',
+    background: 'linear-gradient(135deg, #7b1fa2 0%, #4a0072 100%)',
+    position: 'relative',
+    overflow: 'hidden',
     display: 'flex',
     flexDirection: 'column',
+  },
+  appBar: {
+    background: 'rgba(123, 31, 162, 0.9) !important',
+    backdropFilter: 'blur(10px)',
+    boxShadow: '0 2px 10px rgba(0,0,0,0.1) !important',
+  },
+  mainContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
     alignItems: 'center',
-    justifyContent: 'flex-start', // Mudado de 'center' para 'flex-start'
-    paddingTop: '120px', // Adiciona um espaçamento do topo
-    height: '100vh',
-    backgroundImage: `url(${wallpaper})`, // Use a variável importada
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    backgroundRepeat: 'no-repeat',
-    position: 'relative',
-    '&::before': { // Adiciona um overlay escuro para melhorar a legibilidade
-      content: '""',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(0, 0, 0, 0.5)', // Ajuste a opacidade conforme necessário
-      zIndex: 1,
-    },
-    padding: '120px 20px 20px 20px', // Adiciona padding em todos os lados
+    flex: 1,
+    padding: '0 16px',
+  },
+  contentWrapper: {
+    maxWidth: '800px',
+    width: '100%',
+    textAlign: 'center',
   },
   title: {
-    fontSize: '4rem',
-    fontWeight: 'bold',
-    marginBottom: '20px',
-    letterSpacing: '2px',
-    textTransform: 'uppercase',
-    fontFamily: "'Zen Dots', cursive",
-    color: '#fff',
-    position: 'relative',
-    zIndex: 2, // Coloca o texto acima do overlay
-    textShadow: '2px 2px 4px rgba(0,0,0,0.5)', // Adiciona sombra para melhor legibilidade
+    fontSize: '3.5rem !important',
+    fontWeight: '700 !important',
+    background: 'linear-gradient(45deg, #fff 30%, #e1bee7 90%)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    marginBottom: '24px !important',
     '@media (max-width: 600px)': {
-      fontSize: '2.5rem', // Fonte menor para mobile
-      marginBottom: '15px',
-      padding: '0 10px',
+      fontSize: '2.5rem !important',
     },
   },
-  description: {
-    fontSize: '1.5rem',
-    marginBottom: '30px',
-    maxWidth: '900px',
-    lineHeight: '1.6',
-    minHeight: '4rem',
-    fontFamily: "'Inconsolata', monospace",
-    color: '#fff',
-    position: 'relative',
-    zIndex: 2, // Coloca o texto acima do overlay
-    textShadow: '1px 1px 2px rgba(0,0,0,0.5)', // Adiciona sombra para melhor legibilidade
+  subtitle: {
+    fontSize: '1.25rem !important',
+    color: 'rgba(255, 255, 255, 0.9) !important',
+    marginBottom: '40px !important',
     '@media (max-width: 600px)': {
-      fontSize: '1.1rem', // Fonte menor para mobile
-      marginBottom: '20px',
-      padding: '0 10px',
-      maxWidth: '100%',
+      fontSize: '1rem !important',
     },
   },
-  buttonBar: {
-    position: 'absolute',
-    top: '20px',
-    right: '20px',
-    zIndex: 2,
-    display: 'flex',
-    alignItems: 'center',
-    '& .MuiButton-root': {
-      color: '#fff',
-      backgroundColor: 'transparent',
-      border: 'none',
-      '&:hover': {
-        backgroundColor: 'rgba(255, 255, 255, 0.1)',
-      },
-    },
-    '& .separator': {
-      color: '#fff',
-      margin: '0 8px',
-    },
-    '@media (max-width: 600px)': {
-      fontSize: '0.9rem',
-      right: '10px', // Ajusta posição no mobile
-      top: '10px',
-    },
-  },
-  buttonProducts: {
-    marginTop: '20px',
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    color: '#7b1fa2',
-    position: 'relative',
-    zIndex: 2, // Coloca o botão acima do overlay
+  ctaButton: {
+    borderRadius: '30px !important',
+    padding: '16px 48px !important',
+    fontSize: '1.2rem !important',
+    background: '#fff !important',
+    color: '#7b1fa2 !important',
+    fontWeight: '600 !important',
+    transition: 'all 0.3s ease !important',
     '&:hover': {
-      backgroundColor: '#fff',
+      transform: 'translateY(-2px)',
+      boxShadow: '0 8px 20px rgba(0,0,0,0.2) !important',
+      background: '#f5f5f5 !important',
+    },
+    '@media (max-width: 600px)': {
+      width: '100%',
+      maxWidth: '300px',
+    },
+  },
+  logo: {
+    fontWeight: '700 !important',
+    fontSize: '1.5rem !important',
+    color: '#fff',
+    textDecoration: 'none',
+  },
+  navButton: {
+    margin: '0 8px !important',
+    color: '#fff !important',
+    borderRadius: '8px !important',
+    padding: '6px 16px !important',
+    '@media (max-width: 600px)': {
+      width: '100%',
+      margin: '8px 0 !important',
+    },
+  },
+  desktopNav: {
+    '@media (max-width: 600px)': {
+      display: 'none !important',
+    },
+  },
+  menuButton: {
+    '@media (min-width: 600px)': {
+      display: 'none !important',
     },
   },
 }));
@@ -104,56 +102,105 @@ const useStyles = makeStyles(() => ({
 const MainScreen: React.FC = () => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const isMobile = useMediaQuery('(max-width:600px)');
+  const [mobileOpen, setMobileOpen] = React.useState(false);
 
-  const [typedText, setTypedText] = useState('');
-  const fullText = 'O Smart Finds é o seu portal de redirecionamento para as melhores ofertas online. Aqui você encontra uma curadoria de produtos com links para os maiores marketplaces como Amazon, Shopee, Mercado Livre e AliExpress.';
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
 
-  useEffect(() => {
-    let index = 0;
-    const typingEffect = () => {
-      if (index < fullText.length) {
-        setTypedText(fullText.slice(0, index + 1));
-        index++;
-        setTimeout(typingEffect, 50);
-      }
-    };
-    typingEffect();
-  }, [fullText]);
+  const menuItems = [
+    { text: 'Login', path: '/Login' },
+    { text: 'Sobre Nós', path: '/developer' },
+    { text: 'Contato', path: '/contato' },
+  ];
+
+  const drawer = (
+    <Box sx={{ p: 2, background: '#7b1fa2', height: '100%' }}>
+      <List>
+        {menuItems.map((item) => (
+          <ListItem key={item.text}>
+            <Button
+              className={classes.navButton}
+              onClick={() => {
+                navigate(item.path);
+                handleDrawerToggle();
+              }}
+              fullWidth
+            >
+              {item.text}
+            </Button>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
 
   return (
-    <div className={classes.container}>
-      <div className={classes.buttonBar}>
-        <Button 
-          onClick={() => navigate('/Login')}
-          sx={{ textTransform: 'none' }}
-        >
-          Login
-        </Button>
-        <span className="separator">|</span>
-        <Button 
-          onClick={() => navigate('/developer')}
-          sx={{ textTransform: 'none' }}
-        >
-          Quem Somos Nós?
-        </Button>
-        <span className="separator">|</span>
-        <Button 
-          onClick={() => navigate('/')}
-          sx={{ textTransform: 'none' }}
-        >
-          Contato
-        </Button>
-      </div>
-      <h1 className={classes.title}>Smart Finds</h1>
-      <p className={classes.description}>{typedText}</p>
-      <Button
-        variant="contained"
-        className={classes.buttonProducts}
-        onClick={() => navigate('/produtos')}
+    <Box className={classes.root}>
+      <AppBar position="fixed" className={classes.appBar}>
+        <Toolbar>
+          <Typography variant="h6" component="div" className={classes.logo}>
+            Smart Finds
+          </Typography>
+          <Box sx={{ flexGrow: 1 }} />
+          
+          <Box className={classes.desktopNav}>
+            {menuItems.map((item) => (
+              <Button
+                key={item.text}
+                className={classes.navButton}
+                onClick={() => navigate(item.path)}
+              >
+                {item.text}
+              </Button>
+            ))}
+          </Box>
+
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            className={classes.menuButton}
+          >
+            <MenuIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+
+      <Drawer
+        variant="temporary"
+        anchor="right"
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        ModalProps={{
+          keepMounted: true,
+        }}
       >
-        Ir para Produtos
-      </Button>
-    </div>
+        {drawer}
+      </Drawer>
+
+      <Box className={classes.mainContent}>
+        <Box className={classes.contentWrapper}>
+          <Typography variant="h1" className={classes.title}>
+            Descubra as Melhores Ofertas
+          </Typography>
+          <Typography variant="h5" className={classes.subtitle}>
+            Conectamos você aos melhores preços em marketplaces como Amazon, 
+            Shopee, Mercado Livre e AliExpress em um só lugar.
+          </Typography>
+          <Button
+            variant="contained"
+            className={classes.ctaButton}
+            onClick={() => navigate('/produtos')}
+            startIcon={<ShoppingCartIcon />}
+          >
+            Explorar Ofertas
+          </Button>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 
