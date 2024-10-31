@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import InputForm from "../../components/inputForm";
 import { unwrapResult } from "@reduxjs/toolkit";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 interface AddProductsFormProps {
   produtoParaEditar?: any;
@@ -56,6 +57,7 @@ function AddProductsForm({ produtoParaEditar, onProductUpdated }: AddProductsFor
     linkImage: false,
     categoria: false
   });
+  const isMobile = useMediaQuery('(max-width:768px)');
 
   // Definindo cores personalizadas (mesmas do dashboard)
   const customColors = {
@@ -155,21 +157,22 @@ function AddProductsForm({ produtoParaEditar, onProductUpdated }: AddProductsFor
   };
 
   return (
-    <Container maxWidth="xl" sx={{ px: '0px !important' }}>
+    <Container maxWidth="xl" sx={{ 
+      px: isMobile ? '8px !important' : '24px !important'
+    }}>
       <Box sx={{ 
         py: 4,
+        px: isMobile ? 2 : 4,
         backgroundColor: '#f0f2f5',
         minHeight: '100vh'
       }}>
         <Card sx={{ 
           borderRadius: '16px',
-          border: 'none',
-          boxShadow: 'rgba(0, 0, 0, 0.04) 0px 5px 22px, rgba(0, 0, 0, 0.03) 0px 0px 0px 0.5px',
-          backgroundColor: 'white',
-          mx: 'auto',
-          maxWidth: '900px'
+          p: isMobile ? 2 : 4
         }}>
-          <CardContent sx={{ p: 4 }}>
+          <CardContent sx={{ 
+            p: isMobile ? 1 : 4
+          }}>
             <Box sx={{ 
               display: 'flex', 
               alignItems: 'center', 
@@ -200,7 +203,7 @@ function AddProductsForm({ produtoParaEditar, onProductUpdated }: AddProductsFor
                 <CircularProgress size={30} sx={{ color: customColors.primary }} />
               </Box>
             ) : (
-              <Grid container spacing={3}>
+              <Grid container spacing={isMobile ? 2 : 3}>
                 <Grid item xs={12}>
                   <InputForm
                     label="Nome do Produto *"

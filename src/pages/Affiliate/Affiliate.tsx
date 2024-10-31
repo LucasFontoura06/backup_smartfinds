@@ -4,6 +4,7 @@ import AmazonLogo from '../../assets/amazon_logo.png'; // Exemplo de importaçã
 import AliexpressLogo from '../../assets/amazon_logo.png'; // Exemplo de importação do logo
 import MercadoLivreLogo from '../../assets/amazon_logo.png'; // Exemplo de importação do logo
 import ShopeeLogo from '../../assets/amazon_logo.png'; // Exemplo de importação do logo
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const categories = [
     {
@@ -40,13 +41,18 @@ const categories = [
 ];
 
 const CategoriesPage = () => {
+    const isMobile = useMediaQuery('(max-width:768px)');
+
     return (
         <Box sx={{ 
             backgroundColor: '#f0f2f5',
             minHeight: '100vh',
-            py: 4
+            py: 4,
+            px: isMobile ? 2 : 4
         }}>
-            <Container sx={{ px: '0px !important' }}>
+            <Container sx={{ 
+                px: isMobile ? '8px !important' : '24px !important'
+            }}>
                 <Box sx={{
                     display: 'flex',
                     alignItems: 'center',
@@ -66,13 +72,13 @@ const CategoriesPage = () => {
                     </Typography>
                 </Box>
 
-                <Grid container spacing={3}>
+                <Grid container spacing={isMobile ? 2 : 3}>
                     {categories.map((category, index) => (
                         <Grid item xs={12} sm={6} md={3} key={index}>
                             <Card sx={{ 
                                 backgroundColor: '#FFFFFF',
                                 boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.05)',
-                                p: 2,
+                                p: isMobile ? 1.5 : 2,
                                 height: '100%',
                                 display: 'flex',
                                 flexDirection: 'column',

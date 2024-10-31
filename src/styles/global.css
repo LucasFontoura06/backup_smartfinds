@@ -18,3 +18,17 @@ body {
     display: flex;
     flex-direction: column;
 }
+
+
+@media (max-width: 768px) {
+    .MuiDialog-paper {
+        margin: 16px;
+        width: calc(100% - 32px);
+        max-height: calc(100% - 32px);
+    }
+
+    .MuiContainer-root {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+}

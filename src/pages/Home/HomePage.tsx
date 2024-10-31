@@ -10,16 +10,16 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 const useStyles = makeStyles(() => ({
   root: {
     minHeight: '100vh',
-    background: 'linear-gradient(135deg, #7b1fa2 0%, #4a0072 100%)',
+    background: '#000000',
     position: 'relative',
     overflow: 'hidden',
     display: 'flex',
     flexDirection: 'column',
   },
   appBar: {
-    background: 'rgba(123, 31, 162, 0.9) !important',
+    background: 'transparent !important',
     backdropFilter: 'blur(10px)',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.1) !important',
+    boxShadow: 'none !important',
   },
   mainContent: {
     display: 'flex',
@@ -28,63 +28,72 @@ const useStyles = makeStyles(() => ({
     alignItems: 'center',
     flex: 1,
     padding: '0 16px',
+    position: 'relative',
   },
   contentWrapper: {
-    maxWidth: '800px',
+    maxWidth: '1200px',
     width: '100%',
     textAlign: 'center',
+    padding: '0 20px',
   },
   title: {
-    fontSize: '3.5rem !important',
-    fontWeight: '700 !important',
-    background: 'linear-gradient(45deg, #fff 30%, #e1bee7 90%)',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    marginBottom: '24px !important',
+    display: 'flex',
+    justifyContent: 'center',
+    gap: '0',
+    width: '100%',
+    fontSize: '6rem',
+    fontWeight: 700,
+    color: '#ffffff',
+    letterSpacing: '0.3em',
+    marginBottom: '24px',
+    textTransform: 'none',
     '@media (max-width: 600px)': {
-      fontSize: '2.5rem !important',
+      fontSize: '3rem',
+      letterSpacing: '0.2em',
+      flexDirection: 'column',
+      alignItems: 'center',
     },
   },
+  titleWord: {
+    display: 'inline-block',
+  },
   subtitle: {
-    fontSize: '1.25rem !important',
-    color: 'rgba(255, 255, 255, 0.9) !important',
+    fontSize: '1rem !important',
+    color: '#999999 !important',
     marginBottom: '40px !important',
+    letterSpacing: '0.2em !important',
+    textTransform: 'uppercase',
     '@media (max-width: 600px)': {
-      fontSize: '1rem !important',
+      fontSize: '0.8rem !important',
     },
   },
   ctaButton: {
     borderRadius: '30px !important',
     padding: '16px 48px !important',
-    fontSize: '1.2rem !important',
-    background: '#fff !important',
-    color: '#7b1fa2 !important',
-    fontWeight: '600 !important',
+    fontSize: '1rem !important',
+    background: 'transparent !important',
+    color: '#ffffff !important',
+    border: '1px solid #ffffff !important',
+    fontWeight: '400 !important',
+    letterSpacing: '0.2em !important',
     transition: 'all 0.3s ease !important',
     '&:hover': {
-      transform: 'translateY(-2px)',
-      boxShadow: '0 8px 20px rgba(0,0,0,0.2) !important',
-      background: '#f5f5f5 !important',
-    },
-    '@media (max-width: 600px)': {
-      width: '100%',
-      maxWidth: '300px',
+      background: 'rgba(255,255,255,0.1) !important',
     },
   },
   logo: {
-    fontWeight: '700 !important',
-    fontSize: '1.5rem !important',
+    fontWeight: '400 !important',
+    fontSize: '1.2rem !important',
     color: '#fff',
     textDecoration: 'none',
+    letterSpacing: '0.2em',
   },
   navButton: {
-    margin: '0 8px !important',
     color: '#fff !important',
-    borderRadius: '8px !important',
+    letterSpacing: '0.1em !important',
     padding: '6px 16px !important',
-    '@media (max-width: 600px)': {
-      width: '100%',
-      margin: '8px 0 !important',
+    '&:hover': {
+      background: 'rgba(255,255,255,0.1) !important',
     },
   },
   desktopNav: {
@@ -184,19 +193,18 @@ const MainScreen: React.FC = () => {
       <Box className={classes.mainContent}>
         <Box className={classes.contentWrapper}>
           <Typography variant="h1" className={classes.title}>
-            Descubra as Melhores Ofertas
+            <span className={classes.titleWord}>Smart</span>
+            <span className={classes.titleWord}>Finds</span>
           </Typography>
           <Typography variant="h5" className={classes.subtitle}>
-            Conectamos você aos melhores preços em marketplaces como Amazon, 
-            Shopee, Mercado Livre e AliExpress em um só lugar.
+          Conectamos você aos melhores preços em marketplaces em um só lugar.
           </Typography>
           <Button
-            variant="contained"
+            variant="outlined"
             className={classes.ctaButton}
             onClick={() => navigate('/produtos')}
-            startIcon={<ShoppingCartIcon />}
           >
-            Explorar Ofertas
+            JOIN US
           </Button>
         </Box>
       </Box>

@@ -11,6 +11,7 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import { useAppDispatch } from '../../lib/hooks';
 import { deleteUserAction } from '../../lib/features/Users/UserAction';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 interface User {
   id: string;
@@ -38,6 +39,8 @@ const UsersPage = () => {
   const [userToDelete, setUserToDelete] = useState<{id: string, email: string} | null>(null);
 
   const dispatch = useAppDispatch();
+
+  const isMobile = useMediaQuery('(max-width:768px)');
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -168,10 +171,33 @@ const UsersPage = () => {
   };
 
   const columns = [
-    { field: 'email', headerName: 'Email', flex: 1, minWidth: 200 },
-    { field: 'name', headerName: 'Nome', flex: 1, minWidth: 150 },
-    { field: 'profile', headerName: 'Perfil', flex: 0.8, minWidth: 120 },
-    { field: 'ativo', headerName: 'Ativo', width: 100, type: 'boolean' as const },
+    { 
+      field: 'email', 
+      headerName: 'Email', 
+      flex: 1, 
+      minWidth: 200,
+      hide: isMobile 
+    },
+    { 
+      field: 'name', 
+      headerName: 'Nome', 
+      flex: 1, 
+      minWidth: 150 
+    },
+    { 
+      field: 'profile', 
+      headerName: 'Perfil', 
+      flex: 0.8, 
+      minWidth: 120,
+      hide: isMobile 
+    },
+    { 
+      field: 'ativo', 
+      headerName: 'Ativo', 
+      width: 100, 
+      type: 'boolean' as const,
+      hide: isMobile 
+    },
     { 
       field: 'createdAt', 
       headerName: 'Data de Criação', 
@@ -233,9 +259,12 @@ const UsersPage = () => {
     <Box sx={{ 
       backgroundColor: '#f0f2f5',
       minHeight: '100vh',
-      py: 4
+      py: 4,
+      px: isMobile ? 2 : 4
     }}>
-      <Container maxWidth="xl" sx={{ px: '24px !important' }}>
+      <Container maxWidth="xl" sx={{ 
+        px: isMobile ? '8px !important' : '24px !important'
+      }}>
         <Box sx={{
           display: 'flex',
           alignItems: 'center',
@@ -256,9 +285,10 @@ const UsersPage = () => {
         </Box>
 
         <Card sx={{ 
-          backgroundColor: '#FFFFFF',
-          boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.05)',
-          width: '100%'
+          overflowX: 'auto',
+          '& .MuiDataGrid-root': {
+            width: isMobile ? 'max-content' : '100%'
+          }
         }}>
           <Box sx={{ p: 2, display: 'flex', justifyContent: 'flex-end' }}>
             {userProfile === 'Administrador' && (

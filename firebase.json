@@ -1,7 +1,7 @@
 {
   "hosting": {
     "site": "smartfinds",
-    "public": "public",
+    "public": "build",
     "ignore": [
       "firebase.json",
       "**/.*",

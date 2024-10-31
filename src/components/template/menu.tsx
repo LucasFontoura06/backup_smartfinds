@@ -1,8 +1,9 @@
 import React from 'react';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Drawer } from 'antd';
 import { ShoppingCartOutlined, DashboardOutlined, PlusOutlined, AppstoreOutlined, LogoutOutlined, UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { getAuth } from 'firebase/auth';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const { Sider } = Layout;
 
@@ -13,6 +14,7 @@ interface MenuProps {
 
 const SideMenu: React.FC<MenuProps> = ({ menuOpen, setMenuOpen }) => {
   const navigate = useNavigate();
+  const isMobile = useMediaQuery('(max-width:768px)');
 
   const handleNavigation = (path: string) => {
     navigate(path);
@@ -61,27 +63,8 @@ const SideMenu: React.FC<MenuProps> = ({ menuOpen, setMenuOpen }) => {
     },
   ];
 
-  return (
-    <Sider
-      collapsible
-      collapsed={!menuOpen}
-      onCollapse={(collapsed) => setMenuOpen(!collapsed)}
-      trigger={null}
-      theme="light"
-      width={250}
-      style={{
-        height: '100vh',
-        position: 'fixed',
-        left: 0,
-        top: 0,
-        zIndex: 1000,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        borderRight: '1px solid #e0e0e0',
-        backgroundColor: '#FFFFFF',
-      }}
-    >
+  const menuContent = (
+    <>
       <div>
         <div className="logo" style={{ 
           height: '64px', 
@@ -91,8 +74,8 @@ const SideMenu: React.FC<MenuProps> = ({ menuOpen, setMenuOpen }) => {
           alignItems: 'center',
           paddingRight: '8px'
         }}>
-          {menuOpen && <h2 style={{ color: '#37352f', margin: 0, fontSize: '16px' }}>Painel de Controle</h2>}
-          {React.createElement(menuOpen ? MenuFoldOutlined : MenuUnfoldOutlined, {
+          {(menuOpen || isMobile) && <h2 style={{ color: '#37352f', margin: 0, fontSize: '16px' }}>Painel de Controle</h2>}
+          {!isMobile && React.createElement(menuOpen ? MenuFoldOutlined : MenuUnfoldOutlined, {
             onClick: () => setMenuOpen(!menuOpen),
             style: { 
               fontSize: '18px', 
@@ -119,9 +102,7 @@ const SideMenu: React.FC<MenuProps> = ({ menuOpen, setMenuOpen }) => {
         <Menu
           theme="light"
           mode="inline"
-          style={{ 
-            backgroundColor: '#FFFFFF',
-          }}
+          style={{ backgroundColor: '#FFFFFF' }}
           className="custom-menu"
           items={[
             {
@@ -133,6 +114,54 @@ const SideMenu: React.FC<MenuProps> = ({ menuOpen, setMenuOpen }) => {
           ]}
         />
       </div>
+    </>
+  );
+
+  return isMobile ? (
+    <>
+      <MenuUnfoldOutlined 
+        onClick={() => setMenuOpen(true)}
+        style={{
+          position: 'fixed',
+          top: '16px',
+          left: '16px',
+          fontSize: '24px',
+          zIndex: 1000,
+          color: '#6366f2',
+        }}
+      />
+      <Drawer
+        placement="left"
+        onClose={() => setMenuOpen(false)}
+        open={menuOpen}
+        width={250}
+        bodyStyle={{ padding: 0 }}
+      >
+        {menuContent}
+      </Drawer>
+    </>
+  ) : (
+    <Sider
+      collapsible
+      collapsed={!menuOpen}
+      onCollapse={(collapsed) => setMenuOpen(!collapsed)}
+      trigger={null}
+      theme="light"
+      width={250}
+      style={{
+        height: '100vh',
+        position: 'fixed',
+        left: 0,
+        top: 0,
+        zIndex: 1000,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        borderRight: '1px solid #e0e0e0',
+        backgroundColor: '#FFFFFF',
+      }}
+    >
+      {menuContent}
     </Sider>
   );
 };
