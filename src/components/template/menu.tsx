@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout, Menu, Drawer } from 'antd';
-import { ShoppingCartOutlined, DashboardOutlined, PlusOutlined, AppstoreOutlined, LogoutOutlined, UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+import { ShoppingCartOutlined, DashboardOutlined, PlusOutlined, AppstoreOutlined, LogoutOutlined, UserOutlined, MenuFoldOutlined, MenuUnfoldOutlined, MessageOutlined, MailOutlined} from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { getAuth } from 'firebase/auth';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -60,6 +60,12 @@ const SideMenu: React.FC<MenuProps> = ({ menuOpen, setMenuOpen }) => {
       icon: <UserOutlined />,
       label: 'Usuários',
       onClick: () => handleNavigation('/users'),
+    },
+    {
+      key: '7',
+      icon: <MessageOutlined />,
+      label: 'Mensagens',
+      onClick: () => handleNavigation('/mensagens'),
     },
   ];
 

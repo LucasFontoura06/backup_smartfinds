@@ -15,6 +15,7 @@ import AddProductPage from '../pages/AddProduct/AddProductPage';
 import Affiliate from '../pages/Affiliate/Affiliate';
 import UsersPage from '../pages/Users/UsersPage';
 import ContatoPage from '../pages/Contato/ContatoPage';
+import CentralDeMensagens from '../pages/CentralDeMensagens/CentralDeMensagens';
 
 const AppRoutes: React.FC = () => {
   return (
@@ -32,6 +33,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/cadastrarProduto" element={<PrivateRoute><AddProductPage /></PrivateRoute>} />
       <Route path="/affiliate" element={<PrivateRoute><Affiliate /></PrivateRoute>} />
       <Route path="/users" element={<PrivateRoute><UsersPage /></PrivateRoute>} />
+      <Route path="/mensagens" element={<PrivateRoute><CentralDeMensagens /></PrivateRoute>} />
     </Routes>
   );
 };
