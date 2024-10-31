@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Container,
@@ -12,33 +12,38 @@ import {
   InputLabel,
   Snackbar,
   Alert,
+  CircularProgress,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../lib/store';
+import { handleSubmitContato } from '../../lib/features/Contato/ContatoAction';
+import { resetStatus, setEmail, setMensagem, setNome, setTipo } from '../../lib/features/Contato/ContatoSlice';
 
 const ContatoPage = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    nome: '',
-    email: '',
-    tipo: '',
-    mensagem: '',
-  });
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const { loading, error, success, values } = useSelector((state: RootState) => state.contato);
+  
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Aqui você implementa a lógica para enviar o feedback
-    console.log(formData);
-    setOpenSnackbar(true);
-    // Limpar formulário após envio
-    setFormData({
-      nome: '',
-      email: '',
-      tipo: '',
-      mensagem: '',
-    });
+    try {
+      await dispatch(handleSubmitContato(values));
+    } catch (error) {
+      console.error('Erro ao enviar formulário:', error);
+    }
   };
+
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        dispatch(resetStatus());
+      }, 4000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [success, dispatch]);
 
   return (
     <Box
@@ -98,7 +103,7 @@ const ContatoPage = () => {
           sx={{
             color: '#999999',
             mb: 6,
-            fontSize: '1rem',
+            fontSize: '2rem',
             letterSpacing: '0.2em',
             textTransform: 'uppercase',
             '& span': {
@@ -126,8 +131,8 @@ const ContatoPage = () => {
               label="Nome"
               margin="normal"
               required
-              value={formData.nome}
-              onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
+              value={values.nome}
+              onChange={(e) => dispatch(setNome(e.target.value))}
               sx={{
                 '& .MuiOutlinedInput-root': {
                   color: '#ffffff',
@@ -153,8 +158,8 @@ const ContatoPage = () => {
               margin="normal"
               required
               type="email"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              value={values.email}
+              onChange={(e) => dispatch(setEmail(e.target.value))}
               sx={{
                 '& .MuiOutlinedInput-root': {
                   color: '#ffffff',
@@ -179,9 +184,9 @@ const ContatoPage = () => {
                 Tipo de Contato
               </InputLabel>
               <Select
-                value={formData.tipo}
+                value={values.tipo}
                 label="Tipo de Contato"
-                onChange={(e) => setFormData({ ...formData, tipo: e.target.value })}
+                onChange={(e) => dispatch(setTipo(e.target.value))}
                 sx={{
                   color: '#ffffff',
                   '& .MuiOutlinedInput-notchedOutline': {
@@ -209,8 +214,8 @@ const ContatoPage = () => {
               required
               multiline
               rows={4}
-              value={formData.mensagem}
-              onChange={(e) => setFormData({ ...formData, mensagem: e.target.value })}
+              value={values.mensagem}
+              onChange={(e) => dispatch(setMensagem(e.target.value))}
               sx={{
                 '& .MuiOutlinedInput-root': {
                   color: '#ffffff',
@@ -234,6 +239,7 @@ const ContatoPage = () => {
               type="submit"
               variant="contained"
               fullWidth
+              disabled={loading}
               sx={{
                 mt: 3,
                 mb: 2,
@@ -244,24 +250,46 @@ const ContatoPage = () => {
                 },
               }}
             >
-              Enviar Mensagem
+              {loading ? (
+                <CircularProgress size={24} color="inherit" />
+              ) : (
+                'Enviar Mensagem'
+              )}
             </Button>
           </Box>
         </Paper>
 
-        {/* Snackbar de confirmação */}
+        {/* Snackbar atualizado */}
         <Snackbar
-          open={openSnackbar}
-          autoHideDuration={6000}
-          onClose={() => setOpenSnackbar(false)}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          open={success || !!error}
+          autoHideDuration={4000}
+          onClose={() => dispatch(resetStatus())}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         >
-          <Alert
-            onClose={() => setOpenSnackbar(false)}
-            severity="success"
-            sx={{ width: '100%' }}
+          <Alert 
+            onClose={() => dispatch(resetStatus())} 
+            severity={success ? 'success' : 'error'}
+            sx={{ 
+              width: '100%',
+              backgroundColor: success ? '#4CAF50' : '#f44336',
+              color: '#ffffff',
+              '& .MuiAlert-icon': {
+                color: '#ffffff'
+              },
+              '& .MuiSvgIcon-root': {
+                color: '#ffffff'
+              },
+              boxShadow: 'rgba(0, 0, 0, 0.1) 0px 4px 12px',
+              borderRadius: '8px',
+              '& .MuiAlert-message': {
+                fontSize: '0.95rem',
+                fontWeight: 500
+              }
+            }}
           >
-            Mensagem enviada com sucesso!
+            {success 
+              ? 'Mensagem enviada com sucesso!' 
+              : error || 'Ocorreu um erro ao enviar a mensagem.'}
           </Alert>
         </Snackbar>
       </Container>
