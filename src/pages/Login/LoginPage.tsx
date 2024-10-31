@@ -12,6 +12,8 @@ import {
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { getFirestore, doc, updateDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import backgroundImage from '../../assets/background_home_page.jpg';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -70,7 +72,10 @@ const LoginPage = () => {
     <Box
       sx={{
         minHeight: '100vh',
-        background: '#000000',
+        background: `url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
         position: 'relative',
         '&::before': {
           content: '""',
@@ -79,15 +84,38 @@ const LoginPage = () => {
           left: 0,
           right: 0,
           bottom: 0,
-          background: `
-            radial-gradient(circle at 30% 50%, rgba(30,30,30,1) 0%, rgba(0,0,0,0) 50%),
-            radial-gradient(circle at 70% 50%, rgba(30,30,30,1) 0%, rgba(0,0,0,0) 50%)
-          `,
-          opacity: 0.5,
+          backgroundColor: 'rgba(0, 0, 0, 0.6)',
           zIndex: 1
         }
       }}
     >
+      <Button
+        onClick={() => navigate('/')}
+        startIcon={<ArrowBackIcon />}
+        sx={{
+          position: { xs: 'fixed', md: 'absolute' },
+          top: { xs: 'auto', md: 24 },
+          bottom: { xs: 24, md: 'auto' },
+          left: { xs: '50%', md: 24 },
+          transform: { xs: 'translateX(-50%)', md: 'none' },
+          color: '#ffffff',
+          textTransform: 'none',
+          fontSize: '0.9rem',
+          padding: '8px 16px',
+          minWidth: 'auto',
+          border: '2px solid rgba(255, 255, 255, 0.3)',
+          borderRadius: '20px',
+          background: 'transparent',
+          zIndex: 2,
+          '&:hover': {
+            background: 'transparent',
+            opacity: 0.8,
+          }
+        }}
+      >
+        Voltar
+      </Button>
+
       <Container component="main" maxWidth="xs">
         <Box
           sx={{
@@ -121,6 +149,9 @@ const LoginPage = () => {
                 mb: 3,
                 color: '#ffffff',
                 fontWeight: 500,
+                fontFamily: "'Montserrat', sans-serif",
+                letterSpacing: '0.2em',
+                textTransform: 'uppercase',
               }}
             >
               Login
