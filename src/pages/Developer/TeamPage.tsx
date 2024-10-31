@@ -52,15 +52,18 @@ const TeamPage: React.FC = () => {
       alignItems: 'center', 
       padding: 4,
       borderRadius: 4,
-      backgroundColor: '#ffffff',
-      boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
+      backgroundColor: 'rgba(255, 255, 255, 0.15)',
+      backdropFilter: 'blur(20px)',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
+      color: '#ffffff',
       transition: 'all 0.3s ease-in-out',
       height: '100%',
-      width: '100%', // Garante largura total
-      maxWidth: '400px', // Limita a largura máxima
+      width: '100%',
+      maxWidth: '400px',
       '&:hover': {
         transform: 'translateY(-5px)',
-        boxShadow: '0 15px 40px rgba(0, 0, 0, 0.2)',
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
       }
     }}>
       <CardMedia
@@ -70,9 +73,9 @@ const TeamPage: React.FC = () => {
           height: 180, 
           borderRadius: '50%', 
           marginBottom: 3,
-          border: '4px solid #fff',
-          boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
-          objectFit: 'cover', // Garante que a imagem cubra o espaço uniformemente
+          border: '4px solid rgba(255, 255, 255, 0.8)',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
+          objectFit: 'cover',
         }}
         image={member.image}
         alt={member.name}
@@ -80,16 +83,24 @@ const TeamPage: React.FC = () => {
       <CardContent sx={{ 
         textAlign: 'center', 
         width: '100%',
-        flex: 1, // Permite que o conteúdo ocupe o espaço disponível
+        flex: 1,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        gap: 2,
+        '& > *': { marginBottom: 0 }
       }}>
         <Box>
-          <Typography variant="h5" component="div" gutterBottom sx={{ fontWeight: 'bold' }}>
+          <Typography variant="h5" component="div" gutterBottom sx={{ 
+            fontWeight: 'bold',
+            color: '#ffffff',
+          }}>
             {member.name}
           </Typography>
-          <Typography variant="subtitle1" color="text.secondary" gutterBottom sx={{ marginBottom: 4 }}>
+          <Typography variant="subtitle1" gutterBottom sx={{ 
+            marginBottom: 4,
+            color: 'rgba(255, 255, 255, 0.9)',
+          }}>
             {member.role}
           </Typography>
         </Box>
@@ -98,7 +109,7 @@ const TeamPage: React.FC = () => {
           flexDirection: 'column',
           gap: 2,
           width: '100%',
-          mt: 'auto' // Empurra os botões para baixo
+          mt: 'auto'
         }}>
           {member.socialLinks.github && (
             <Button
@@ -107,7 +118,15 @@ const TeamPage: React.FC = () => {
               href={member.socialLinks.github}
               target="_blank"
               rel="noopener noreferrer"
-              sx={{ borderRadius: 20 }}
+              sx={{ 
+                borderRadius: 20,
+                borderColor: 'rgba(255, 255, 255, 0.3)',
+                color: '#ffffff',
+                '&:hover': {
+                  borderColor: 'rgba(255, 255, 255, 0.8)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                }
+              }}
             >
               GitHub
             </Button>
@@ -119,7 +138,15 @@ const TeamPage: React.FC = () => {
               href={member.socialLinks.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              sx={{ borderRadius: 20 }}
+              sx={{ 
+                borderRadius: 20,
+                borderColor: 'rgba(255, 255, 255, 0.3)',
+                color: '#ffffff',
+                '&:hover': {
+                  borderColor: 'rgba(255, 255, 255, 0.8)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                }
+              }}
             >
               LinkedIn
             </Button>
@@ -131,7 +158,15 @@ const TeamPage: React.FC = () => {
               href={member.socialLinks.portfolio}
               target="_blank"
               rel="noopener noreferrer"
-              sx={{ borderRadius: 20 }}
+              sx={{ 
+                borderRadius: 20,
+                borderColor: 'rgba(255, 255, 255, 0.3)',
+                color: '#ffffff',
+                '&:hover': {
+                  borderColor: 'rgba(255, 255, 255, 0.8)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                }
+              }}
             >
               Portfólio
             </Button>
@@ -144,41 +179,65 @@ const TeamPage: React.FC = () => {
   return (
     <Box
       sx={{
-        background: 'linear-gradient(135deg, #1a237e 0%, #121858 100%)', // Fundo azul escuro gradiente
+        background: '#000000', // Fundo preto base
+        position: 'relative',
         minHeight: "100vh",
         padding: 3,
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: `url("/waves-bg.svg")`, // Adicione o SVG de ondas
+          backgroundSize: 'cover',
+          opacity: 0.1,
+          zIndex: 1,
+        },
       }}
     >
-      <IconButton
+      <Button
         onClick={() => navigate('/')}
+        startIcon={<ArrowBackIcon />}
         sx={{
-          position: 'fixed',
-          top: 16,
-          left: 16,
+          position: 'absolute',
+          top: 24,
+          left: 24,
           color: '#ffffff',
-          backgroundColor: 'rgba(255, 255, 255, 0.1)',
+          textTransform: 'none',
+          fontSize: '0.9rem',
+          padding: '8px 16px',
+          minWidth: 'auto',
+          border: '2px solid rgba(255, 255, 255, 0.3)',
+          borderRadius: '20px',
+          background: 'transparent',
+          zIndex: 9999,
           '&:hover': {
-            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            background: 'transparent',
+            opacity: 0.8,
           }
         }}
       >
-        <ArrowBackIcon />
-      </IconButton>
+        Voltar
+      </Button>
 
-      <Container maxWidth="lg" sx={{ pt: 8 }}>
+      <Container maxWidth="lg" sx={{ pt: 8, position: 'relative', zIndex: 1 }}>
         <Typography 
           variant="h3" 
-          component="h1" 
-          gutterBottom 
+          align="center" 
           sx={{ 
-            mb: 6, 
-            textAlign: 'center',
-            fontWeight: 'bold', 
-            color: '#ffffff', // Texto branco para contrastar com o fundo escuro
-            textShadow: '2px 2px 4px rgba(0,0,0,0.3)' // Sombra suave no texto
+            color: '#999999',
+            mb: 6,
+            fontSize: '2rem',
+            letterSpacing: '0.2em',
+            textTransform: 'uppercase',
+            '& span': {
+              color: '#2196f3',
+            }
           }}
         >
-          Nossa Equipe
+          Nossa <span>Equipe</span>
         </Typography>
 
         <Grid 

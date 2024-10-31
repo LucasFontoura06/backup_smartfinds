@@ -14,6 +14,7 @@ import DashboardPage from '../pages/Dashboard/DashboardPage';
 import AddProductPage from '../pages/AddProduct/AddProductPage';
 import Affiliate from '../pages/Affiliate/Affiliate';
 import UsersPage from '../pages/Users/UsersPage';
+import ContatoPage from '../pages/Contato/ContatoPage';
 
 const AppRoutes: React.FC = () => {
   return (
@@ -23,6 +24,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/produtos" element={<ProductList />} />
       <Route path="/developer" element={<TeamPage />} />
       <Route path="/Login" element={<LoginPage />} />
+      <Route path="/contato" element={<ContatoPage />} />
 
       {/* Rotas Privadas */}
       <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />

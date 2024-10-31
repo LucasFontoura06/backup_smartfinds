@@ -15,7 +15,7 @@ const MainApp: React.FC = () => {
   const location = useLocation();
   
   // Lista de rotas públicas onde o menu não deve aparecer
-  const publicRoutes = ['/', '/produtos', '/developer', '/Login', '/quem-somos'];
+  const publicRoutes = ['/', '/produtos', '/developer', '/Login', '/contato'];
   const shouldShowMenu = !publicRoutes.includes(location.pathname);
 
   return (
