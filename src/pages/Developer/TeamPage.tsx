@@ -30,14 +30,14 @@ const teamMembers: TeamMember[] = [
       portfolio: 'https://lucas-fontoura-portfolio.netlify.app/',
     },
   },
-  {
-    name: 'Jadis',
-    role: 'Gestora de Negócios', // ou outro cargo apropriado
-    image: jadisImage,
-    socialLinks: {
-      linkedin: '#', // Adicione o link correto
-    },
-  },
+  // {
+  //   name: 'Jadis',
+  //   role: 'Gestora de Negócios', // ou outro cargo apropriado
+  //   image: jadisImage,
+  //   socialLinks: {
+  //     linkedin: '#', // Adicione o link correto
+  //   },
+  // },
 ];
 
 const TeamPage: React.FC = () => {
